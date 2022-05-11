@@ -284,7 +284,7 @@ namespace LA_TT
         public static async void WriteCCards(bool your, byte rarity)
         {
             JsonHandler jsonHandler = new JsonHandler();
-            if (your)
+            if (!your)
             {
                 switch (rarity)
                 {
@@ -311,7 +311,7 @@ namespace LA_TT
         public static async void WriteFCards(bool your, byte rarity)
         {
             JsonHandler jsonHandler = new JsonHandler();
-            if (your)
+            if (!your)
             {
                 switch (rarity)
                 {

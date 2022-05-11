@@ -46,7 +46,7 @@ namespace LA_TT
                 case 5: rareString = "O"; break;
             }
 
-            string fileName = @"Resources/FCards.json";
+            string fileName = @"Resources/"+ yourString +"FCards"+ rareString +".json";
 
             var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
             using FileStream createStream = File.Create(fileName);
@@ -79,7 +79,7 @@ namespace LA_TT
             }
             else
             {
-                Console.WriteLine("Couldn't find Babies location");
+                //MessageBox.Show("Failed to Load: "+ yourString +"CCards"+ rareString +".json", "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return null;
         }
@@ -109,7 +109,7 @@ namespace LA_TT
             }
             else
             {
-                Console.WriteLine("Couldn't find Babies location");
+                //MessageBox.Show("Failed to Load: " + yourString + "FCards" + rareString + ".json", "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return null;
         }

@@ -97,6 +97,7 @@
             // 
             // ComboCardCheckBox
             // 
+            this.ComboCardCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ComboCardCheckBox.AutoSize = true;
             this.ComboCardCheckBox.Checked = true;
             this.ComboCardCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -122,6 +123,7 @@
             // 
             // RarityNumericBox
             // 
+            this.RarityNumericBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RarityNumericBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.RarityNumericBox.Location = new System.Drawing.Point(48, 439);
             this.RarityNumericBox.Maximum = new decimal(new int[] {
@@ -321,7 +323,7 @@
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.OkButton);
             this.Controls.Add(this.CardPanel);
-            this.MinimumSize = new System.Drawing.Size(378, 489);
+            this.MinimumSize = new System.Drawing.Size(507, 695);
             this.Name = "AddCardForm";
             this.ShowInTaskbar = false;
             this.Text = "Little Alchemist - Add Card";

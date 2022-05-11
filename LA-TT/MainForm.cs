@@ -23,6 +23,7 @@ namespace LA_TT
                     ccard.level = (byte)addCardForm.LevelNumericBox.Value;
                     ccard.attack = (byte)addCardForm.AttackNumericBox.Value;
                     ccard.defense = (byte)addCardForm.DefenseNumericBox.Value;
+                    ccard.rarity = (byte)addCardForm.RarityNumericBox.Value;
                     ccard.image = addCardForm.ImagePictureBox.Image;
                     Cards.AddCCard(ccard);
                 }
@@ -33,6 +34,7 @@ namespace LA_TT
                     fcard.level = (byte)addCardForm.LevelNumericBox.Value;
                     fcard.attack = (byte)addCardForm.AttackNumericBox.Value;
                     fcard.defense = (byte)addCardForm.DefenseNumericBox.Value;
+                    fcard.rarity = (byte)addCardForm.RarityNumericBox.Value;
                     fcard.image = addCardForm.ImagePictureBox.Image;
                     Cards.AddFCard(fcard);
                 }
@@ -42,16 +44,20 @@ namespace LA_TT
 
         private void saveAllCardsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Cards.WriteCCards(false, 1);
-            Cards.WriteCCards(false, 2);
-            Cards.WriteCCards(false, 3);
-            Cards.WriteCCards(false, 4);
-            Cards.WriteCCards(false, 5);
+            if (Cards._ccardsB.Count != 0) Cards.WriteCCards(false, 1);
+            if (Cards._ccardsS.Count != 0) Cards.WriteCCards(false, 2);
+            if (Cards._ccardsG.Count != 0) Cards.WriteCCards(false, 3);
+            if (Cards._ccardsD.Count != 0) Cards.WriteCCards(false, 4);
+            if (Cards._ccardsO.Count != 0) Cards.WriteCCards(false, 5);
         }
 
         private void saveAllFFCardsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Cards.WriteFCards();
+            if (Cards._fcardsB.Count != 0) Cards.WriteFCards(false, 1);
+            if (Cards._fcardsS.Count != 0) Cards.WriteFCards(false, 2);
+            if (Cards._fcardsG.Count != 0) Cards.WriteFCards(false, 3);
+            if (Cards._fcardsD.Count != 0) Cards.WriteFCards(false, 4);
+            if (Cards._fcardsO.Count != 0) Cards.WriteFCards(false, 5);
         }
 
         private void UpdateYourCards()
@@ -80,33 +86,11 @@ namespace LA_TT
         }
         private void UpdateYourCCards()
         {
-            if (Cards._yccards == null)
-            {
-                OwnedCardsListBox.Items.Add("Empty");
-                return;
-            }
-
-            OwnedCardsListBox.Items.Clear();
-            foreach (CCard card in Cards._yccards)
-            {
-                OwnedCardsListBox.Items.Add(card.name + "; " + card.rarity + "; C");
-            }
-            OwnedCardsListBox.SelectedIndex = 0;
+            
         }
         private void UpdateYourFCards()
         {
-            if (Cards._yfcards == null)
-            {
-                OwnedCardsListBox.Items.Add("Empty");
-                return;
-            }
-
-            OwnedCardsListBox.Items.Clear();
-            foreach (FCard card in Cards._yfcards)
-            {
-                OwnedCardsListBox.Items.Add(card.name + "; " + card.rarity + "; F");
-            }
-            OwnedCardsListBox.SelectedIndex = 0;
+            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -126,6 +110,7 @@ namespace LA_TT
         private void OnFinishedInitCards(object sender, EventArgs e)
         {
             finishedCardsInit = true;
+            Cards._ycards = Cards._ycards.OrderBy(c => c.name).ToList();
             UpdateYourCards();
             //MessageBox.Show("Form Init Finished");
         }
