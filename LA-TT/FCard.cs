@@ -9,7 +9,11 @@ namespace LA_TT
     public class FCard : Card
     {
         public string special { get; set; }
-        public CCard comboCard1 { get; set; }
-        public CCard ComboCard2 { get; set; }
+        public Dictionary<CCard, CCard> comboCards { get; set; }
+
+        public FCard()
+        {
+            comboCards = new Dictionary<CCard, CCard>();
+        }
     }
 }

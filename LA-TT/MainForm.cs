@@ -6,18 +6,22 @@ namespace LA_TT
         private bool finishedLoadForm;
         public MainForm()
         {
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             InitializeComponent();
-            Cards.Init();
             Cards.OnFinishedInit += OnFinishedInitCards;
+            Cards.Init();
         }
 
         private void addCardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddCardForm addCardForm = new AddCardForm();
-            if (addCardForm.ShowDialog() == DialogResult.OK)
+            DialogResult result = addCardForm.ShowDialog();
+            /*
+            if (result == DialogResult.OK || (addCardForm.LeftWindowOpenCheckBox.Checked && result == DialogResult.None))//not using leave open box make new invisible one
             {
                 if (addCardForm.ComboCardCheckBox.Checked)
                 {
+                    //! CONTINUE
                     CCard ccard = new CCard();
                     ccard.name = addCardForm.NameTextBox.Text;
                     ccard.level = (byte)addCardForm.LevelNumericBox.Value;
@@ -25,6 +29,23 @@ namespace LA_TT
                     ccard.defense = (byte)addCardForm.DefenseNumericBox.Value;
                     ccard.rarity = (byte)addCardForm.RarityNumericBox.Value;
                     ccard.image = addCardForm.ImagePictureBox.Image;
+
+                    FCard fcard = Cards.GetFCard(addCardForm.CombosToCardTextBox.Text);
+
+                    if (fcard == null)
+                    {
+                        CCard cfcard = Cards.GetCCard(addCardForm.CombosToCardTextBox.Text);
+                        try
+                        {
+                            ccard.combos.Add(Cards.GetCCard(addCardForm.CombosWithTextBox.Text), cfcard);
+                        }
+                        catch (Exception) { }
+                    }
+                    else
+                    {
+                        ccard.combos.Add(Cards.GetCCard(addCardForm.CombosWithTextBox.Text), fcard);
+                    }
+
                     Cards.AddCCard(ccard);
                 }
                 else
@@ -36,10 +57,17 @@ namespace LA_TT
                     fcard.defense = (byte)addCardForm.DefenseNumericBox.Value;
                     fcard.rarity = (byte)addCardForm.RarityNumericBox.Value;
                     fcard.image = addCardForm.ImagePictureBox.Image;
+
+                    try
+                    {
+                        fcard.comboCards.Add(Cards.GetCCard(addCardForm.CombosWithTextBox.Text), Cards.GetCCard(addCardForm.CombosToCardTextBox.Text));
+                    }
+                    catch (Exception) { }
+                    
                     Cards.AddFCard(fcard);
                 }
             }
-            addCardForm.Dispose();
+            */
         }
 
         private void saveAllCardsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -63,10 +91,7 @@ namespace LA_TT
         private void UpdateYourCards()
         {
             if (Cards._ycards == null)
-            {
-                OwnedCardsListBox.Items.Add("Empty");
                 return;
-            }
 
             string cardType = "C";
             OwnedCardsListBox.Items.Clear();
@@ -82,21 +107,52 @@ namespace LA_TT
                 }
                 OwnedCardsListBox.Items.Add(card.name+"; "+card.rarity+"; "+cardType);
             }
-            OwnedCardsListBox.SelectedIndex = 0;
+            if (OwnedCardsListBox.Items.Count != 0)
+                OwnedCardsListBox.SelectedIndex = 0;
         }
         private void UpdateYourCCards()
         {
-            
+            if (Cards._yccards == null)
+                return;
+
+            OwnedCardsListBox.Items.Clear();
+            foreach (Card card in Cards._yccards)
+            {
+                OwnedCardsListBox.Items.Add(card.name + "; " + card.rarity + "; C");
+            }
+
+            Cards._yfcards = Cards._yfcards.OrderBy(c => c.name).ToList();
+            foreach (Card card in Cards._yfcards)
+            {
+                OwnedCardsListBox.Items.Add(card.name + "; " + card.rarity + "; F");
+            }
+            if (OwnedCardsListBox.Items.Count != 0)
+                OwnedCardsListBox.SelectedIndex = 0;
         }
         private void UpdateYourFCards()
         {
-            
+            if (Cards._yfcards == null)
+                return;
+
+            OwnedCardsListBox.Items.Clear();
+            foreach (Card card in Cards._yfcards)
+            {
+                OwnedCardsListBox.Items.Add(card.name + "; " + card.rarity + "; F");
+            }
+
+            Cards._yccards = Cards._yccards.OrderBy(c => c.name).ToList();
+            foreach (Card card in Cards._yccards)
+            {
+                OwnedCardsListBox.Items.Add(card.name + "; " + card.rarity + "; C");
+            }
+            if (OwnedCardsListBox.Items.Count != 0)
+                OwnedCardsListBox.SelectedIndex = 0;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             CardAttackTextBox.BackColor = Color.FromArgb(255, 102, 0);
-            CardDefenseTextBox.BackColor = Color.FromArgb(101, 204, 255);
+            CardDefenseTextBox.BackColor = Color.FromArgb(0, 101, 204);
             OwnedCardsSortComboBox.SelectedIndex = 0;
             OwnedCardsOrderComboBox.SelectedIndex = 0;
         }
@@ -123,24 +179,36 @@ namespace LA_TT
             {
                 switch (OwnedCardsSortComboBox.SelectedIndex)
                 {
-                    case 0: Cards._ycards = Cards._ycards.OrderBy(c => c.name).ToList(); break;
-                    case 1: Cards._ycards = Cards._ycards.OrderBy(c => c.attack).ToList(); break;
-                    case 2: Cards._ycards = Cards._ycards.OrderBy(c => c.defense).ToList(); break;
-                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack + c.defense).ToList(); break;
-                    case 4: Cards._ycards = Cards._ycards.OrderBy(c => c.rarity).ToList(); break;
-                    case 5: Cards._yccards = Cards._yccards.OrderBy(c => c.comboCards.Length).ToList(); break;
+                    case 0: Cards._ycards = Cards._ycards.OrderBy(c => c.name).ToList();
+                        UpdateYourCards(); break;
+                    case 1: Cards._ycards = Cards._ycards.OrderBy(c => c.attack).ToList();
+                        UpdateYourCards(); break;
+                    case 2: Cards._ycards = Cards._ycards.OrderBy(c => c.defense).ToList(); 
+                        UpdateYourCards(); break;
+                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack + c.defense).ToList(); 
+                        UpdateYourCards(); break;
+                    case 4: Cards._ycards = Cards._ycards.OrderBy(c => c.rarity).ToList(); 
+                        UpdateYourCards(); break;
+                    case 5: Cards._yccards = Cards._yccards.OrderBy(c => c.combos.Count).ToList(); 
+                        UpdateYourCCards(); break;
                 }
             }
             else if (OwnedCardsOrderComboBox.SelectedIndex == 1)
             {
                 switch (OwnedCardsSortComboBox.SelectedIndex)
                 {
-                    case 0: Cards._ycards = Cards._ycards.OrderByDescending(c => c.name).ToList(); break;
-                    case 1: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack).ToList(); break;
-                    case 2: Cards._ycards = Cards._ycards.OrderByDescending(c => c.defense).ToList(); break;
-                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack + c.defense).ToList(); break;
-                    case 4: Cards._ycards = Cards._ycards.OrderByDescending(c => c.rarity).ToList(); break;
-                    case 5: Cards._ycards = Cards._ycards.OrderByDescending(c => c.name).ToList(); break;
+                    case 0: Cards._ycards = Cards._ycards.OrderByDescending(c => c.name).ToList(); 
+                        UpdateYourCards(); break;
+                    case 1: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack).ToList(); 
+                        UpdateYourCards(); break;
+                    case 2: Cards._ycards = Cards._ycards.OrderByDescending(c => c.defense).ToList(); 
+                        UpdateYourCards(); break;
+                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack + c.defense).ToList(); 
+                        UpdateYourCards(); break;
+                    case 4: Cards._ycards = Cards._ycards.OrderByDescending(c => c.rarity).ToList(); 
+                        UpdateYourCards(); break;
+                    case 5: Cards._yfcards = Cards._yfcards.OrderByDescending(c => c.comboCards.Count).ToList(); 
+                        UpdateYourFCards(); break;
                 }
             }
             UpdateYourCards();
@@ -187,6 +255,32 @@ namespace LA_TT
                 CardDefenseTextBox.Text = fcard.defense.ToString();
                 CardNameTextBox.Text = fcard.name;
             }
+        }
+        private void OnProcessExit(object sender, EventArgs e)
+        {
+            Cards.WriteCCards(true, 1);
+            Cards.WriteCCards(true, 2);
+            Cards.WriteCCards(true, 3);
+            Cards.WriteCCards(true, 4);
+            Cards.WriteCCards(true, 5);
+
+            Cards.WriteFCards(true, 1);
+            Cards.WriteFCards(true, 2);
+            Cards.WriteFCards(true, 3);
+            Cards.WriteFCards(true, 4);
+            Cards.WriteFCards(true, 5);
+
+            Cards.WriteCCards(false, 1);
+            Cards.WriteCCards(false, 2);
+            Cards.WriteCCards(false, 3);
+            Cards.WriteCCards(false, 4);
+            Cards.WriteCCards(false, 5);
+
+            Cards.WriteFCards(false, 1);
+            Cards.WriteFCards(false, 2);
+            Cards.WriteFCards(false, 3);
+            Cards.WriteFCards(false, 4);
+            Cards.WriteFCards(false, 5);
         }
     }
 }

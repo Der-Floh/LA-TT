@@ -150,6 +150,7 @@ namespace LA_TT
             if (_yfcardsO == null)
                 _yfcardsO = new List<FCard>();
 
+            //Change _ccards to _yccards
             _yccards = new List<CCard>();
             _yccards.AddRange(_ccardsB);
             _yccards.AddRange(_ccardsS);
@@ -214,6 +215,21 @@ namespace LA_TT
             }
             return null;
         }
+        public static CCard GetCCard(string name)
+        {
+            CCard ccard = null;
+            ccard = _ccardsB.Find(c => c.name == name);
+            if (ccard != null) return ccard;
+            ccard = _ccardsS.Find(c => c.name == name);
+            if (ccard != null) return ccard;
+            ccard = _ccardsG.Find(c => c.name == name);
+            if (ccard != null) return ccard;
+            ccard = _ccardsD.Find(c => c.name == name);
+            if (ccard != null) return ccard;
+            ccard = _ccardsO.Find(c => c.name == name);
+            if (ccard != null) return ccard;
+            return null;
+        }
         public static FCard GetFCard(string name, byte rarity)
         {
             switch (rarity)
@@ -224,6 +240,21 @@ namespace LA_TT
                 case 4: return _fcardsD.Find(c => c.name == name);
                 case 5: return _fcardsO.Find(c => c.name == name);
             }
+            return null;
+        }
+        public static FCard GetFCard(string name)
+        {
+            FCard fcard = null;
+            fcard = _fcardsB.Find(c => c.name == name);
+            if (fcard != null) return fcard;
+            fcard = _fcardsS.Find(c => c.name == name);
+            if (fcard != null) return fcard;
+            fcard = _fcardsG.Find(c => c.name == name);
+            if (fcard != null) return fcard;
+            fcard = _fcardsD.Find(c => c.name == name);
+            if (fcard != null) return fcard;
+            fcard = _fcardsO.Find(c => c.name == name);
+            if (fcard != null) return fcard;
             return null;
         }
 
@@ -260,23 +291,23 @@ namespace LA_TT
             {
                 case 1:
                     _fcardsB.Add(fcard);
-                    ccardsBChanged = true;
+                    fcardsBChanged = true;
                     break;
                 case 2:
                     _fcardsS.Add(fcard);
-                    ccardsSChanged = true;
+                    fcardsSChanged = true;
                     break;
                 case 3:
                     _fcardsG.Add(fcard);
-                    ccardsGChanged = true;
+                    fcardsGChanged = true;
                     break;
                 case 4:
                     _fcardsD.Add(fcard);
-                    ccardsDChanged = true;
+                    fcardsDChanged = true;
                     break;
                 case 5:
                     _fcardsO.Add(fcard);
-                    ccardsOChanged = true;
+                    fcardsOChanged = true;
                     break;
             }
         }
@@ -288,25 +319,84 @@ namespace LA_TT
             {
                 switch (rarity)
                 {
-                    case 1: await jsonHandler.WriteCCards(_ccardsB, your, rarity); break;
-                    case 2: await jsonHandler.WriteCCards(_ccardsS, your, rarity); break;
-                    case 3: await jsonHandler.WriteCCards(_ccardsG, your, rarity); break;
-                    case 4: await jsonHandler.WriteCCards(_ccardsD, your, rarity); break;
-                    case 5: await jsonHandler.WriteCCards(_ccardsO, your, rarity); break;
+                    case 1: if (ccardsBChanged && _ccardsB.Count != 0)
+                        {
+                            _ccardsB = _ccardsB.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_ccardsB, your, rarity);
+                            ccardsBChanged = false;
+                        }
+                        break;
+                    case 2: if (ccardsSChanged && _ccardsS.Count != 0)
+                        {
+                            _ccardsS = _ccardsS.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_ccardsS, your, rarity);
+                            ccardsSChanged = false;
+                        }
+                        break;
+                    case 3: if (ccardsGChanged && _ccardsG.Count != 0) 
+                        {
+                            _ccardsG = _ccardsG.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_ccardsG, your, rarity); 
+                            ccardsGChanged = false;
+                        }
+                        break;
+                    case 4: if (ccardsDChanged && _ccardsD.Count != 0) 
+                        {
+                            _ccardsD = _ccardsD.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_ccardsD, your, rarity); 
+                            ccardsDChanged = false;
+                        }
+                        break;
+                    case 5: if (ccardsOChanged && _ccardsO.Count != 0) 
+                        {
+                            _ccardsO = _ccardsO.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_ccardsO, your, rarity); 
+                            ccardsOChanged = false;
+                        }
+                        break;
                 }
             }
             else
             {
                 switch (rarity)
                 {
-                    case 1: await jsonHandler.WriteCCards(_yccardsB, your, rarity); break;
-                    case 2: await jsonHandler.WriteCCards(_yccardsS, your, rarity); break;
-                    case 3: await jsonHandler.WriteCCards(_yccardsG, your, rarity); break;
-                    case 4: await jsonHandler.WriteCCards(_yccardsD, your, rarity); break;
-                    case 5: await jsonHandler.WriteCCards(_yccardsO, your, rarity); break;
+                    case 1: if (yccardsBChanged && _yccardsB.Count != 0)
+                        {
+                            _yccardsB = _yccardsB.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_yccardsS, your, rarity);
+                            yccardsBChanged = false;
+                        }
+                        break;
+                    case 2: if (yccardsSChanged && _yccardsS.Count != 0) 
+                        {
+                            _yccardsS = _yccardsS.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_yccardsG, your, rarity);
+                            yccardsSChanged = false;
+                        }
+                        break;
+                    case 3: if (yccardsGChanged && _yccardsG.Count != 0) 
+                        {
+                            _yccardsG = _yccardsG.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_yccardsD, your, rarity);
+                            yccardsGChanged = false;
+                        }
+                        break;
+                    case 4: if (yccardsDChanged && _yccardsD.Count != 0) 
+                        {
+                            _yccardsD = _yccardsD.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_yccardsB, your, rarity);
+                            yccardsDChanged = false;
+                        }
+                        break;
+                    case 5: if (yccardsOChanged && _yccardsO.Count != 0) 
+                        {
+                            _yccardsO = _yccardsO.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteCCards(_yccardsO, your, rarity);
+                            yccardsOChanged = false;
+                        }
+                        break;
                 }
             }
-            ccardsBChanged = false;
         }
         public static async void WriteFCards(bool your, byte rarity)
         {
@@ -315,25 +405,84 @@ namespace LA_TT
             {
                 switch (rarity)
                 {
-                    case 1: await jsonHandler.WriteFCards(_fcardsB, your, rarity); break;
-                    case 2: await jsonHandler.WriteFCards(_fcardsS, your, rarity); break;
-                    case 3: await jsonHandler.WriteFCards(_fcardsG, your, rarity); break;
-                    case 4: await jsonHandler.WriteFCards(_fcardsD, your, rarity); break;
-                    case 5: await jsonHandler.WriteFCards(_fcardsO, your, rarity); break;
+                    case 1: if (fcardsBChanged && _fcardsB.Count != 0)
+                        {
+                            _fcardsB = _fcardsB.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_fcardsB, your, rarity);
+                            fcardsBChanged = false;
+                        }
+                        break;
+                    case 2: if (fcardsSChanged && _fcardsS.Count != 0) 
+                        {
+                            _fcardsS = _fcardsS.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_fcardsS, your, rarity);
+                            fcardsSChanged = false;
+                        }
+                        break;
+                    case 3: if (fcardsDChanged && _fcardsG.Count != 0) 
+                        {
+                            _fcardsG = _fcardsG.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_fcardsG, your, rarity);
+                            fcardsGChanged = false;
+                        }
+                        break;
+                    case 4: if (fcardsGChanged && _fcardsD.Count != 0) 
+                        {
+                            _fcardsD = _fcardsD.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_fcardsD, your, rarity);
+                            fcardsDChanged = false;
+                        }
+                        break;
+                    case 5: if (fcardsOChanged && _fcardsO.Count != 0) 
+                        {
+                            _fcardsO = _fcardsO.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_fcardsO, your, rarity);
+                            fcardsOChanged = false;
+                        }
+                        break;
                 }
             }
             else
             {
                 switch (rarity)
                 {
-                    case 1: await jsonHandler.WriteFCards(_yfcardsB, your, rarity); break;
-                    case 2: await jsonHandler.WriteFCards(_yfcardsS, your, rarity); break;
-                    case 3: await jsonHandler.WriteFCards(_yfcardsG, your, rarity); break;
-                    case 4: await jsonHandler.WriteFCards(_yfcardsD, your, rarity); break;
-                    case 5: await jsonHandler.WriteFCards(_yfcardsO, your, rarity); break;
+                    case 1: if (yfcardsBChanged && _yfcardsB.Count != 0) 
+                        {
+                            _yfcardsB = _yfcardsB.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_yfcardsB, your, rarity);
+                            yfcardsBChanged = false;
+                        }
+                        break;
+                    case 2: if (yfcardsSChanged && _yfcardsS.Count != 0) 
+                        {
+                            _yfcardsS = _yfcardsS.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_yfcardsS, your, rarity);
+                            yfcardsSChanged = false;
+                        }
+                        break;
+                    case 3: if (yfcardsGChanged && _yfcardsG.Count != 0) 
+                        {
+                            _yfcardsG = _yfcardsG.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_yfcardsG, your, rarity);
+                            yfcardsGChanged = false;
+                        }
+                        break;
+                    case 4: if (yfcardsDChanged && _yfcardsD.Count != 0) 
+                        {
+                            _yfcardsD = _yfcardsD.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_yfcardsD, your, rarity);
+                            yfcardsDChanged = false;
+                        }
+                        break;
+                    case 5: if (yfcardsOChanged && _yfcardsO.Count != 0) 
+                        {
+                            _yfcardsO = _yfcardsO.OrderBy(c => c.name).ToList();
+                            await jsonHandler.WriteFCards(_yfcardsO, your, rarity);
+                            yfcardsOChanged = false;
+                        }
+                        break;
                 }
             }
-            fcardsBChanged = false;
         }
 
         private static void FinishedInit()

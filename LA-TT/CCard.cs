@@ -8,6 +8,13 @@ namespace LA_TT
 {
     public class CCard : Card
     {
-        public string[] comboCards { get; set; }
+        public Dictionary<Card, Card> comboCards { get; set; }
+        public Dictionary<Card, Card> combos { get; set; }
+
+        public CCard()
+        {
+            comboCards = new Dictionary<Card, Card>();
+            combos = new Dictionary<Card, Card>();
+        }
     }
 }

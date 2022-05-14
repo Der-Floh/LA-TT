@@ -30,6 +30,10 @@
         {
             this.NameTextBox = new System.Windows.Forms.TextBox();
             this.CardPanel = new System.Windows.Forms.Panel();
+            this.CombosToLabel = new System.Windows.Forms.Label();
+            this.CombosToCardTextBox = new System.Windows.Forms.TextBox();
+            this.CombosWithLabel = new System.Windows.Forms.Label();
+            this.CombosWithTextBox = new System.Windows.Forms.TextBox();
             this.ComboCardCheckBox = new System.Windows.Forms.CheckBox();
             this.RarityLabel = new System.Windows.Forms.Label();
             this.RarityNumericBox = new System.Windows.Forms.NumericUpDown();
@@ -47,6 +51,7 @@
             this.CardPictureBox = new System.Windows.Forms.PictureBox();
             this.OkButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.LeaveOpenCheckBox = new System.Windows.Forms.CheckBox();
             this.CardPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RarityNumericBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CFPictureBox)).BeginInit();
@@ -65,7 +70,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NameTextBox.Location = new System.Drawing.Point(53, 483);
             this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(302, 23);
+            this.NameTextBox.Size = new System.Drawing.Size(291, 23);
             this.NameTextBox.TabIndex = 0;
             this.NameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -74,6 +79,10 @@
             this.CardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.CardPanel.Controls.Add(this.CombosToLabel);
+            this.CardPanel.Controls.Add(this.CombosToCardTextBox);
+            this.CardPanel.Controls.Add(this.CombosWithLabel);
+            this.CardPanel.Controls.Add(this.CombosWithTextBox);
             this.CardPanel.Controls.Add(this.ComboCardCheckBox);
             this.CardPanel.Controls.Add(this.RarityLabel);
             this.CardPanel.Controls.Add(this.RarityNumericBox);
@@ -95,6 +104,46 @@
             this.CardPanel.Size = new System.Drawing.Size(405, 562);
             this.CardPanel.TabIndex = 5;
             // 
+            // CombosToLabel
+            // 
+            this.CombosToLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CombosToLabel.AutoSize = true;
+            this.CombosToLabel.BackColor = System.Drawing.Color.Transparent;
+            this.CombosToLabel.Location = new System.Drawing.Point(212, 424);
+            this.CombosToLabel.Name = "CombosToLabel";
+            this.CombosToLabel.Size = new System.Drawing.Size(129, 15);
+            this.CombosToLabel.TabIndex = 26;
+            this.CombosToLabel.Text = "Combos to Card Name";
+            // 
+            // CombosToCardTextBox
+            // 
+            this.CombosToCardTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CombosToCardTextBox.Location = new System.Drawing.Point(212, 442);
+            this.CombosToCardTextBox.Name = "CombosToCardTextBox";
+            this.CombosToCardTextBox.Size = new System.Drawing.Size(144, 23);
+            this.CombosToCardTextBox.TabIndex = 25;
+            this.CombosToCardTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // CombosWithLabel
+            // 
+            this.CombosWithLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CombosWithLabel.AutoSize = true;
+            this.CombosWithLabel.BackColor = System.Drawing.Color.Transparent;
+            this.CombosWithLabel.Location = new System.Drawing.Point(48, 424);
+            this.CombosWithLabel.Name = "CombosWithLabel";
+            this.CombosWithLabel.Size = new System.Drawing.Size(141, 15);
+            this.CombosWithLabel.TabIndex = 24;
+            this.CombosWithLabel.Text = "Combos with Card Name";
+            // 
+            // CombosWithTextBox
+            // 
+            this.CombosWithTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CombosWithTextBox.Location = new System.Drawing.Point(48, 442);
+            this.CombosWithTextBox.Name = "CombosWithTextBox";
+            this.CombosWithTextBox.Size = new System.Drawing.Size(144, 23);
+            this.CombosWithTextBox.TabIndex = 23;
+            this.CombosWithTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // ComboCardCheckBox
             // 
             this.ComboCardCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -102,7 +151,7 @@
             this.ComboCardCheckBox.Checked = true;
             this.ComboCardCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ComboCardCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ComboCardCheckBox.Location = new System.Drawing.Point(240, 443);
+            this.ComboCardCheckBox.Location = new System.Drawing.Point(240, 385);
             this.ComboCardCheckBox.Name = "ComboCardCheckBox";
             this.ComboCardCheckBox.Size = new System.Drawing.Size(117, 25);
             this.ComboCardCheckBox.TabIndex = 22;
@@ -115,7 +164,7 @@
             this.RarityLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RarityLabel.AutoSize = true;
             this.RarityLabel.BackColor = System.Drawing.Color.Transparent;
-            this.RarityLabel.Location = new System.Drawing.Point(50, 421);
+            this.RarityLabel.Location = new System.Drawing.Point(50, 363);
             this.RarityLabel.Name = "RarityLabel";
             this.RarityLabel.Size = new System.Drawing.Size(37, 15);
             this.RarityLabel.TabIndex = 21;
@@ -125,7 +174,7 @@
             // 
             this.RarityNumericBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RarityNumericBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.RarityNumericBox.Location = new System.Drawing.Point(48, 439);
+            this.RarityNumericBox.Location = new System.Drawing.Point(48, 381);
             this.RarityNumericBox.Maximum = new decimal(new int[] {
             4,
             0,
@@ -274,7 +323,7 @@
             this.ImagePictureBox.BackColor = System.Drawing.Color.Transparent;
             this.ImagePictureBox.Location = new System.Drawing.Point(36, 29);
             this.ImagePictureBox.Name = "ImagePictureBox";
-            this.ImagePictureBox.Size = new System.Drawing.Size(334, 448);
+            this.ImagePictureBox.Size = new System.Drawing.Size(329, 448);
             this.ImagePictureBox.TabIndex = 0;
             this.ImagePictureBox.TabStop = false;
             // 
@@ -295,13 +344,13 @@
             // OkButton
             // 
             this.OkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OkButton.Location = new System.Drawing.Point(275, 613);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(99, 31);
             this.OkButton.TabIndex = 6;
             this.OkButton.Text = "Add";
             this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
             // CancelButton
             // 
@@ -314,12 +363,25 @@
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
             // 
+            // LeaveOpenCheckBox
+            // 
+            this.LeaveOpenCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.LeaveOpenCheckBox.AutoSize = true;
+            this.LeaveOpenCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LeaveOpenCheckBox.Location = new System.Drawing.Point(12, 619);
+            this.LeaveOpenCheckBox.Name = "LeaveOpenCheckBox";
+            this.LeaveOpenCheckBox.Size = new System.Drawing.Size(170, 25);
+            this.LeaveOpenCheckBox.TabIndex = 27;
+            this.LeaveOpenCheckBox.Text = "Leave Window open";
+            this.LeaveOpenCheckBox.UseVisualStyleBackColor = true;
+            // 
             // AddCardForm
             // 
             this.AcceptButton = this.OkButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(491, 656);
+            this.Controls.Add(this.LeaveOpenCheckBox);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.OkButton);
             this.Controls.Add(this.CardPanel);
@@ -327,6 +389,7 @@
             this.Name = "AddCardForm";
             this.ShowInTaskbar = false;
             this.Text = "Little Alchemist - Add Card";
+            this.Load += new System.EventHandler(this.AddCardForm_Load);
             this.CardPanel.ResumeLayout(false);
             this.CardPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RarityNumericBox)).EndInit();
@@ -339,6 +402,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ImagePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CardPictureBox)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -362,5 +426,10 @@
         private Label RarityLabel;
         public NumericUpDown RarityNumericBox;
         public CheckBox ComboCardCheckBox;
+        private Label CombosWithLabel;
+        public TextBox CombosWithTextBox;
+        private Label CombosToLabel;
+        public TextBox CombosToCardTextBox;
+        public CheckBox LeaveOpenCheckBox;
     }
 }
