@@ -8,13 +8,18 @@ namespace LA_TT
 {
     public class CCard : Card
     {
-        public Dictionary<Card, Card> comboCards { get; set; }
-        public Dictionary<Card, Card> combos { get; set; }
+        //public Dictionary<CCard, CCard> comboCards { get; set; }
+        //public Dictionary<CCard, Card> combos { get; set; }
+        //public List<FCombo> comboCards { get; set; }
+        public List<CCombo> combos { get; set; }
+        public int comboStatSum { get; set; }
 
         public CCard()
         {
-            comboCards = new Dictionary<Card, Card>();
-            combos = new Dictionary<Card, Card>();
+            //comboCards = new Dictionary<CCard, CCard>();
+            //combos = new Dictionary<CCard, Card>();
+            //comboCards = new List<FCombo>();
+            combos = new List<CCombo>();
         }
     }
 }

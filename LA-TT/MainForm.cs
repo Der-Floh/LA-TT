@@ -166,6 +166,7 @@ namespace LA_TT
         private void OnFinishedInitCards(object sender, EventArgs e)
         {
             finishedCardsInit = true;
+            CalcComboRarity();
             Cards._ycards = Cards._ycards.OrderBy(c => c.name).ToList();
             UpdateYourCards();
             //MessageBox.Show("Form Init Finished");
@@ -185,11 +186,14 @@ namespace LA_TT
                         UpdateYourCards(); break;
                     case 2: Cards._ycards = Cards._ycards.OrderBy(c => c.defense).ToList(); 
                         UpdateYourCards(); break;
-                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack + c.defense).ToList(); 
+                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack * 2 + c.defense).ToList(); 
                         UpdateYourCards(); break;
                     case 4: Cards._ycards = Cards._ycards.OrderBy(c => c.rarity).ToList(); 
                         UpdateYourCards(); break;
                     case 5: Cards._yccards = Cards._yccards.OrderBy(c => c.combos.Count).ToList(); 
+                        UpdateYourCCards(); break;
+                    case 6: CalcComboStatsSum();
+                        Cards._yccards = Cards._yccards.OrderBy(c => c.comboStatSum).ToList();
                         UpdateYourCCards(); break;
                 }
             }
@@ -203,15 +207,79 @@ namespace LA_TT
                         UpdateYourCards(); break;
                     case 2: Cards._ycards = Cards._ycards.OrderByDescending(c => c.defense).ToList(); 
                         UpdateYourCards(); break;
-                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack + c.defense).ToList(); 
+                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack * 2 + c.defense).ToList(); 
                         UpdateYourCards(); break;
                     case 4: Cards._ycards = Cards._ycards.OrderByDescending(c => c.rarity).ToList(); 
                         UpdateYourCards(); break;
-                    case 5: Cards._yfcards = Cards._yfcards.OrderByDescending(c => c.comboCards.Count).ToList(); 
+                    case 5: Cards._yccards = Cards._yccards.OrderByDescending(c => c.combos.Count).ToList(); 
                         UpdateYourFCards(); break;
+                    case 6:
+                        CalcComboStatsSum();
+                        Cards._yccards = Cards._yccards.OrderByDescending(c => c.comboStatSum).ToList();
+                        UpdateYourCCards(); break;
                 }
             }
             UpdateYourCards();
+        }
+
+        private void CalcComboStatsSum()
+        {
+            foreach (CCard ccard in Cards._ycards)
+            {
+                foreach (CCombo combo in ccard.combos)
+                {
+                    FCard fcResult;
+                    if (combo.card3Rarity != 0)
+                    {
+                        fcResult = Cards.GetFCard(combo.card3Name);
+                    }
+                    else
+                    {
+                        fcResult = Cards.GetFCard(combo.card3Name, combo.card3Rarity);
+                    }
+                    if (fcResult != null)
+                    {
+                        ccard.comboStatSum += fcResult.attack + fcResult.defense;
+                    }
+                }
+            }
+        }
+        private void CalcComboRarity()
+        {
+            foreach (CCard ccard in Cards._ycards)
+            {
+                foreach (CCombo combo in ccard.combos)
+                {
+                    CCard ccCombo= Cards.GetCCard(combo.ccard2Name);
+                    if (ccCombo != null)
+                    {
+                        combo.card3Rarity = ccCombo.rarity;
+                    }
+
+                    FCard fcResult = Cards.GetFCard(combo.card3Name);
+                    if (fcResult != null)
+                    {
+                        combo.card3Rarity = fcResult.rarity;
+                    }
+                }
+            }
+            foreach (FCard fcard in Cards._ycards)
+            {
+                foreach (FCombo combo in fcard.comboCards)
+                {
+                    CCard ccCombo1 = Cards.GetCCard(combo.ccard1Name);
+                    if (ccCombo1 != null)
+                    {
+                        combo.ccard1Rarity = ccCombo1.rarity;
+                    }
+
+                    CCard ccCombo2 = Cards.GetCCard(combo.ccard2Name);
+                    if (ccCombo2 != null)
+                    {
+                        combo.ccard2Rarity = ccCombo2.rarity;
+                    }
+                }
+            }
         }
 
         private void OwnedCardsSortComboBox_SelectedIndexChanged(object sender, EventArgs e)

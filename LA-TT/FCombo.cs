@@ -8,7 +8,10 @@ namespace LA_TT
 {
     public class FCombo
     {
-        CCard ccard1;
-        CCard ccard2;
+        public int id { get; set; }
+        public string ccard1Name { get; set; }
+        public string ccard2Name { get; set; }
+        public byte ccard1Rarity { get; set; }
+        public byte ccard2Rarity { get; set; }
     }
 }

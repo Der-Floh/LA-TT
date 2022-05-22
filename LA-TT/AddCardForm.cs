@@ -12,22 +12,41 @@ namespace LA_TT
 {
     public partial class AddCardForm : Form
     {
+        private int comboId;
+        //private CCombo _ccombo;
+        //private FCombo _fcombo;
+        private List<CCombo> _ccombos;
+        private List<FCombo> _fcombos;
+        private CCard _ccard;
+        private FCard _fcard;
+
+        private byte combosWithRarity;
+        private byte combosToRarity;
+
+        private bool combosWithExists;
+        private bool combosToExists;
+        private bool cardExists;
+        private bool cardNameEmpty;
+        private bool card3FCard;
         public AddCardForm()
         {
             InitializeComponent();
-        }
+            cardNameEmpty = true;
+            comboId = 0;
+            //_ccombo = new CCombo();
+            //_fcombo = new FCombo();
+            _ccard = new CCard();
+            _fcard = new FCard();
+            _ccombos = new List<CCombo>();
+            _fcombos = new List<FCombo>();
 
-        private void RarityNumericBox_ValueChanged(object sender, EventArgs e)
-        {
-            switch (RarityNumericBox.Value)
-            {
-                case 1: CardPictureBox.Image = LA_TT.Properties.Resources.CardB; break;
-                case 2: CardPictureBox.Image = LA_TT.Properties.Resources.CardS; break;
-                case 3: CardPictureBox.Image = LA_TT.Properties.Resources.CardG; break;
-                case 4: CardPictureBox.Image = LA_TT.Properties.Resources.CardD; break; //Image.FromFile("Resources/CardD.png");;
-            }
-        }
+            _ccard.rarity = (byte)RarityNumericBox.Value;
+            _ccard.level = (byte)LevelNumericBox.Value;
 
+            _fcard.rarity = (byte)RarityNumericBox.Value;
+            _ccard.level = (byte)LevelNumericBox.Value;
+            UpdateErrorsListBox();
+        }
         private void ComboCardCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (ComboCardCheckBox.Checked)
@@ -49,103 +68,11 @@ namespace LA_TT
             AttackNumericBox.BackColor = Color.FromArgb(255, 102, 0);
             DefenseNumericBox.BackColor = Color.FromArgb(0, 101, 204);
         }
-
+        
         private void OkButton_Click(object sender, EventArgs e)
         {
-            if (ComboCardCheckBox.Checked)
-            {
-                CCard ccard = new CCard();
-                ccard.name = NameTextBox.Text;
-                ccard.rarity = (byte)RarityNumericBox.Value;
-
-                bool continued = false;
-                if (ccard.name == "")
-                {
-                    MessageBox.Show("Cardname is empty", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    DialogResult = DialogResult.None;
-                    return;
-                }
-                if (Cards.GetCCard(ccard.name, ccard.rarity) != null)
-                {
-                    MessageBox.Show("Cardname already exists", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    DialogResult = DialogResult.None;
-                    return;
-                }
-
-                CCard ccard2 = Cards.GetCCard(CombosWithTextBox.Text);
-                FCard fcard = Cards.GetFCard(CombosToCardTextBox.Text);
-
-                CCard cfcard = null;
-                if (fcard == null)
-                {
-                    cfcard = Cards.GetCCard(CombosToCardTextBox.Text);
-                    if (cfcard == null)
-                    {
-                        if (MessageBox.Show("Combo Cards do not exist.\n\nAre you sure you want to continue?", "Save Card Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
-                        {
-                            DialogResult = DialogResult.None;
-                            return;
-                        }
-                        continued = true;
-
-                    }
-                    if (!continued)
-                    {
-                        DialogResult = DialogResult.None;
-                    }
-                }
-                else
-                {
-                    ccard.combos.Add(ccard2, fcard);
-                }
-
-                if (!continued && (ccard2 == null || ccard.combos[ccard2] == null))
-                {
-                    if (MessageBox.Show("Combo Cards do not exist.\n\nAre you sure you want to continue?", "Save Card Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
-                    {
-                        DialogResult = DialogResult.None;
-                        return;
-                    }
-                    continued = true;
-                }
-                DialogResult = DialogResult.OK;
-            }
-            else
-            {
-                FCard fcard = new FCard();
-                fcard.name = NameTextBox.Text;
-                fcard.rarity = (byte)RarityNumericBox.Value;
-
-                if (fcard.name == "")
-                {
-                    MessageBox.Show("Cardname is empty", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    DialogResult = DialogResult.None;
-                    return;
-                }
-                if (Cards.GetCCard(fcard.name, fcard.rarity) != null)
-                {
-                    MessageBox.Show("Cardname already exists", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    DialogResult = DialogResult.None;
-                    return;
-                }
-
-                CCard ccard1 = Cards.GetCCard(CombosWithTextBox.Text);
-                CCard ccard2 = Cards.GetCCard(CombosToCardTextBox.Text);
-
-                if (ccard1 == null || ccard2 == null)
-                {
-                    if (MessageBox.Show("Combo Cards do not exist.\n\nAre you sure you want to continue?", "Save Card Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
-                    {
-                        DialogResult = DialogResult.None;
-                        return;
-                    }
-                }
-                else
-                {
-                    fcard.comboCards.Add(ccard1, ccard2);
-                }
-                DialogResult = DialogResult.OK;
-            }
+            AddCard();
+            DialogResult = DialogResult.OK;
             if (LeaveOpenCheckBox.Checked)
             {
                 NameTextBox.Text = "";
@@ -155,58 +82,365 @@ namespace LA_TT
                 DefenseNumericBox.Value = 0;
                 LevelNumericBox.Value = 1;
                 RarityNumericBox.Value = 1;
+                
+                cardNameEmpty = true;
+                comboId = 0;
+                _ccard = new CCard();
+                _fcard = new FCard();
+                _ccombos = new List<CCombo>();
+                _fcombos = new List<FCombo>();
+
+                _ccard.rarity = (byte)RarityNumericBox.Value;
+                _ccard.level = (byte)LevelNumericBox.Value;
+
+                _fcard.rarity = (byte)RarityNumericBox.Value;
+                _ccard.level = (byte)LevelNumericBox.Value;
+
+                UpdateComboCardsListBox();
+                UpdateErrorsListBox();
+
                 DialogResult = DialogResult.None;
             }
-
-            AddCard();
         }
         private void AddCard()
         {
             if (ComboCardCheckBox.Checked)
             {
-                CCard ccard = new CCard();
-                ccard.name = NameTextBox.Text;
-                ccard.level = (byte)LevelNumericBox.Value;
-                ccard.attack = (byte)AttackNumericBox.Value;
-                ccard.defense = (byte)DefenseNumericBox.Value;
-                ccard.rarity = (byte)RarityNumericBox.Value;
-                ccard.image = ImagePictureBox.Image;
-
-                FCard fcard = Cards.GetFCard(CombosToCardTextBox.Text);
-
-                if (fcard == null)
-                {
-                    CCard cfcard = Cards.GetCCard(CombosToCardTextBox.Text);
-                    try
-                    {
-                        ccard.combos.Add(Cards.GetCCard(CombosWithTextBox.Text), cfcard);
-                    }
-                    catch (Exception) { }
-                }
-                else
-                {
-                    ccard.combos.Add(Cards.GetCCard(CombosWithTextBox.Text), fcard);
-                }
-
-                Cards.AddCCard(ccard);
+                _ccard.combos = _ccombos;
+                Cards.AddCCard(_ccard);
             }
             else
             {
-                FCard fcard = new FCard();
-                fcard.name = NameTextBox.Text;
-                fcard.level = (byte)LevelNumericBox.Value;
-                fcard.attack = (byte)AttackNumericBox.Value;
-                fcard.defense = (byte)DefenseNumericBox.Value;
-                fcard.rarity = (byte)RarityNumericBox.Value;
-                fcard.image = ImagePictureBox.Image;
+                _fcard.comboCards = _fcombos;
+                Cards.AddFCard(_fcard);
+            }
 
-                try
+            if (InstantSaveCheckBox.Checked)
+            {
+                if (ComboCardCheckBox.Checked)
                 {
-                    fcard.comboCards.Add(Cards.GetCCard(CombosWithTextBox.Text), Cards.GetCCard(CombosToCardTextBox.Text));
+                    Cards.WriteCCards(true, _ccard.rarity);
+                    Cards.WriteCCards(false, _ccard.rarity);
                 }
-                catch (Exception) { }
+                else
+                {
+                    Cards.WriteFCards(true, _fcard.rarity);
+                    Cards.WriteFCards(false, _fcard.rarity);
+                }
+            }
+        }
 
-                Cards.AddFCard(fcard);
+        private void AddComboToComboCardsListBox(CCombo combo)
+        {
+            ComboCardsListBox.Items.Add(_ccard.name+ " (this Card) + " +combo.ccard2Name+ " = "+ combo.card3Name);
+        }
+        private void AddComboToComboCardsListBox(FCombo combo)
+        {
+            ComboCardsListBox.Items.Add(combo.ccard1Name + " + " + combo.ccard2Name + " = " +_fcard.name+ " (this Card)");
+        }
+        private void UpdateComboCardsListBox()
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                ComboCardsListBox.Items.Clear();
+                if (_ccombos.Count == 0) return;
+                foreach (CCombo combo in _ccombos)
+                {
+                    ComboCardsListBox.Items.Add(_ccard.name + " (this Card) + " + combo.ccard2Name + " = " + combo.card3Name);
+                }
+            }
+            else
+            {
+                ComboCardsListBox.Items.Clear();
+                if (_fcombos.Count == 0) return;
+                foreach (FCombo combo in _fcombos)
+                {
+                    ComboCardsListBox.Items.Add(combo.ccard1Name + " + " + combo.ccard2Name + " = " + _fcard.name + " (this Card)");
+                }
+            }
+        }
+        private void UpdateErrorsListBox()
+        {
+            ErrorsListBox.Items.Clear();
+            if (!combosWithExists)
+            {
+                string CombosWithText = CombosWithTextBox.Text;
+                if (CombosWithText == "") CombosWithText = "empty";
+                ErrorsListBox.Items.Add("Combo Card: '" + CombosWithText + "' doesn't exist.");
+            }
+            if (!combosToExists)
+            {
+                string CombosToText = CombosToCardTextBox.Text;
+                if (CombosToText == "") CombosToText = "empty";
+                ErrorsListBox.Items.Add("Combo Card: '" + CombosToText + "' doesn't exist.");
+            }
+            if (cardNameEmpty)
+            {
+                ErrorsListBox.Items.Add("Cardname is empty.");
+            }
+            if (cardExists)
+            {
+                string nameText = NameTextBox.Text;
+                if (nameText == "") nameText = "empty";
+                ErrorsListBox.Items.Add("Cardname: '" + nameText + "' already exists." + _ccard.name);
+            }
+        }
+
+        private void AddComboButton_Click(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                if (cardNameEmpty)
+                {
+                    MessageBox.Show("Cardname is Empty. Can't add combo to card.", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (cardExists)
+                {
+                    MessageBox.Show("Cardname already exists. Can't add combo to card: '"+ _ccard.name+ "'", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (!combosWithExists || !combosToExists)
+                {
+                    if (MessageBox.Show("Combo Cards do not exist.\n\nAre you sure you want to continue?", "Save Card Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                CCombo combo = new CCombo();
+                combo.id = comboId;
+                combo.ccard2Name = CombosWithTextBox.Text;
+                combo.card3Name = CombosToCardTextBox.Text;
+                combo.card3FCard = card3FCard;
+                combo.ccard2Rarity = combosWithRarity;
+                combo.card3Rarity = combosToRarity;
+
+                _ccombos.Add(combo);
+                AddComboToComboCardsListBox(combo);
+            }
+            else
+            {
+                if (cardNameEmpty)
+                {
+                    MessageBox.Show("Cardname is Empty. Can't add combo to card.", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (cardExists)
+                {
+                    MessageBox.Show("Cardname already exists. Can't add combo to card: '" + _fcard.name+ "'", "Save Card Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (!combosWithExists || !combosToExists)
+                {
+                    if (MessageBox.Show("Combo Cards do not exist.\n\nAre you sure you want to continue?", "Save Card Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                FCombo combo = new FCombo();
+                combo.id = comboId;
+                combo.ccard1Name = CombosWithTextBox.Text;
+                combo.ccard2Name = CombosToCardTextBox.Text;
+                combo.ccard1Rarity = combosWithRarity;
+                combo.ccard2Rarity = combosToRarity;
+
+                _fcombos.Add(combo);
+                AddComboToComboCardsListBox(combo);
+            }
+            comboId++;
+            CombosWithTextBox.Text = "";
+            CombosToCardTextBox.Text = "";
+        }
+
+        private void AttackNumericBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                _ccard.attack = (byte)AttackNumericBox.Value;
+            }
+            else
+            {
+                _fcard.attack = (byte)AttackNumericBox.Value;
+            }
+        }
+
+        private void DefenseNumericBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                _ccard.defense = (byte)DefenseNumericBox.Value;
+            }
+            else
+            {
+                _fcard.defense = (byte)DefenseNumericBox.Value;
+            }
+        }
+
+        private void LevelNumericBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                _ccard.level = (byte)LevelNumericBox.Value;
+            }
+            else
+            {
+                _fcard.level = (byte)LevelNumericBox.Value;
+            }
+        }
+        private void RarityNumericBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                _ccard.rarity = (byte)RarityNumericBox.Value;
+            }
+            else
+            {
+                _fcard.rarity = (byte)RarityNumericBox.Value;
+            }
+            switch (RarityNumericBox.Value)
+            {
+                case 1: CardPictureBox.Image = LA_TT.Properties.Resources.CardB; break;
+                case 2: CardPictureBox.Image = LA_TT.Properties.Resources.CardS; break;
+                case 3: CardPictureBox.Image = LA_TT.Properties.Resources.CardG; break;
+                case 4: CardPictureBox.Image = LA_TT.Properties.Resources.CardD; break;
+            }
+        }
+
+        private void NameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                _ccard.name = NameTextBox.Text;
+                if (_ccard.name == "")
+                {
+                    cardNameEmpty = true;
+                    UpdateErrorsListBox();
+                    return;
+                }
+                cardNameEmpty = false;
+                if (Cards.GetCCard(_ccard.name) != null)
+                {
+                    cardExists = true;
+                    UpdateErrorsListBox();
+                    return;
+                }
+                cardExists = false;
+                UpdateErrorsListBox();
+                UpdateComboCardsListBox();
+            }
+            else
+            {
+                _fcard.name = NameTextBox.Text;
+                if (_fcard.name == "")
+                {
+                    cardNameEmpty = true;
+                    UpdateErrorsListBox();
+                    return;
+                }
+                cardNameEmpty = false;
+                if (Cards.GetFCard(_fcard.name) != null)
+                {
+                    cardExists = true;
+                    UpdateErrorsListBox();
+                    return;
+                }
+                cardExists = false;
+                UpdateErrorsListBox();
+                UpdateComboCardsListBox();
+            }
+        }
+
+        private void CombosWithTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                CCard ccard2 = Cards.GetCCard(CombosWithTextBox.Text);
+                if (ccard2 == null)
+                {
+                    combosWithExists = false;
+                    UpdateErrorsListBox();
+                    return;
+                }
+                combosWithExists = true;
+                combosWithRarity = ccard2.rarity;
+            }
+            else
+            {
+                CCard ccard1 = Cards.GetCCard(CombosWithTextBox.Text);
+                if (ccard1 == null)
+                {
+                    combosWithExists = false;
+                    UpdateErrorsListBox();
+                    return;
+                }
+                combosWithExists = true;
+                combosWithRarity = ccard1.rarity;
+            }
+        }
+
+        private void CombosToCardTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                FCard fcard3 = Cards.GetFCard(CombosToCardTextBox.Text);
+                if (fcard3 == null)
+                {
+                    CCard cfcard3 = Cards.GetCCard(CombosToCardTextBox.Text);
+                    if (cfcard3 == null)
+                    {
+                        card3FCard = true;
+                        combosToExists = false;
+                        UpdateErrorsListBox();
+                        return;
+                    }
+                    card3FCard = false;
+                    combosToRarity = cfcard3.rarity;
+                }
+                else
+                {
+                    card3FCard = true;
+                    combosToRarity = fcard3.rarity;
+                }
+                combosToExists = true;
+            }
+            else
+            {
+                CCard ccard2 = Cards.GetCCard(CombosToCardTextBox.Text);
+                if (ccard2 == null)
+                {
+                    combosToExists = false;
+                    UpdateErrorsListBox();
+                    return;
+                }
+                combosToExists = true;
+                combosToRarity = ccard2.rarity;
+            }
+        }
+
+        private void DeleteComboButton_Click(object sender, EventArgs e)
+        {
+            if (ComboCardsListBox.SelectedIndex == -1) return;
+            if (ComboCardCheckBox.Checked)
+            {
+                CCombo combo = _ccombos.Find(c => c.id == ComboCardsListBox.SelectedIndex);
+                if (combo == null)
+                {
+                    MessageBox.Show("Combo could not be deleted.", "Delete Combo Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                _ccombos.Remove(combo);
+                UpdateComboCardsListBox();
+            }
+            else
+            {
+                FCombo combo = _fcombos.Find(c => c.id == ComboCardsListBox.SelectedIndex);
+                if (combo == null)
+                {
+                    MessageBox.Show("Combo could not be deleted.", "Delete Combo Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                _fcombos.Remove(combo);
+                UpdateComboCardsListBox();
             }
         }
     }

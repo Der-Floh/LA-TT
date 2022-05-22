@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.fIleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllCardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -403,7 +404,8 @@
             "Best Stats",
             "Rarity",
             "Level",
-            "Combo Number"});
+            "Combo Number",
+            "Best Combos"});
             this.OwnedCardsSortComboBox.Location = new System.Drawing.Point(50, 3);
             this.OwnedCardsSortComboBox.Name = "OwnedCardsSortComboBox";
             this.OwnedCardsSortComboBox.Size = new System.Drawing.Size(140, 23);
@@ -469,6 +471,7 @@
             this.Controls.Add(this.DecksPanel);
             this.Controls.Add(this.MenuStrip);
             this.Controls.Add(this.CardManagerMenuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuStrip;
             this.MinimumSize = new System.Drawing.Size(1015, 636);
             this.Name = "MainForm";
