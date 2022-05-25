@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace LA_TT
 {
     public partial class MainForm : Form
@@ -10,7 +12,12 @@ namespace LA_TT
             InitializeComponent();
             Cards.OnFinishedInit += OnFinishedInitCards;
             Cards.Init();
+
+            HtmlHandler htmlHandler = new HtmlHandler();
+            //htmlHandler.DownloadWikiPageHTML();
         }
+
+        
 
         private void addCardToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -166,7 +173,7 @@ namespace LA_TT
         private void OnFinishedInitCards(object sender, EventArgs e)
         {
             finishedCardsInit = true;
-            CalcComboRarity();
+            //CalcComboRarity();
             Cards._ycards = Cards._ycards.OrderBy(c => c.name).ToList();
             UpdateYourCards();
             //MessageBox.Show("Form Init Finished");
