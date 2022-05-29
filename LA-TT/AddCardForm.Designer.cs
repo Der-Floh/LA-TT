@@ -30,6 +30,12 @@
         {
             this.NameTextBox = new System.Windows.Forms.TextBox();
             this.CardPanel = new System.Windows.Forms.Panel();
+            this.CalcedDefenseTextBox = new System.Windows.Forms.TextBox();
+            this.CalcedAttackTextBox = new System.Windows.Forms.TextBox();
+            this.CalcedDefenseLabel = new System.Windows.Forms.Label();
+            this.CalcedAttackLabel = new System.Windows.Forms.Label();
+            this.CalcedBluePictureBox = new System.Windows.Forms.PictureBox();
+            this.CalcedOrangePictureBox = new System.Windows.Forms.PictureBox();
             this.ComboCardCheckBox = new System.Windows.Forms.CheckBox();
             this.RarityLabel = new System.Windows.Forms.Label();
             this.RarityNumericBox = new System.Windows.Forms.NumericUpDown();
@@ -58,7 +64,10 @@
             this.ErrorsLabel = new System.Windows.Forms.Label();
             this.DeleteComboButton = new System.Windows.Forms.Button();
             this.InstantSaveCheckBox = new System.Windows.Forms.CheckBox();
+            this.AddOwnCardCheckBox = new System.Windows.Forms.CheckBox();
             this.CardPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CalcedBluePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CalcedOrangePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RarityNumericBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CFPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DefenseNumericBox)).BeginInit();
@@ -83,6 +92,12 @@
             // 
             // CardPanel
             // 
+            this.CardPanel.Controls.Add(this.CalcedDefenseTextBox);
+            this.CardPanel.Controls.Add(this.CalcedAttackTextBox);
+            this.CardPanel.Controls.Add(this.CalcedDefenseLabel);
+            this.CardPanel.Controls.Add(this.CalcedAttackLabel);
+            this.CardPanel.Controls.Add(this.CalcedBluePictureBox);
+            this.CardPanel.Controls.Add(this.CalcedOrangePictureBox);
             this.CardPanel.Controls.Add(this.ComboCardCheckBox);
             this.CardPanel.Controls.Add(this.RarityLabel);
             this.CardPanel.Controls.Add(this.RarityNumericBox);
@@ -103,6 +118,75 @@
             this.CardPanel.Name = "CardPanel";
             this.CardPanel.Size = new System.Drawing.Size(405, 562);
             this.CardPanel.TabIndex = 5;
+            // 
+            // CalcedDefenseTextBox
+            // 
+            this.CalcedDefenseTextBox.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.CalcedDefenseTextBox.ForeColor = System.Drawing.Color.Black;
+            this.CalcedDefenseTextBox.Location = new System.Drawing.Point(265, 128);
+            this.CalcedDefenseTextBox.Name = "CalcedDefenseTextBox";
+            this.CalcedDefenseTextBox.ReadOnly = true;
+            this.CalcedDefenseTextBox.Size = new System.Drawing.Size(79, 34);
+            this.CalcedDefenseTextBox.TabIndex = 30;
+            this.CalcedDefenseTextBox.Text = "0";
+            this.CalcedDefenseTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // CalcedAttackTextBox
+            // 
+            this.CalcedAttackTextBox.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.CalcedAttackTextBox.ForeColor = System.Drawing.Color.Black;
+            this.CalcedAttackTextBox.Location = new System.Drawing.Point(146, 128);
+            this.CalcedAttackTextBox.Name = "CalcedAttackTextBox";
+            this.CalcedAttackTextBox.ReadOnly = true;
+            this.CalcedAttackTextBox.Size = new System.Drawing.Size(79, 34);
+            this.CalcedAttackTextBox.TabIndex = 29;
+            this.CalcedAttackTextBox.Text = "0";
+            this.CalcedAttackTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // CalcedDefenseLabel
+            // 
+            this.CalcedDefenseLabel.AutoSize = true;
+            this.CalcedDefenseLabel.BackColor = System.Drawing.Color.Transparent;
+            this.CalcedDefenseLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CalcedDefenseLabel.Location = new System.Drawing.Point(271, 173);
+            this.CalcedDefenseLabel.Name = "CalcedDefenseLabel";
+            this.CalcedDefenseLabel.Size = new System.Drawing.Size(66, 21);
+            this.CalcedDefenseLabel.TabIndex = 28;
+            this.CalcedDefenseLabel.Text = "Defense";
+            // 
+            // CalcedAttackLabel
+            // 
+            this.CalcedAttackLabel.AutoSize = true;
+            this.CalcedAttackLabel.BackColor = System.Drawing.Color.Transparent;
+            this.CalcedAttackLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CalcedAttackLabel.Location = new System.Drawing.Point(157, 173);
+            this.CalcedAttackLabel.Name = "CalcedAttackLabel";
+            this.CalcedAttackLabel.Size = new System.Drawing.Size(53, 21);
+            this.CalcedAttackLabel.TabIndex = 27;
+            this.CalcedAttackLabel.Text = "Attack";
+            // 
+            // CalcedBluePictureBox
+            // 
+            this.CalcedBluePictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.CalcedBluePictureBox.Image = global::LA_TT.Properties.Resources.Blue;
+            this.CalcedBluePictureBox.Location = new System.Drawing.Point(255, 120);
+            this.CalcedBluePictureBox.Name = "CalcedBluePictureBox";
+            this.CalcedBluePictureBox.Size = new System.Drawing.Size(100, 50);
+            this.CalcedBluePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CalcedBluePictureBox.TabIndex = 26;
+            this.CalcedBluePictureBox.TabStop = false;
+            // 
+            // CalcedOrangePictureBox
+            // 
+            this.CalcedOrangePictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.CalcedOrangePictureBox.Image = global::LA_TT.Properties.Resources.Orange;
+            this.CalcedOrangePictureBox.InitialImage = null;
+            this.CalcedOrangePictureBox.Location = new System.Drawing.Point(135, 120);
+            this.CalcedOrangePictureBox.Name = "CalcedOrangePictureBox";
+            this.CalcedOrangePictureBox.Size = new System.Drawing.Size(100, 50);
+            this.CalcedOrangePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CalcedOrangePictureBox.TabIndex = 25;
+            this.CalcedOrangePictureBox.TabStop = false;
             // 
             // ComboCardCheckBox
             // 
@@ -166,17 +250,18 @@
             this.CFPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.CFPictureBox.TabIndex = 19;
             this.CFPictureBox.TabStop = false;
+            this.CFPictureBox.Click += new System.EventHandler(this.CFPictureBox_Click);
             // 
             // DefenseLabel
             // 
             this.DefenseLabel.AutoSize = true;
             this.DefenseLabel.BackColor = System.Drawing.Color.Transparent;
             this.DefenseLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.DefenseLabel.Location = new System.Drawing.Point(269, 93);
+            this.DefenseLabel.Location = new System.Drawing.Point(255, 93);
             this.DefenseLabel.Name = "DefenseLabel";
-            this.DefenseLabel.Size = new System.Drawing.Size(66, 21);
+            this.DefenseLabel.Size = new System.Drawing.Size(102, 21);
             this.DefenseLabel.TabIndex = 11;
-            this.DefenseLabel.Text = "Defense";
+            this.DefenseLabel.Text = "Base Defense";
             // 
             // DefenseNumericBox
             // 
@@ -201,7 +286,7 @@
             // 
             this.BluePictureBox.BackColor = System.Drawing.Color.Transparent;
             this.BluePictureBox.Image = global::LA_TT.Properties.Resources.Blue;
-            this.BluePictureBox.Location = new System.Drawing.Point(256, 40);
+            this.BluePictureBox.Location = new System.Drawing.Point(255, 40);
             this.BluePictureBox.Name = "BluePictureBox";
             this.BluePictureBox.Size = new System.Drawing.Size(100, 50);
             this.BluePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -235,11 +320,11 @@
             this.AttackLabel.AutoSize = true;
             this.AttackLabel.BackColor = System.Drawing.Color.Transparent;
             this.AttackLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.AttackLabel.Location = new System.Drawing.Point(157, 93);
+            this.AttackLabel.Location = new System.Drawing.Point(141, 93);
             this.AttackLabel.Name = "AttackLabel";
-            this.AttackLabel.Size = new System.Drawing.Size(53, 21);
+            this.AttackLabel.Size = new System.Drawing.Size(89, 21);
             this.AttackLabel.TabIndex = 10;
-            this.AttackLabel.Text = "Attack";
+            this.AttackLabel.Text = "Base Attack";
             // 
             // LevelNumericBox
             // 
@@ -433,12 +518,26 @@
             this.InstantSaveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.InstantSaveCheckBox.AutoSize = true;
             this.InstantSaveCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.InstantSaveCheckBox.Location = new System.Drawing.Point(292, 618);
+            this.InstantSaveCheckBox.Location = new System.Drawing.Point(292, 620);
             this.InstantSaveCheckBox.Name = "InstantSaveCheckBox";
             this.InstantSaveCheckBox.Size = new System.Drawing.Size(113, 25);
             this.InstantSaveCheckBox.TabIndex = 33;
             this.InstantSaveCheckBox.Text = "Instant Save";
             this.InstantSaveCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // AddOwnCardCheckBox
+            // 
+            this.AddOwnCardCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddOwnCardCheckBox.AutoSize = true;
+            this.AddOwnCardCheckBox.Checked = true;
+            this.AddOwnCardCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AddOwnCardCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.AddOwnCardCheckBox.Location = new System.Drawing.Point(122, 620);
+            this.AddOwnCardCheckBox.Name = "AddOwnCardCheckBox";
+            this.AddOwnCardCheckBox.Size = new System.Drawing.Size(164, 25);
+            this.AddOwnCardCheckBox.TabIndex = 34;
+            this.AddOwnCardCheckBox.Text = "Add as owned Card";
+            this.AddOwnCardCheckBox.UseVisualStyleBackColor = true;
             // 
             // AddCardForm
             // 
@@ -446,6 +545,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(803, 661);
+            this.Controls.Add(this.AddOwnCardCheckBox);
             this.Controls.Add(this.InstantSaveCheckBox);
             this.Controls.Add(this.DeleteComboButton);
             this.Controls.Add(this.ErrorsLabel);
@@ -467,6 +567,8 @@
             this.Load += new System.EventHandler(this.AddCardForm_Load);
             this.CardPanel.ResumeLayout(false);
             this.CardPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CalcedBluePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CalcedOrangePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RarityNumericBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CFPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DefenseNumericBox)).EndInit();
@@ -512,5 +614,12 @@
         public ListBox ErrorsListBox;
         public Button DeleteComboButton;
         public CheckBox InstantSaveCheckBox;
+        public CheckBox AddOwnCardCheckBox;
+        private Label CalcedDefenseLabel;
+        private Label CalcedAttackLabel;
+        public PictureBox CalcedBluePictureBox;
+        public PictureBox CalcedOrangePictureBox;
+        public TextBox CalcedDefenseTextBox;
+        public TextBox CalcedAttackTextBox;
     }
 }

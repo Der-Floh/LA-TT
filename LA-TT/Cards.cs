@@ -34,6 +34,7 @@ namespace LA_TT
         public static List<FCard> _yfcardsO;
 
         public static List<Card> _ycards;
+        public static List<Card> _ycardsFiltered;
         public static List<CCard> _yccards;
         public static List<FCard> _yfcards;
 
@@ -152,22 +153,25 @@ namespace LA_TT
 
             //Change _ccards to _yccards
             _yccards = new List<CCard>();
-            _yccards.AddRange(_ccardsB);
-            _yccards.AddRange(_ccardsS);
-            _yccards.AddRange(_ccardsG);
-            _yccards.AddRange(_ccardsD);
-            _yccards.AddRange(_ccardsO);
+            //_yccards.AddRange(_ccardsB);
+            //_yccards.AddRange(_ccardsS);
+            //_yccards.AddRange(_ccardsG);
+            //_yccards.AddRange(_ccardsD);
+            //_yccards.AddRange(_ccardsO);
 
             _yfcards = new List<FCard>();
-            _yfcards.AddRange(_fcardsB);
-            _yfcards.AddRange(_fcardsS);
-            _yfcards.AddRange(_fcardsG);
-            _yfcards.AddRange(_fcardsD);
-            _yfcards.AddRange(_fcardsO);
+            //_yfcards.AddRange(_fcardsB);
+            //_yfcards.AddRange(_fcardsS);
+            //_yfcards.AddRange(_fcardsG);
+            //_yfcards.AddRange(_fcardsD);
+            //_yfcards.AddRange(_fcardsO);
 
             _ycards = new List<Card>();
             _ycards.AddRange(_yccards);
             _ycards.AddRange(_yfcards);
+
+            _ycardsFiltered = new List<Card>();
+            _ycardsFiltered = _ycards;
 
             writeTimer = new System.Timers.Timer(60000);
             writeTimer.Elapsed += OnTimeedEvent;
@@ -284,6 +288,32 @@ namespace LA_TT
                     break;
             }
         }
+        public static async void AddYourCCard(CCard ccard)
+        {
+            switch (ccard.rarity)
+            {
+                case 1:
+                    _yccardsB.Add(ccard);
+                    yccardsBChanged = true;
+                    break;
+                case 2:
+                    _yccardsS.Add(ccard);
+                    yccardsSChanged = true;
+                    break;
+                case 3:
+                    _yccardsG.Add(ccard);
+                    yccardsGChanged = true;
+                    break;
+                case 4:
+                    _yccardsD.Add(ccard);
+                    yccardsDChanged = true;
+                    break;
+                case 5:
+                    _yccardsO.Add(ccard);
+                    yccardsOChanged = true;
+                    break;
+            }
+        }
 
         public static async void AddFCard(FCard fcard)
         {
@@ -308,6 +338,32 @@ namespace LA_TT
                 case 5:
                     _fcardsO.Add(fcard);
                     fcardsOChanged = true;
+                    break;
+            }
+        }
+        public static async void AddYourFCard(FCard fcard)
+        {
+            switch (fcard.rarity)
+            {
+                case 1:
+                    _yfcardsB.Add(fcard);
+                    yfcardsBChanged = true;
+                    break;
+                case 2:
+                    _yfcardsS.Add(fcard);
+                    yfcardsSChanged = true;
+                    break;
+                case 3:
+                    _yfcardsG.Add(fcard);
+                    yfcardsGChanged = true;
+                    break;
+                case 4:
+                    _yfcardsD.Add(fcard);
+                    yfcardsDChanged = true;
+                    break;
+                case 5:
+                    _yfcardsO.Add(fcard);
+                    yfcardsOChanged = true;
                     break;
             }
         }
@@ -363,28 +419,28 @@ namespace LA_TT
                     case 1: if (yccardsBChanged && _yccardsB.Count != 0)
                         {
                             _yccardsB = _yccardsB.OrderBy(c => c.name).ToList();
-                            await jsonHandler.WriteCCards(_yccardsS, your, rarity);
+                            await jsonHandler.WriteCCards(_yccardsB, your, rarity);
                             yccardsBChanged = false;
                         }
                         break;
                     case 2: if (yccardsSChanged && _yccardsS.Count != 0) 
                         {
                             _yccardsS = _yccardsS.OrderBy(c => c.name).ToList();
-                            await jsonHandler.WriteCCards(_yccardsG, your, rarity);
+                            await jsonHandler.WriteCCards(_yccardsS, your, rarity);
                             yccardsSChanged = false;
                         }
                         break;
                     case 3: if (yccardsGChanged && _yccardsG.Count != 0) 
                         {
                             _yccardsG = _yccardsG.OrderBy(c => c.name).ToList();
-                            await jsonHandler.WriteCCards(_yccardsD, your, rarity);
+                            await jsonHandler.WriteCCards(_yccardsG, your, rarity);
                             yccardsGChanged = false;
                         }
                         break;
                     case 4: if (yccardsDChanged && _yccardsD.Count != 0) 
                         {
                             _yccardsD = _yccardsD.OrderBy(c => c.name).ToList();
-                            await jsonHandler.WriteCCards(_yccardsB, your, rarity);
+                            await jsonHandler.WriteCCards(_yccardsD, your, rarity);
                             yccardsDChanged = false;
                         }
                         break;
@@ -485,13 +541,183 @@ namespace LA_TT
             }
         }
 
+        public static void UpdateCCard(CCard ccard, bool your)
+        {
+            if (!your)
+            {
+                switch (ccard.rarity)
+                {
+                    case 1:
+                        if (_ccardsB.Remove(_ccardsB.Find(c => c.name == ccard.name)))
+                        {
+                            _ccardsB.Add(ccard);
+                            ccardsBChanged = true;
+                        }
+                        break;
+                    case 2:
+                        if (_ccardsS.Remove(_ccardsS.Find(c => c.name == ccard.name)))
+                        {
+                            _ccardsS.Add(ccard);
+                            ccardsSChanged = true;
+                        }
+                        break;
+                    case 3:
+                        if (_ccardsG.Remove(_ccardsG.Find(c => c.name == ccard.name)))
+                        {
+                            _ccardsG.Add(ccard);
+                            ccardsGChanged = true;
+                        }
+                        break;
+                    case 4:
+                        if (_ccardsD.Remove(_ccardsD.Find(c => c.name == ccard.name)))
+                        {
+                            _ccardsD.Add(ccard);
+                            ccardsDChanged = true;
+                        }
+                        break;
+                    case 5:
+                        if (_ccardsO.Remove(_ccardsO.Find(c => c.name == ccard.name)))
+                        {
+                            _ccardsO.Add(ccard);
+                            ccardsOChanged = true;
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                switch (ccard.rarity)
+                {
+                    case 1:
+                        if (_yccardsB.Remove(_yccardsB.Find(c => c.name == ccard.name)))
+                        {
+                            _yccardsB.Add(ccard);
+                            yccardsBChanged = true;
+                        }
+                        break;
+                    case 2:
+                        if (_yccardsS.Remove(_yccardsS.Find(c => c.name == ccard.name)))
+                        {
+                            _yccardsS.Add(ccard);
+                            yccardsSChanged = true;
+                        }
+                        break;
+                    case 3:
+                        if (_yccardsG.Remove(_yccardsG.Find(c => c.name == ccard.name)))
+                        {
+                            _yccardsG.Add(ccard);
+                            yccardsGChanged = true;
+                        }
+                        break;
+                    case 4:
+                        if (_yccardsD.Remove(_yccardsD.Find(c => c.name == ccard.name)))
+                        {
+                            _yccardsD.Add(ccard);
+                            yccardsDChanged = true;
+                        }
+                        break;
+                    case 5:
+                        if (_yccardsO.Remove(_yccardsO.Find(c => c.name == ccard.name)))
+                        {
+                            _yccardsO.Add(ccard);
+                            yccardsOChanged = true;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public static void UpdateFCard(FCard fcard, bool your)
+        {
+            if (!your)
+            {
+                switch (fcard.rarity)
+                {
+                    case 1:
+                        if (_fcardsB.Remove(_fcardsB.Find(c => c.name == fcard.name)))
+                        {
+                            _fcardsB.Add(fcard);
+                            fcardsBChanged = true;
+                        }
+                        break;
+                    case 2:
+                        if (_fcardsS.Remove(_fcardsS.Find(c => c.name == fcard.name)))
+                        {
+                            _fcardsS.Add(fcard);
+                            fcardsSChanged = true;
+                        }
+                        break;
+                    case 3:
+                        if (_fcardsG.Remove(_fcardsG.Find(c => c.name == fcard.name)))
+                        {
+                            _fcardsG.Add(fcard);
+                            fcardsGChanged = true;
+                        }
+                        break;
+                    case 4:
+                        if (_fcardsD.Remove(_fcardsD.Find(c => c.name == fcard.name)))
+                        {
+                            _fcardsD.Add(fcard);
+                            fcardsDChanged = true;
+                        }
+                        break;
+                    case 5:
+                        if (_fcardsO.Remove(_fcardsO.Find(c => c.name == fcard.name)))
+                        {
+                            _fcardsO.Add(fcard);
+                            fcardsOChanged = true;
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                switch (fcard.rarity)
+                {
+                    case 1:
+                        if (_yfcardsB.Remove(_yfcardsB.Find(c => c.name == fcard.name)))
+                        {
+                            _yfcardsB.Add(fcard);
+                            yfcardsBChanged = true;
+                        }
+                        break;
+                    case 2:
+                        if (_yfcardsS.Remove(_yfcardsS.Find(c => c.name == fcard.name)))
+                        {
+                            _yfcardsS.Add(fcard);
+                            yfcardsSChanged = true;
+                        }
+                        break;
+                    case 3:
+                        if (_yfcardsG.Remove(_yfcardsG.Find(c => c.name == fcard.name)))
+                        {
+                            _yfcardsG.Add(fcard);
+                            yfcardsGChanged = true;
+                        }
+                        break;
+                    case 4:
+                        if (_yfcardsD.Remove(_yfcardsD.Find(c => c.name == fcard.name)))
+                        {
+                            _yfcardsD.Add(fcard);
+                            yfcardsDChanged = true;
+                        }
+                        break;
+                    case 5:
+                        if (_yfcardsO.Remove(_yfcardsO.Find(c => c.name == fcard.name)))
+                        {
+                            _yfcardsO.Add(fcard);
+                            yfcardsOChanged = true;
+                        }
+                        break;
+                }
+            }
+        }
+
         private static void FinishedInit()
         {
-            //MessageBox.Show("Event");
             EventHandler handler = OnFinishedInit;
             if (handler != null)
             {
-                //MessageBox.Show("Event != null");
                 handler(null, EventArgs.Empty);
             }
         }

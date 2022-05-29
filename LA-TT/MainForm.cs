@@ -6,6 +6,8 @@ namespace LA_TT
     {
         private bool finishedCardsInit;
         private bool finishedLoadForm;
+        private bool updateOnlyCCards;
+        private bool updateOnlyFCards;
         public MainForm()
         {
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
@@ -13,8 +15,11 @@ namespace LA_TT
             Cards.OnFinishedInit += OnFinishedInitCards;
             Cards.Init();
 
-            HtmlHandler htmlHandler = new HtmlHandler();
-            //htmlHandler.DownloadWikiPageHTML();
+            if (MessageBox.Show("Do you want to sync all Cards with the Wiki?", "Sync Cards", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                HtmlHandler htmlHandler = new HtmlHandler();
+                htmlHandler.Sync(true);
+            }
         }
 
         
@@ -97,12 +102,12 @@ namespace LA_TT
 
         private void UpdateYourCards()
         {
-            if (Cards._ycards == null)
+            if (Cards._ycardsFiltered == null)
                 return;
 
             string cardType = "C";
             OwnedCardsListBox.Items.Clear();
-            foreach (Card card in Cards._ycards)
+            foreach (Card card in Cards._ycardsFiltered)
             {
                 if (cardType == "C" && card.GetType() == typeof(FCard))
                 {
@@ -162,6 +167,8 @@ namespace LA_TT
             CardDefenseTextBox.BackColor = Color.FromArgb(0, 101, 204);
             OwnedCardsSortComboBox.SelectedIndex = 0;
             OwnedCardsOrderComboBox.SelectedIndex = 0;
+            FilterComboBox.SelectedIndex = 0;
+            OperatorComboBox.SelectedIndex = 0;
         }
         private void MainForm_Shown(object sender, EventArgs e)
         {
@@ -188,50 +195,82 @@ namespace LA_TT
                 switch (OwnedCardsSortComboBox.SelectedIndex)
                 {
                     case 0: Cards._ycards = Cards._ycards.OrderBy(c => c.name).ToList();
-                        UpdateYourCards(); break;
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
                     case 1: Cards._ycards = Cards._ycards.OrderBy(c => c.attack).ToList();
-                        UpdateYourCards(); break;
-                    case 2: Cards._ycards = Cards._ycards.OrderBy(c => c.defense).ToList(); 
-                        UpdateYourCards(); break;
-                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack * 2 + c.defense).ToList(); 
-                        UpdateYourCards(); break;
-                    case 4: Cards._ycards = Cards._ycards.OrderBy(c => c.rarity).ToList(); 
-                        UpdateYourCards(); break;
-                    case 5: Cards._yccards = Cards._yccards.OrderBy(c => c.combos.Count).ToList(); 
-                        UpdateYourCCards(); break;
-                    case 6: CalcComboStatsSum();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 2: Cards._ycards = Cards._ycards.OrderBy(c => c.defense).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack * 2 + c.defense).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 4: Cards._ycards = Cards._ycards.OrderBy(c => c.rarity).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 6: Cards._yccards = Cards._yccards.OrderBy(c => c.combos.Count).ToList();
+                        //UpdateYourCCards(); break;
+                        updateOnlyCCards = true;
+                        updateOnlyFCards = false; break;
+                    case 7:
+                        CalcComboRarity();
+                        CalcComboStatsSum();
                         Cards._yccards = Cards._yccards.OrderBy(c => c.comboStatSum).ToList();
-                        UpdateYourCCards(); break;
+                        //UpdateYourCCards(); break;
+                        updateOnlyCCards = true;
+                        updateOnlyFCards = false; break;
                 }
             }
             else if (OwnedCardsOrderComboBox.SelectedIndex == 1)
             {
                 switch (OwnedCardsSortComboBox.SelectedIndex)
                 {
-                    case 0: Cards._ycards = Cards._ycards.OrderByDescending(c => c.name).ToList(); 
-                        UpdateYourCards(); break;
-                    case 1: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack).ToList(); 
-                        UpdateYourCards(); break;
-                    case 2: Cards._ycards = Cards._ycards.OrderByDescending(c => c.defense).ToList(); 
-                        UpdateYourCards(); break;
-                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack * 2 + c.defense).ToList(); 
-                        UpdateYourCards(); break;
-                    case 4: Cards._ycards = Cards._ycards.OrderByDescending(c => c.rarity).ToList(); 
-                        UpdateYourCards(); break;
-                    case 5: Cards._yccards = Cards._yccards.OrderByDescending(c => c.combos.Count).ToList(); 
-                        UpdateYourFCards(); break;
-                    case 6:
+                    case 0: Cards._ycards = Cards._ycards.OrderByDescending(c => c.name).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 1: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 2: Cards._ycards = Cards._ycards.OrderByDescending(c => c.defense).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack * 2 + c.defense).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 4: Cards._ycards = Cards._ycards.OrderByDescending(c => c.rarity).ToList();
+                        //UpdateYourCards(); break;
+                        updateOnlyCCards = false;
+                        updateOnlyFCards = false; break;
+                    case 6: Cards._yccards = Cards._yccards.OrderByDescending(c => c.combos.Count).ToList();
+                        //UpdateYourCCards(); break;
+                        updateOnlyCCards = true;
+                        updateOnlyFCards = false; break;
+                    case 7:
+                        CalcComboRarity();
                         CalcComboStatsSum();
                         Cards._yccards = Cards._yccards.OrderByDescending(c => c.comboStatSum).ToList();
-                        UpdateYourCCards(); break;
+                        //UpdateYourCCards(); break;
+                        updateOnlyCCards = true;
+                        updateOnlyFCards = false; break;
                 }
             }
-            UpdateYourCards();
+            //UpdateYourCards();
+            SetFilters();
         }
 
         private void CalcComboStatsSum()
         {
-            foreach (CCard ccard in Cards._ycards)
+            foreach (CCard ccard in Cards._yccards)
             {
                 foreach (CCombo combo in ccard.combos)
                 {
@@ -247,30 +286,33 @@ namespace LA_TT
                     if (fcResult != null)
                     {
                         ccard.comboStatSum += fcResult.attack + fcResult.defense;
+                        Cards.UpdateCCard(ccard, false);
                     }
                 }
             }
         }
         private void CalcComboRarity()
         {
-            foreach (CCard ccard in Cards._ycards)
+            foreach (CCard ccard in Cards._yccards)
             {
                 foreach (CCombo combo in ccard.combos)
                 {
                     CCard ccCombo= Cards.GetCCard(combo.ccard2Name);
                     if (ccCombo != null)
                     {
-                        combo.card3Rarity = ccCombo.rarity;
+                        combo.ccard2Rarity = ccCombo.rarity;
+                        Cards.UpdateCCard(ccCombo, false);
                     }
 
                     FCard fcResult = Cards.GetFCard(combo.card3Name);
                     if (fcResult != null)
                     {
                         combo.card3Rarity = fcResult.rarity;
+                        Cards.UpdateFCard(fcResult, false);
                     }
                 }
             }
-            foreach (FCard fcard in Cards._ycards)
+            foreach (FCard fcard in Cards._yfcards)
             {
                 foreach (FCombo combo in fcard.comboCards)
                 {
@@ -278,12 +320,14 @@ namespace LA_TT
                     if (ccCombo1 != null)
                     {
                         combo.ccard1Rarity = ccCombo1.rarity;
+                        Cards.UpdateCCard(ccCombo1, false);
                     }
 
                     CCard ccCombo2 = Cards.GetCCard(combo.ccard2Name);
                     if (ccCombo2 != null)
                     {
                         combo.ccard2Rarity = ccCombo2.rarity;
+                        Cards.UpdateCCard(ccCombo2, false);
                     }
                 }
             }
@@ -356,6 +400,137 @@ namespace LA_TT
             Cards.WriteFCards(false, 3);
             Cards.WriteFCards(false, 4);
             Cards.WriteFCards(false, 5);
+
+            //Thread.Sleep(1000);
+        }
+
+        private void FilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (FilterComboBox.SelectedIndex)
+            {
+                case 0:
+                    FilterTextBox.Visible = false;
+                    FilterTextBox.Clear();
+                    FilterNumericBox.Visible = false;
+                    FilterNumericBox.Value = 0;
+                    break;
+                case 1:
+                    FilterTextBox.Visible = true;
+                    FilterNumericBox.Visible = false;
+                    FilterNumericBox.Value = 0;
+                    break;
+                case 2:
+                    FilterNumericBox.Visible = true;
+                    FilterTextBox.Visible = false;
+                    FilterTextBox.Clear();
+                    break;
+                case 3:
+                    FilterNumericBox.Visible = true;
+                    FilterTextBox.Visible = false;
+                    FilterTextBox.Clear();
+                    break;
+                case 4:
+                    FilterNumericBox.Visible = true;
+                    FilterTextBox.Visible = false;
+                    FilterTextBox.Clear();
+                    break;
+                case 5:
+                    FilterNumericBox.Visible = true;
+                    FilterTextBox.Visible = false;
+                    FilterTextBox.Clear();
+                    break;
+            }
+        }
+
+        private void SetFilters()
+        {
+            Cards._ycardsFiltered = Cards._ycards;
+            switch (FilterComboBox.SelectedIndex)
+            {
+                case 1: SetFilterName(FilterTextBox.Text.Trim()); break;
+                case 2: SetFilterAttack((byte)FilterNumericBox.Value); break;
+                case 3: SetFilterDefense((byte)FilterNumericBox.Value); break;
+                case 4: SetFilterRarity((byte)FilterNumericBox.Value); break;
+                case 5: SetFilterLevel((byte)FilterNumericBox.Value); break;
+            }
+            if (updateOnlyCCards)
+            {
+                UpdateYourCCards();
+            }
+            else if (updateOnlyFCards)
+            {
+                UpdateYourFCards();
+            }
+            else
+            {
+                UpdateYourCards();
+            }
+        }
+
+        private void SetFilterName(string name)
+        {
+            switch (OperatorComboBox.SelectedIndex)
+            {
+                case 0:  Cards._ycardsFiltered = Cards._ycards.Where(c => c.name.StartsWith(name)).ToList(); break;
+                case 1: Cards._ycardsFiltered = Cards._ycards.Where(c => c.name.StartsWith(name)).ToList(); break;
+                case 2: Cards._ycardsFiltered = Cards._ycards.Where(c => c.name == name).ToList(); break;
+                case 3: Cards._ycardsFiltered = Cards._ycards.Where(c => c.name.EndsWith(name)).ToList(); break;
+                case 4: Cards._ycardsFiltered = Cards._ycards.Where(c => c.name.EndsWith(name)).ToList(); break;
+            }
+        }
+        private void SetFilterAttack(byte attack)
+        {
+            switch (OperatorComboBox.SelectedIndex)
+            {
+                case 0: Cards._ycardsFiltered = Cards._ycards.Where(c => c.attack < attack).ToList(); break;
+                case 1: Cards._ycardsFiltered = Cards._ycards.Where(c => c.attack <= attack).ToList(); break;
+                case 2: Cards._ycardsFiltered = Cards._ycards.Where(c => c.attack == attack).ToList(); break;
+                case 3: Cards._ycardsFiltered = Cards._ycards.Where(c => c.attack >= attack).ToList(); break;
+                case 4: Cards._ycardsFiltered = Cards._ycards.Where(c => c.attack > attack).ToList(); break;
+            }
+        }
+        private void SetFilterDefense(byte defense)
+        {
+            switch (OperatorComboBox.SelectedIndex)
+            {
+                case 0: Cards._ycardsFiltered = Cards._ycards.Where(c => c.defense < defense).ToList(); break;
+                case 1: Cards._ycardsFiltered = Cards._ycards.Where(c => c.defense <= defense).ToList(); break;
+                case 2: Cards._ycardsFiltered = Cards._ycards.Where(c => c.defense == defense).ToList(); break;
+                case 3: Cards._ycardsFiltered = Cards._ycards.Where(c => c.defense >= defense).ToList(); break;
+                case 4: Cards._ycardsFiltered = Cards._ycards.Where(c => c.defense > defense).ToList(); break;
+            }
+        }
+        private void SetFilterRarity(byte rarity)
+        {
+            switch (OperatorComboBox.SelectedIndex)
+            {
+                case 0: Cards._ycardsFiltered = Cards._ycards.Where(c => c.rarity < rarity).ToList(); break;
+                case 1: Cards._ycardsFiltered = Cards._ycards.Where(c => c.rarity <= rarity).ToList(); break;
+                case 2: Cards._ycardsFiltered = Cards._ycards.Where(c => c.rarity == rarity).ToList(); break;
+                case 3: Cards._ycardsFiltered = Cards._ycards.Where(c => c.rarity >= rarity).ToList(); break;
+                case 4: Cards._ycardsFiltered = Cards._ycards.Where(c => c.rarity > rarity).ToList(); break;
+            }
+        }
+        private void SetFilterLevel(byte level)
+        {
+            switch (OperatorComboBox.SelectedIndex)
+            {
+                case 0: Cards._ycardsFiltered = Cards._ycards.Where(c => c.level < level).ToList(); break;
+                case 1: Cards._ycardsFiltered = Cards._ycards.Where(c => c.level <= level).ToList(); break;
+                case 2: Cards._ycardsFiltered = Cards._ycards.Where(c => c.level == level).ToList(); break;
+                case 3: Cards._ycardsFiltered = Cards._ycards.Where(c => c.level >= level).ToList(); break;
+                case 4: Cards._ycardsFiltered = Cards._ycards.Where(c => c.level > level).ToList(); break;
+            }
+        }
+
+        private void FilterButton_Click(object sender, EventArgs e)
+        {
+            SortYourCards();
+        }
+
+        private void OperatorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SortYourCards();
         }
     }
 }

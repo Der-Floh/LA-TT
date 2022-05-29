@@ -45,6 +45,13 @@
             this.yourCardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OwnedCardsPanel = new System.Windows.Forms.Panel();
+            this.FilterButton = new System.Windows.Forms.Button();
+            this.OperatorComboBox = new System.Windows.Forms.ComboBox();
+            this.OperatorLabel = new System.Windows.Forms.Label();
+            this.FilterNumericBox = new System.Windows.Forms.NumericUpDown();
+            this.FilterTextBox = new System.Windows.Forms.TextBox();
+            this.FilterLabel = new System.Windows.Forms.Label();
+            this.FilterComboBox = new System.Windows.Forms.ComboBox();
             this.RefreshYourCardsButton = new System.Windows.Forms.Button();
             this.OwnedCardsCardImagePanel = new System.Windows.Forms.Panel();
             this.CardLevelTextBox = new System.Windows.Forms.TextBox();
@@ -69,6 +76,7 @@
             this.DecksPanel.SuspendLayout();
             this.CardManagerMenuStrip.SuspendLayout();
             this.OwnedCardsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FilterNumericBox)).BeginInit();
             this.OwnedCardsCardImagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CFPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CardPictureBox)).BeginInit();
@@ -216,6 +224,13 @@
             // 
             this.OwnedCardsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.OwnedCardsPanel.Controls.Add(this.FilterButton);
+            this.OwnedCardsPanel.Controls.Add(this.OperatorComboBox);
+            this.OwnedCardsPanel.Controls.Add(this.OperatorLabel);
+            this.OwnedCardsPanel.Controls.Add(this.FilterNumericBox);
+            this.OwnedCardsPanel.Controls.Add(this.FilterTextBox);
+            this.OwnedCardsPanel.Controls.Add(this.FilterLabel);
+            this.OwnedCardsPanel.Controls.Add(this.FilterComboBox);
             this.OwnedCardsPanel.Controls.Add(this.RefreshYourCardsButton);
             this.OwnedCardsPanel.Controls.Add(this.OwnedCardsCardImagePanel);
             this.OwnedCardsPanel.Controls.Add(this.OwnedCardsHideMaxLevelCheckBox);
@@ -225,14 +240,95 @@
             this.OwnedCardsPanel.Controls.Add(this.OwnedCardsSortLabel);
             this.OwnedCardsPanel.Controls.Add(this.OwnedCardsListBox);
             this.OwnedCardsPanel.Controls.Add(this.OwnedCardsSortComboBox);
-            this.OwnedCardsPanel.Location = new System.Drawing.Point(12, 167);
+            this.OwnedCardsPanel.Location = new System.Drawing.Point(12, 124);
             this.OwnedCardsPanel.Name = "OwnedCardsPanel";
-            this.OwnedCardsPanel.Size = new System.Drawing.Size(452, 381);
+            this.OwnedCardsPanel.Size = new System.Drawing.Size(501, 424);
             this.OwnedCardsPanel.TabIndex = 6;
+            // 
+            // FilterButton
+            // 
+            this.FilterButton.Location = new System.Drawing.Point(447, 8);
+            this.FilterButton.Name = "FilterButton";
+            this.FilterButton.Size = new System.Drawing.Size(48, 23);
+            this.FilterButton.TabIndex = 15;
+            this.FilterButton.Text = "Ok";
+            this.FilterButton.UseVisualStyleBackColor = true;
+            this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);
+            // 
+            // OperatorComboBox
+            // 
+            this.OperatorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.OperatorComboBox.FormattingEnabled = true;
+            this.OperatorComboBox.Items.AddRange(new object[] {
+            "<<",
+            "<=",
+            "==",
+            ">=",
+            ">>"});
+            this.OperatorComboBox.Location = new System.Drawing.Point(393, 8);
+            this.OperatorComboBox.Name = "OperatorComboBox";
+            this.OperatorComboBox.Size = new System.Drawing.Size(48, 23);
+            this.OperatorComboBox.TabIndex = 14;
+            this.OperatorComboBox.SelectedIndexChanged += new System.EventHandler(this.OperatorComboBox_SelectedIndexChanged);
+            // 
+            // OperatorLabel
+            // 
+            this.OperatorLabel.AutoSize = true;
+            this.OperatorLabel.Location = new System.Drawing.Point(330, 12);
+            this.OperatorLabel.Name = "OperatorLabel";
+            this.OperatorLabel.Size = new System.Drawing.Size(57, 15);
+            this.OperatorLabel.TabIndex = 13;
+            this.OperatorLabel.Text = "Operator:";
+            // 
+            // FilterNumericBox
+            // 
+            this.FilterNumericBox.Location = new System.Drawing.Point(176, 9);
+            this.FilterNumericBox.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.FilterNumericBox.Name = "FilterNumericBox";
+            this.FilterNumericBox.Size = new System.Drawing.Size(148, 23);
+            this.FilterNumericBox.TabIndex = 12;
+            this.FilterNumericBox.Visible = false;
+            // 
+            // FilterTextBox
+            // 
+            this.FilterTextBox.Location = new System.Drawing.Point(176, 9);
+            this.FilterTextBox.Name = "FilterTextBox";
+            this.FilterTextBox.Size = new System.Drawing.Size(148, 23);
+            this.FilterTextBox.TabIndex = 11;
+            // 
+            // FilterLabel
+            // 
+            this.FilterLabel.AutoSize = true;
+            this.FilterLabel.Location = new System.Drawing.Point(9, 12);
+            this.FilterLabel.Name = "FilterLabel";
+            this.FilterLabel.Size = new System.Drawing.Size(36, 15);
+            this.FilterLabel.TabIndex = 10;
+            this.FilterLabel.Text = "Filter:";
+            // 
+            // FilterComboBox
+            // 
+            this.FilterComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.FilterComboBox.FormattingEnabled = true;
+            this.FilterComboBox.Items.AddRange(new object[] {
+            "None",
+            "Name",
+            "Attack",
+            "Defense",
+            "Rarity",
+            "Level"});
+            this.FilterComboBox.Location = new System.Drawing.Point(51, 9);
+            this.FilterComboBox.Name = "FilterComboBox";
+            this.FilterComboBox.Size = new System.Drawing.Size(119, 23);
+            this.FilterComboBox.TabIndex = 9;
+            this.FilterComboBox.SelectedIndexChanged += new System.EventHandler(this.FilterComboBox_SelectedIndexChanged);
             // 
             // RefreshYourCardsButton
             // 
-            this.RefreshYourCardsButton.Location = new System.Drawing.Point(277, 321);
+            this.RefreshYourCardsButton.Location = new System.Drawing.Point(273, 356);
             this.RefreshYourCardsButton.Name = "RefreshYourCardsButton";
             this.RefreshYourCardsButton.Size = new System.Drawing.Size(101, 30);
             this.RefreshYourCardsButton.TabIndex = 4;
@@ -248,7 +344,7 @@
             this.OwnedCardsCardImagePanel.Controls.Add(this.CardNameTextBox);
             this.OwnedCardsCardImagePanel.Controls.Add(this.CFPictureBox);
             this.OwnedCardsCardImagePanel.Controls.Add(this.CardPictureBox);
-            this.OwnedCardsCardImagePanel.Location = new System.Drawing.Point(277, 82);
+            this.OwnedCardsCardImagePanel.Location = new System.Drawing.Point(273, 117);
             this.OwnedCardsCardImagePanel.Name = "OwnedCardsCardImagePanel";
             this.OwnedCardsCardImagePanel.Size = new System.Drawing.Size(172, 233);
             this.OwnedCardsCardImagePanel.TabIndex = 8;
@@ -332,7 +428,7 @@
             // OwnedCardsHideMaxLevelCheckBox
             // 
             this.OwnedCardsHideMaxLevelCheckBox.AutoSize = true;
-            this.OwnedCardsHideMaxLevelCheckBox.Location = new System.Drawing.Point(277, 57);
+            this.OwnedCardsHideMaxLevelCheckBox.Location = new System.Drawing.Point(273, 92);
             this.OwnedCardsHideMaxLevelCheckBox.Name = "OwnedCardsHideMaxLevelCheckBox";
             this.OwnedCardsHideMaxLevelCheckBox.Size = new System.Drawing.Size(114, 19);
             this.OwnedCardsHideMaxLevelCheckBox.TabIndex = 8;
@@ -342,7 +438,7 @@
             // OwnedCardsInDeckCheckBox
             // 
             this.OwnedCardsInDeckCheckBox.AutoSize = true;
-            this.OwnedCardsInDeckCheckBox.Location = new System.Drawing.Point(277, 32);
+            this.OwnedCardsInDeckCheckBox.Location = new System.Drawing.Point(273, 67);
             this.OwnedCardsInDeckCheckBox.Name = "OwnedCardsInDeckCheckBox";
             this.OwnedCardsInDeckCheckBox.Size = new System.Drawing.Size(125, 19);
             this.OwnedCardsInDeckCheckBox.TabIndex = 7;
@@ -352,7 +448,7 @@
             // OwnedCardsOrderLabel
             // 
             this.OwnedCardsOrderLabel.AutoSize = true;
-            this.OwnedCardsOrderLabel.Location = new System.Drawing.Point(196, 6);
+            this.OwnedCardsOrderLabel.Location = new System.Drawing.Point(192, 41);
             this.OwnedCardsOrderLabel.Name = "OwnedCardsOrderLabel";
             this.OwnedCardsOrderLabel.Size = new System.Drawing.Size(40, 15);
             this.OwnedCardsOrderLabel.TabIndex = 6;
@@ -365,7 +461,7 @@
             this.OwnedCardsOrderComboBox.Items.AddRange(new object[] {
             "Asscending",
             "Descending"});
-            this.OwnedCardsOrderComboBox.Location = new System.Drawing.Point(242, 3);
+            this.OwnedCardsOrderComboBox.Location = new System.Drawing.Point(238, 38);
             this.OwnedCardsOrderComboBox.Name = "OwnedCardsOrderComboBox";
             this.OwnedCardsOrderComboBox.Size = new System.Drawing.Size(160, 23);
             this.OwnedCardsOrderComboBox.TabIndex = 5;
@@ -374,7 +470,7 @@
             // OwnedCardsSortLabel
             // 
             this.OwnedCardsSortLabel.AutoSize = true;
-            this.OwnedCardsSortLabel.Location = new System.Drawing.Point(13, 6);
+            this.OwnedCardsSortLabel.Location = new System.Drawing.Point(9, 41);
             this.OwnedCardsSortLabel.Name = "OwnedCardsSortLabel";
             this.OwnedCardsSortLabel.Size = new System.Drawing.Size(31, 15);
             this.OwnedCardsSortLabel.TabIndex = 4;
@@ -387,9 +483,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.OwnedCardsListBox.FormattingEnabled = true;
             this.OwnedCardsListBox.ItemHeight = 15;
-            this.OwnedCardsListBox.Location = new System.Drawing.Point(13, 32);
+            this.OwnedCardsListBox.Location = new System.Drawing.Point(9, 67);
             this.OwnedCardsListBox.Name = "OwnedCardsListBox";
-            this.OwnedCardsListBox.Size = new System.Drawing.Size(258, 334);
+            this.OwnedCardsListBox.Size = new System.Drawing.Size(258, 349);
             this.OwnedCardsListBox.TabIndex = 2;
             this.OwnedCardsListBox.SelectedIndexChanged += new System.EventHandler(this.OwnedCardsListBox_SelectedIndexChanged);
             // 
@@ -406,7 +502,7 @@
             "Level",
             "Combo Number",
             "Best Combos"});
-            this.OwnedCardsSortComboBox.Location = new System.Drawing.Point(50, 3);
+            this.OwnedCardsSortComboBox.Location = new System.Drawing.Point(46, 38);
             this.OwnedCardsSortComboBox.Name = "OwnedCardsSortComboBox";
             this.OwnedCardsSortComboBox.Size = new System.Drawing.Size(140, 23);
             this.OwnedCardsSortComboBox.TabIndex = 3;
@@ -420,43 +516,51 @@
             this.AddToDeckPanel.Controls.Add(this.RemoveOneToDeckButton);
             this.AddToDeckPanel.Controls.Add(this.AddAllToDeckButton);
             this.AddToDeckPanel.Controls.Add(this.AddOneToDeckButton);
-            this.AddToDeckPanel.Location = new System.Drawing.Point(483, 167);
+            this.AddToDeckPanel.Location = new System.Drawing.Point(531, 167);
             this.AddToDeckPanel.Name = "AddToDeckPanel";
-            this.AddToDeckPanel.Size = new System.Drawing.Size(140, 350);
+            this.AddToDeckPanel.Size = new System.Drawing.Size(92, 350);
             this.AddToDeckPanel.TabIndex = 7;
             // 
             // RemoveAllToDeckButton
             // 
+            this.RemoveAllToDeckButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.RemoveAllToDeckButton.Location = new System.Drawing.Point(19, 183);
             this.RemoveAllToDeckButton.Name = "RemoveAllToDeckButton";
-            this.RemoveAllToDeckButton.Size = new System.Drawing.Size(99, 30);
+            this.RemoveAllToDeckButton.Size = new System.Drawing.Size(54, 30);
             this.RemoveAllToDeckButton.TabIndex = 3;
             this.RemoveAllToDeckButton.Text = "<-";
             this.RemoveAllToDeckButton.UseVisualStyleBackColor = true;
             // 
             // RemoveOneToDeckButton
             // 
+            this.RemoveOneToDeckButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.RemoveOneToDeckButton.Location = new System.Drawing.Point(19, 147);
             this.RemoveOneToDeckButton.Name = "RemoveOneToDeckButton";
-            this.RemoveOneToDeckButton.Size = new System.Drawing.Size(99, 30);
+            this.RemoveOneToDeckButton.Size = new System.Drawing.Size(54, 30);
             this.RemoveOneToDeckButton.TabIndex = 2;
             this.RemoveOneToDeckButton.Text = "<==";
             this.RemoveOneToDeckButton.UseVisualStyleBackColor = true;
             // 
             // AddAllToDeckButton
             // 
+            this.AddAllToDeckButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.AddAllToDeckButton.Location = new System.Drawing.Point(19, 111);
             this.AddAllToDeckButton.Name = "AddAllToDeckButton";
-            this.AddAllToDeckButton.Size = new System.Drawing.Size(99, 30);
+            this.AddAllToDeckButton.Size = new System.Drawing.Size(54, 30);
             this.AddAllToDeckButton.TabIndex = 1;
             this.AddAllToDeckButton.Text = "==>";
             this.AddAllToDeckButton.UseVisualStyleBackColor = true;
             // 
             // AddOneToDeckButton
             // 
+            this.AddOneToDeckButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.AddOneToDeckButton.Location = new System.Drawing.Point(19, 75);
             this.AddOneToDeckButton.Name = "AddOneToDeckButton";
-            this.AddOneToDeckButton.Size = new System.Drawing.Size(99, 30);
+            this.AddOneToDeckButton.Size = new System.Drawing.Size(54, 30);
             this.AddOneToDeckButton.TabIndex = 0;
             this.AddOneToDeckButton.Text = "->";
             this.AddOneToDeckButton.UseVisualStyleBackColor = true;
@@ -486,6 +590,7 @@
             this.CardManagerMenuStrip.PerformLayout();
             this.OwnedCardsPanel.ResumeLayout(false);
             this.OwnedCardsPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FilterNumericBox)).EndInit();
             this.OwnedCardsCardImagePanel.ResumeLayout(false);
             this.OwnedCardsCardImagePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CFPictureBox)).EndInit();
@@ -534,5 +639,12 @@
         public TextBox CardLevelTextBox;
         public TextBox CardDefenseTextBox;
         public TextBox CardAttackTextBox;
+        public TextBox FilterTextBox;
+        private Label FilterLabel;
+        private ComboBox FilterComboBox;
+        public NumericUpDown FilterNumericBox;
+        private Label OperatorLabel;
+        private ComboBox OperatorComboBox;
+        private Button FilterButton;
     }
 }

@@ -13,39 +13,99 @@ namespace LA_TT
     {
         HtmlDocument _cardsHtml;
         HtmlDocument _currentCardHtml;
-        char c;
-        public void DownloadWikiPageHTML()
+        char currentLetter;
+        string skippedCards;
+        float loadingCards;
+        float loadingCardsAll;
+        string currentCardUrl;
+        bool skipDownloadWhenExist;
+        LoadingForm loadingForm;
+        public void Sync(bool skipIfDownloaded)
         {
-            for (c = 'A'; c <= 'Z'; c++)
+            skipDownloadWhenExist = skipIfDownloaded;
+            DownloadWikiPageHTML();
+        }
+        public void Sync(bool skipIfDownloaded, char letter)
+        {
+            skipDownloadWhenExist = skipIfDownloaded;
+            DownloadWikiPageHTML(letter);
+        }
+        private void DownloadWikiPageHTML()
+        {
+            loadingForm = new LoadingForm();
+            loadingForm.HeaderLabel.Text = "Syncing Cards with Wiki";
+            loadingForm.Show();
+
+            for (currentLetter = 'A'; currentLetter <= 'Z'; currentLetter++)
             {
                 using (WebClient client = new WebClient())
                 {
-                    client.DownloadFile(new Uri("https://lil-alchemist.fandom.com/wiki/Category:Card?from=" +c), "Resources/Html/Cards" +c+ ".html");
+                    loadingForm.TopLoadingBarLabel.Text = "Loading Cards with Letter: " +currentLetter;
+                    loadingForm.Update();
+                    if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + ".html")))
+                    {
+                        client.DownloadFile(new Uri("https://lil-alchemist.fandom.com/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
+                    }
                     _cardsHtml = new HtmlDocument();
-                    _cardsHtml.Load("Resources/Html/Cards" +c+ ".html");
+                    _cardsHtml.Load("Resources/Html/Cards" +currentLetter+ ".html");
                 }
                 FindCards();
+                loadingCardsAll += 1;
+                loadingForm.TopLoadingBar.Value = (int)Math.Round(loadingCardsAll*100 / 26);
             }
+            MessageBox.Show("Skipped Cards:\n" + skippedCards);
+            loadingForm.Close();
         }
-        public void DownloadCard(string cardUrl, string cardname)
+
+        private void DownloadWikiPageHTML(char letter)
+        {
+            loadingForm = new LoadingForm();
+            loadingForm.HeaderLabel.Text = "Syncing Cards with Wiki";
+            loadingForm.Show();
+            currentLetter = letter;
+
+            using (WebClient client = new WebClient())
+            {
+                loadingForm.TopLoadingBarLabel.Text = "Loading Cards with Letter: " + currentLetter;
+                loadingForm.Update();
+                if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + ".html")))
+                {
+                    client.DownloadFile(new Uri("https://lil-alchemist.fandom.com/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
+                }
+                _cardsHtml = new HtmlDocument();
+                _cardsHtml.Load("Resources/Html/Cards" + currentLetter + ".html");
+            }
+            FindCards();
+            loadingCardsAll += 1;
+            loadingForm.TopLoadingBar.Value = (int)Math.Round(loadingCardsAll * 100 / 26);
+
+            MessageBox.Show("Skipped Cards:\n" + skippedCards);
+            loadingForm.Close();
+        }
+        private void DownloadCard(string cardUrl, string cardname)
         {
             using (WebClient client = new WebClient())
             {
                 try
                 {
-                    client.DownloadFile(new Uri("https://lil-alchemist.fandom.com" + cardUrl), "Resources/Html/Cards" +c+ "/" +cardname + ".html");
+                    if (!Directory.Exists("Resources/Html/Cards" + currentLetter)) Directory.CreateDirectory("Resources/Html/Cards" + currentLetter);
+                    if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + "/" + cardname + ".html")))
+                    {
+                        client.DownloadFile(new Uri("https://lil-alchemist.fandom.com" + cardUrl), "Resources/Html/Cards" + currentLetter + "/" + cardname + ".html");
+                    }
                 }
                 catch 
                 {
+                    skippedCards += cardname + "\n";
                     return;
                 }
                 _currentCardHtml = new HtmlDocument();
-                _currentCardHtml.Load("Resources/Html/Cards" +c+ "/" + cardname + ".html");
+                _currentCardHtml.Load("Resources/Html/Cards" +currentLetter+ "/" + cardname + ".html");
             }
             HtmlToCard(cardname);
         }
 
-        public void FindCards()
+        private void FindCards()
         {
             HtmlNode region = _cardsHtml.DocumentNode.Descendants("div").Where(node => node.Attributes.Count >= 2 && node.Attributes[0].Name == "id" && node.Attributes[0].Value == "mw-content-text").FirstOrDefault();
 
@@ -58,25 +118,27 @@ namespace LA_TT
                     cardNames.Add(cardName.InnerText);
             }
 
+            loadingForm.BottomLoadingBar.Value = 0;
+            loadingCards = 0;
             foreach (string cardName in cardNames)
             {
+                loadingForm.BottomLoadingBarLabel.Text = "Loading Card: " +cardName;
+                loadingForm.Update();
                 FindCard(cardName);
+                loadingCards += 1;
+                loadingForm.BottomLoadingBar.Value = (int)Math.Round(loadingCards*100 / cardNames.Count);
             }
         }
 
-        public void FindCard(string cardname)
+        private void FindCard(string cardname)
         {
-            /*
-            HtmlNode link = _cardsHtml.DocumentNode.SelectNodes("//link[@class]").FirstOrDefault();
-            string tagClass = link.Attributes["class"].Value;
-            */
             HtmlNode node = _cardsHtml.DocumentNode.Descendants().Where(node => node.Attributes.Count >= 2 && node.Attributes[1].Value == cardname).FirstOrDefault();
 
-            //MessageBox.Show(tag.Attributes[1].Value);
+            currentCardUrl = node.Attributes[0].Value;
             DownloadCard(node.Attributes[0].Value, node.Attributes[1].Value);
         }
 
-        public void HtmlToCard(string cardname)
+        private void HtmlToCard(string cardname)
         {
             HtmlNode region = _currentCardHtml.DocumentNode.Descendants("aside").Where(node => node.Attributes.Count >= 2 && node.Attributes[0].Name == "role" && node.Attributes[0].Value == "region").FirstOrDefault();
 
@@ -115,6 +177,7 @@ namespace LA_TT
                 card.attack = attack;
                 card.defense = defense;
                 card.level = 1;
+                card.cardUrl = currentCardUrl;
                 if (cCombos != null)
                     card.combos = cCombos;
                 
@@ -130,14 +193,12 @@ namespace LA_TT
                 card.attack = attack;
                 card.defense = defense;
                 card.level = 1;
+                card.cardUrl = currentCardUrl;
                 if (fCombos != null)
                     card.comboCards = fCombos;
                
                 Cards.AddFCard(card);
             }
-
-
-            //MessageBox.Show("Attack: " + attack+ "\nDefense: " +defense+ "\nRarity: " +rarity+ "\nComboCard: " +comboCard+ "\n\n" +fCombos.Count);
         }
 
         private List<FCombo> GetHtmlFCardCombos()
@@ -178,6 +239,7 @@ namespace LA_TT
             if (region == null) return null;
 
             var combos = region.Descendants("td").Where(node => node.ChildNodes[0].Attributes.Count >= 1 /*node.Attributes.Count >= 2*/);
+            var combosRarities = region.Descendants("td").Where(node => node.ChildNodes[0].Attributes.Count <= 0).ToList();
             List<CCombo> cCombos = new List<CCombo>();
             CCombo ccombo = new CCombo();
             int i = 0;
@@ -193,6 +255,15 @@ namespace LA_TT
                 {
                     ccombo.id = j;
                     ccombo.card3Name = node.InnerText;
+                    byte rarity = 0;
+                    byte.TryParse(combosRarities[j].InnerText.Substring(0, 2).Trim(), out rarity);
+                    switch (rarity)
+                    {
+                        case 1: ccombo.card3Rarity = 1; break;
+                        case 6: ccombo.card3Rarity = 2; break;
+                        case 24: ccombo.card3Rarity = 3; break;
+                        case 48: ccombo.card3Rarity = 4; break;
+                    }
                     cCombos.Add(ccombo);
                     ccombo = new CCombo();
                     j++;

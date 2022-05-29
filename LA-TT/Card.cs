@@ -14,5 +14,8 @@ namespace LA_TT
         public byte defense { get; set; }
         public Image image { get; set; }
         public byte rarity { get; set; }
+        public string cardUrl { get; set; }
+        //public CCard ccard { get; set; }
+        //public FCard fcard { get; set; }
     }
 }

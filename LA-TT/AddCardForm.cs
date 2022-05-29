@@ -13,8 +13,6 @@ namespace LA_TT
     public partial class AddCardForm : Form
     {
         private int comboId;
-        //private CCombo _ccombo;
-        //private FCombo _fcombo;
         private List<CCombo> _ccombos;
         private List<FCombo> _fcombos;
         private CCard _ccard;
@@ -26,15 +24,17 @@ namespace LA_TT
         private bool combosWithExists;
         private bool combosToExists;
         private bool cardExists;
+        private bool cardExisted;
         private bool cardNameEmpty;
         private bool card3FCard;
+        private byte oldLevel;
+        private int calcedAttack;
+        private int calcedDefense;
         public AddCardForm()
         {
             InitializeComponent();
             cardNameEmpty = true;
             comboId = 0;
-            //_ccombo = new CCombo();
-            //_fcombo = new FCombo();
             _ccard = new CCard();
             _fcard = new FCard();
             _ccombos = new List<CCombo>();
@@ -67,6 +67,8 @@ namespace LA_TT
         {
             AttackNumericBox.BackColor = Color.FromArgb(255, 102, 0);
             DefenseNumericBox.BackColor = Color.FromArgb(0, 101, 204);
+            CalcedAttackTextBox.BackColor = Color.FromArgb(255, 102, 0);
+            CalcedDefenseTextBox.BackColor = Color.FromArgb(0, 101, 204);
         }
         
         private void OkButton_Click(object sender, EventArgs e)
@@ -107,12 +109,30 @@ namespace LA_TT
             if (ComboCardCheckBox.Checked)
             {
                 _ccard.combos = _ccombos;
-                Cards.AddCCard(_ccard);
+                _ccard.attack = (byte)calcedAttack;
+                _ccard.defense = (byte)calcedDefense;
+                if (AddOwnCardCheckBox.Checked)
+                {
+                    Cards.AddYourCCard(_ccard);
+                }
+                else
+                {
+                    Cards.AddCCard(_ccard);
+                }
             }
             else
             {
                 _fcard.comboCards = _fcombos;
-                Cards.AddFCard(_fcard);
+                _fcard.attack = (byte)calcedAttack;
+                _fcard.defense = (byte)calcedDefense;
+                if (AddOwnCardCheckBox.Checked)
+                {
+                    Cards.AddYourFCard(_fcard);
+                }
+                else
+                {
+                    Cards.AddFCard(_fcard);
+                }
             }
 
             if (InstantSaveCheckBox.Checked)
@@ -132,11 +152,11 @@ namespace LA_TT
 
         private void AddComboToComboCardsListBox(CCombo combo)
         {
-            ComboCardsListBox.Items.Add(_ccard.name+ " (this Card) + " +combo.ccard2Name+ " = "+ combo.card3Name);
+            ComboCardsListBox.Items.Add(_ccard.name+ " (this) + " +combo.ccard2Name+ " = "+ combo.card3Name);
         }
         private void AddComboToComboCardsListBox(FCombo combo)
         {
-            ComboCardsListBox.Items.Add(combo.ccard1Name + " + " + combo.ccard2Name + " = " +_fcard.name+ " (this Card)");
+            ComboCardsListBox.Items.Add(combo.ccard1Name + " + " + combo.ccard2Name + " = " +_fcard.name+ " (this)");
         }
         private void UpdateComboCardsListBox()
         {
@@ -146,7 +166,7 @@ namespace LA_TT
                 if (_ccombos.Count == 0) return;
                 foreach (CCombo combo in _ccombos)
                 {
-                    ComboCardsListBox.Items.Add(_ccard.name + " (this Card) + " + combo.ccard2Name + " = " + combo.card3Name);
+                    ComboCardsListBox.Items.Add(_ccard.name + " (this) + " + combo.ccard2Name + " = " + combo.card3Name);
                 }
             }
             else
@@ -155,20 +175,20 @@ namespace LA_TT
                 if (_fcombos.Count == 0) return;
                 foreach (FCombo combo in _fcombos)
                 {
-                    ComboCardsListBox.Items.Add(combo.ccard1Name + " + " + combo.ccard2Name + " = " + _fcard.name + " (this Card)");
+                    ComboCardsListBox.Items.Add(combo.ccard1Name + " + " + combo.ccard2Name + " = " + _fcard.name + " (this)");
                 }
             }
         }
         private void UpdateErrorsListBox()
         {
             ErrorsListBox.Items.Clear();
-            if (!combosWithExists)
+            if (!combosWithExists && ComboCardsListBox.Items.Count == 0)
             {
                 string CombosWithText = CombosWithTextBox.Text;
                 if (CombosWithText == "") CombosWithText = "empty";
                 ErrorsListBox.Items.Add("Combo Card: '" + CombosWithText + "' doesn't exist.");
             }
-            if (!combosToExists)
+            if (!combosToExists && ComboCardsListBox.Items.Count == 0)
             {
                 string CombosToText = CombosToCardTextBox.Text;
                 if (CombosToText == "") CombosToText = "empty";
@@ -182,7 +202,7 @@ namespace LA_TT
             {
                 string nameText = NameTextBox.Text;
                 if (nameText == "") nameText = "empty";
-                ErrorsListBox.Items.Add("Cardname: '" + nameText + "' already exists." + _ccard.name);
+                ErrorsListBox.Items.Add("Cardname: '" + nameText + "' already exists.");
             }
         }
 
@@ -262,6 +282,7 @@ namespace LA_TT
             {
                 _fcard.attack = (byte)AttackNumericBox.Value;
             }
+            UpdateValueDisplay();
         }
 
         private void DefenseNumericBox_ValueChanged(object sender, EventArgs e)
@@ -274,6 +295,7 @@ namespace LA_TT
             {
                 _fcard.defense = (byte)DefenseNumericBox.Value;
             }
+            UpdateValueDisplay();
         }
 
         private void LevelNumericBox_ValueChanged(object sender, EventArgs e)
@@ -285,6 +307,63 @@ namespace LA_TT
             else
             {
                 _fcard.level = (byte)LevelNumericBox.Value;
+            }
+            UpdateValueDisplay();
+        }
+
+        private void CalcNewStats()
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                switch (_ccard.rarity)
+                {
+                    case 1:
+                        calcedAttack = _ccard.attack + (_ccard.level - 1);
+                        calcedDefense = _ccard.defense + (_ccard.level - 1);
+                        break;
+                    case 2:
+                        calcedAttack = _ccard.attack + (_ccard.level - 1) * 2;
+                        calcedDefense = _ccard.defense + (_ccard.level - 1) * 2;
+                        break;
+                    case 3:
+                        calcedAttack = _ccard.attack + (_ccard.level - 1) * 3;
+                        calcedDefense = _ccard.defense + (_ccard.level - 1) * 3;
+                        break;
+                    case 4:
+                        calcedAttack = _ccard.attack + (_ccard.level - 1) * 4;
+                        calcedDefense = _ccard.defense + (_ccard.level - 1) * 4;
+                        break;
+                    case 5:
+                        calcedAttack = _ccard.attack + (_ccard.level - 1) * 4;
+                        calcedDefense = _ccard.defense + (_ccard.level - 1) * 4;
+                        break;
+                }
+            }
+            else
+            {
+                switch (_fcard.rarity)
+                {
+                    case 1:
+                        calcedAttack = _fcard.attack + (_fcard.level - 1);
+                        calcedDefense = _fcard.defense + (_fcard.level - 1);
+                        break;
+                    case 2:
+                        calcedAttack = _fcard.attack + (_fcard.level - 1) * 2;
+                        calcedDefense = _fcard.defense + (_fcard.level - 1) * 2;
+                        break;
+                    case 3:
+                        calcedAttack = _fcard.attack + (_fcard.level - 1) * 3;
+                        calcedDefense = _fcard.defense + (_fcard.level - 1) * 3;
+                        break;
+                    case 4:
+                        calcedAttack = _fcard.attack + (_fcard.level - 1) * 4;
+                        calcedDefense = _fcard.defense + (_fcard.level - 1) * 4;
+                        break;
+                    case 5:
+                        calcedAttack = _fcard.attack + (_fcard.level - 1) * 4;
+                        calcedDefense = _fcard.defense + (_fcard.level - 1) * 4;
+                        break;
+                }
             }
         }
         private void RarityNumericBox_ValueChanged(object sender, EventArgs e)
@@ -304,6 +383,7 @@ namespace LA_TT
                 case 3: CardPictureBox.Image = LA_TT.Properties.Resources.CardG; break;
                 case 4: CardPictureBox.Image = LA_TT.Properties.Resources.CardD; break;
             }
+            UpdateValueDisplay();
         }
 
         private void NameTextBox_TextChanged(object sender, EventArgs e)
@@ -321,10 +401,16 @@ namespace LA_TT
                 if (Cards.GetCCard(_ccard.name) != null)
                 {
                     cardExists = true;
+                    FillCardInfos(true);
                     UpdateErrorsListBox();
                     return;
                 }
                 cardExists = false;
+                if (cardExisted)
+                {
+                    _ccombos = new List<CCombo>();
+                    cardExisted = false;
+                }
                 UpdateErrorsListBox();
                 UpdateComboCardsListBox();
             }
@@ -341,10 +427,16 @@ namespace LA_TT
                 if (Cards.GetFCard(_fcard.name) != null)
                 {
                     cardExists = true;
+                    FillCardInfos(false);
                     UpdateErrorsListBox();
                     return;
                 }
                 cardExists = false;
+                if (cardExisted)
+                {
+                    _fcombos = new List<FCombo>();
+                    cardExisted = false;
+                }
                 UpdateErrorsListBox();
                 UpdateComboCardsListBox();
             }
@@ -441,6 +533,78 @@ namespace LA_TT
                 }
                 _fcombos.Remove(combo);
                 UpdateComboCardsListBox();
+            }
+        }
+
+        private void FillCardInfos(bool isccard)
+        {
+            cardExisted = true;
+            if (isccard)
+            {
+                CCard ccard = Cards.GetCCard(NameTextBox.Text);
+                _ccard.name = ccard.name;
+                _ccard.rarity = ccard.rarity;
+                _ccard.level = ccard.level;
+                _ccard.attack = ccard.attack;
+                _ccard.defense = ccard.defense;
+
+                _ccombos = ccard.combos;
+
+                ComboCardCheckBox.Checked = true;
+            }
+            else
+            {
+                FCard fcard = Cards.GetFCard(NameTextBox.Text);
+                _fcard.name = fcard.name;
+                _fcard.rarity = fcard.rarity;
+                _fcard.level = fcard.level;
+                _fcard.attack = fcard.attack;
+                _fcard.defense = fcard.defense;
+
+                _fcombos = fcard.comboCards;
+
+                ComboCardCheckBox.Checked = false;
+            }
+            UpdateValueDisplay();
+        }
+        private void UpdateValueDisplay()
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                NameTextBox.Text = _ccard.name;
+                RarityNumericBox.Value = _ccard.rarity;
+                LevelNumericBox.Value = _ccard.level;
+                AttackNumericBox.Value = _ccard.attack;
+                DefenseNumericBox.Value = _ccard.defense;
+
+                CalcNewStats();
+                CalcedAttackTextBox.Text = calcedAttack.ToString();
+                CalcedDefenseTextBox.Text = calcedDefense.ToString();
+            }
+            else
+            {
+                NameTextBox.Text = _fcard.name;
+                RarityNumericBox.Value = _fcard.rarity;
+                LevelNumericBox.Value = _fcard.level;
+                AttackNumericBox.Value = _fcard.attack;
+                DefenseNumericBox.Value = _fcard.defense;
+
+                CalcNewStats();
+                CalcedAttackTextBox.Text = calcedAttack.ToString();
+                CalcedDefenseTextBox.Text = calcedDefense.ToString();
+            }
+            UpdateComboCardsListBox();
+        }
+
+        private void CFPictureBox_Click(object sender, EventArgs e)
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                ComboCardCheckBox.Checked = false;
+            }
+            else
+            {
+                ComboCardCheckBox.Checked = true;
             }
         }
     }
