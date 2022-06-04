@@ -21,5 +21,9 @@ namespace LA_TT
             //comboCards = new List<FCombo>();
             combos = new List<CCombo>();
         }
+        public CCard Clone()
+        {
+            return (CCard)this.MemberwiseClone();
+        }
     }
 }

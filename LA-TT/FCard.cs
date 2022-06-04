@@ -17,5 +17,9 @@ namespace LA_TT
             //comboCards = new Dictionary<CCard, CCard>();
             comboCards = new List<FCombo>();
         }
+        public FCard Clone()
+        {
+            return (FCard)this.MemberwiseClone();
+        }
     }
 }

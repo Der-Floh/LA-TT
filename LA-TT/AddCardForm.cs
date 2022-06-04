@@ -16,7 +16,9 @@ namespace LA_TT
         private List<CCombo> _ccombos;
         private List<FCombo> _fcombos;
         private CCard _ccard;
+        private CCard _ccardBack;
         private FCard _fcard;
+        private FCard _fcardBack;
 
         private byte combosWithRarity;
         private byte combosToRarity;
@@ -30,9 +32,11 @@ namespace LA_TT
         private byte oldLevel;
         private int calcedAttack;
         private int calcedDefense;
+        private bool editCard;
         public AddCardForm()
         {
             InitializeComponent();
+            editCard = false;
             cardNameEmpty = true;
             comboId = 0;
             _ccard = new CCard();
@@ -44,9 +48,48 @@ namespace LA_TT
             _ccard.level = (byte)LevelNumericBox.Value;
 
             _fcard.rarity = (byte)RarityNumericBox.Value;
-            _ccard.level = (byte)LevelNumericBox.Value;
+            _fcard.level = (byte)LevelNumericBox.Value;
             UpdateErrorsListBox();
         }
+        public AddCardForm(CCard card, bool your)
+        {
+            InitializeComponent();
+            editCard = true;
+            cardNameEmpty = false;
+            comboId = 0;
+            _ccard = card.Clone();
+            _ccardBack = card.Clone();
+            _ccombos = card.combos;
+            _fcard = new FCard();
+            _fcombos = new List<FCombo>();
+
+            _fcard.rarity = (byte)RarityNumericBox.Value;
+            _fcard.level = (byte)LevelNumericBox.Value;
+            AddOwnCardCheckBox.Checked = your;
+            UpdateErrorsListBox();
+            CalcEditStats();
+            UpdateValueDisplay();
+        }
+        public AddCardForm(FCard card, bool your)
+        {
+            InitializeComponent();
+            editCard = true;
+            cardNameEmpty = false;
+            comboId = 0;
+            _ccard = new CCard();
+            _ccombos = new List<CCombo>();
+            _fcard = card.Clone();
+            _fcardBack = card.Clone();
+            _fcombos = card.comboCards;
+
+            _ccard.rarity = (byte)RarityNumericBox.Value;
+            _ccard.level = (byte)LevelNumericBox.Value;
+            AddOwnCardCheckBox.Checked = your;
+            UpdateErrorsListBox();
+            CalcEditStats();
+            UpdateValueDisplay();
+        }
+
         private void ComboCardCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (ComboCardCheckBox.Checked)
@@ -69,6 +112,14 @@ namespace LA_TT
             DefenseNumericBox.BackColor = Color.FromArgb(0, 101, 204);
             CalcedAttackTextBox.BackColor = Color.FromArgb(255, 102, 0);
             CalcedDefenseTextBox.BackColor = Color.FromArgb(0, 101, 204);
+
+            if (editCard)
+            {
+                NameTextBox.ReadOnly = true;
+                OkButton.Text = "Save Edits";
+                AddOwnCardCheckBox.Text = "Owned Card";
+                AddOwnCardCheckBox.Enabled = false;
+            }
         }
         
         private void OkButton_Click(object sender, EventArgs e)
@@ -111,13 +162,13 @@ namespace LA_TT
                 _ccard.combos = _ccombos;
                 _ccard.attack = (byte)calcedAttack;
                 _ccard.defense = (byte)calcedDefense;
-                if (AddOwnCardCheckBox.Checked)
+                if (!editCard)
                 {
-                    Cards.AddYourCCard(_ccard);
+                    Cards.AddCCard(_ccard, AddOwnCardCheckBox.Checked);
                 }
                 else
                 {
-                    Cards.AddCCard(_ccard);
+                    Cards.UpdateCCard(_ccard, AddOwnCardCheckBox.Checked);
                 }
             }
             else
@@ -125,13 +176,13 @@ namespace LA_TT
                 _fcard.comboCards = _fcombos;
                 _fcard.attack = (byte)calcedAttack;
                 _fcard.defense = (byte)calcedDefense;
-                if (AddOwnCardCheckBox.Checked)
+                if (!editCard)
                 {
-                    Cards.AddYourFCard(_fcard);
+                    Cards.AddFCard(_fcard, AddOwnCardCheckBox.Checked);
                 }
                 else
                 {
-                    Cards.AddFCard(_fcard);
+                    Cards.UpdateFCard(_fcard, AddOwnCardCheckBox.Checked);
                 }
             }
 
@@ -198,7 +249,7 @@ namespace LA_TT
             {
                 ErrorsListBox.Items.Add("Cardname is empty.");
             }
-            if (cardExists)
+            if (cardExists && !editCard)
             {
                 string nameText = NameTextBox.Text;
                 if (nameText == "") nameText = "empty";
@@ -366,6 +417,62 @@ namespace LA_TT
                 }
             }
         }
+        private void CalcEditStats()
+        {
+            if (ComboCardCheckBox.Checked)
+            {
+                switch (_ccard.rarity)
+                {
+                    case 1:
+                        _ccard.attack = (byte) (_ccard.attack - (_ccard.level - 1));
+                        _ccard.defense = (byte) (_ccard.defense - (_ccard.level - 1));
+                        break;
+                    case 2:
+                        _ccard.attack = (byte) (_ccard.attack - (_ccard.level - 1) * 2);
+                        _ccard.defense = (byte) (_ccard.defense - (_ccard.level - 1) * 2);
+                        break;
+                    case 3:
+                        _ccard.attack = (byte) (_ccard.attack - (_ccard.level - 1) * 3);
+                        _ccard.defense = (byte) (_ccard.defense - (_ccard.level - 1) * 3);
+                        break;
+                    case 4:
+                        _ccard.attack = (byte) (_ccard.attack - (_ccard.level - 1) * 4);
+                        _ccard.defense = (byte) (_ccard.defense - (_ccard.level - 1) * 4);
+                        break;
+                    case 5:
+                        _ccard.attack = (byte) (_ccard.attack - (_ccard.level - 1) * 4);
+                        _ccard.defense = (byte) (_ccard.defense - (_ccard.level - 1) * 4);
+                        break;
+                }
+            }
+            else
+            {
+                switch (_fcard.rarity)
+                {
+                    case 1:
+                        _fcard.attack = (byte) (_fcard.attack - (_fcard.level - 1));
+                        _fcard.defense = (byte) (_fcard.defense - (_fcard.level - 1));
+                        break;
+                    case 2:
+                        _fcard.attack = (byte) (_fcard.attack - (_fcard.level - 1) * 2);
+                        _fcard.defense = (byte) (_fcard.defense - (_fcard.level - 1) * 2);
+                        break;
+                    case 3:
+                        _fcard.attack = (byte) (_fcard.attack - (_fcard.level - 1) * 3);
+                        _fcard.defense = (byte) (_fcard.defense - (_fcard.level - 1) * 3);
+                        break;
+                    case 4:
+                        _fcard.attack = (byte) (_fcard.attack - (_fcard.level - 1) * 4);
+                        _fcard.defense = (byte) (_fcard.defense - (_fcard.level - 1) * 4);
+                        break;
+                    case 5:
+                        _fcard.attack = (byte) (_fcard.attack - (_fcard.level - 1) * 4);
+                        _fcard.defense = (byte) (_fcard.defense - (_fcard.level - 1) * 4);
+                        break;
+                }
+            }
+        }
+
         private void RarityNumericBox_ValueChanged(object sender, EventArgs e)
         {
             if (ComboCardCheckBox.Checked)
@@ -398,10 +505,11 @@ namespace LA_TT
                     return;
                 }
                 cardNameEmpty = false;
-                if (Cards.GetCCard(_ccard.name) != null)
+                if (Cards.GetCCard(_ccard.name, AddOwnCardCheckBox.Checked && editCard) != null)
                 {
                     cardExists = true;
                     FillCardInfos(true);
+                    if (editCard) CalcEditStats();
                     UpdateErrorsListBox();
                     return;
                 }
@@ -424,10 +532,11 @@ namespace LA_TT
                     return;
                 }
                 cardNameEmpty = false;
-                if (Cards.GetFCard(_fcard.name) != null)
+                if (Cards.GetFCard(_fcard.name, AddOwnCardCheckBox.Checked && editCard) != null)
                 {
                     cardExists = true;
                     FillCardInfos(false);
+                    if (editCard) CalcEditStats();
                     UpdateErrorsListBox();
                     return;
                 }
@@ -446,7 +555,7 @@ namespace LA_TT
         {
             if (ComboCardCheckBox.Checked)
             {
-                CCard ccard2 = Cards.GetCCard(CombosWithTextBox.Text);
+                CCard ccard2 = Cards.GetCCard(CombosWithTextBox.Text, false);
                 if (ccard2 == null)
                 {
                     combosWithExists = false;
@@ -458,7 +567,7 @@ namespace LA_TT
             }
             else
             {
-                CCard ccard1 = Cards.GetCCard(CombosWithTextBox.Text);
+                CCard ccard1 = Cards.GetCCard(CombosWithTextBox.Text, false);
                 if (ccard1 == null)
                 {
                     combosWithExists = false;
@@ -474,10 +583,10 @@ namespace LA_TT
         {
             if (ComboCardCheckBox.Checked)
             {
-                FCard fcard3 = Cards.GetFCard(CombosToCardTextBox.Text);
+                FCard fcard3 = Cards.GetFCard(CombosToCardTextBox.Text, false);
                 if (fcard3 == null)
                 {
-                    CCard cfcard3 = Cards.GetCCard(CombosToCardTextBox.Text);
+                    CCard cfcard3 = Cards.GetCCard(CombosToCardTextBox.Text, false);
                     if (cfcard3 == null)
                     {
                         card3FCard = true;
@@ -497,7 +606,7 @@ namespace LA_TT
             }
             else
             {
-                CCard ccard2 = Cards.GetCCard(CombosToCardTextBox.Text);
+                CCard ccard2 = Cards.GetCCard(CombosToCardTextBox.Text, false);
                 if (ccard2 == null)
                 {
                     combosToExists = false;
@@ -541,7 +650,7 @@ namespace LA_TT
             cardExisted = true;
             if (isccard)
             {
-                CCard ccard = Cards.GetCCard(NameTextBox.Text);
+                CCard ccard = Cards.GetCCard(NameTextBox.Text, AddOwnCardCheckBox.Checked && editCard).Clone();
                 _ccard.name = ccard.name;
                 _ccard.rarity = ccard.rarity;
                 _ccard.level = ccard.level;
@@ -554,7 +663,7 @@ namespace LA_TT
             }
             else
             {
-                FCard fcard = Cards.GetFCard(NameTextBox.Text);
+                FCard fcard = Cards.GetFCard(NameTextBox.Text, AddOwnCardCheckBox.Checked && editCard).Clone();
                 _fcard.name = fcard.name;
                 _fcard.rarity = fcard.rarity;
                 _fcard.level = fcard.level;
@@ -605,6 +714,26 @@ namespace LA_TT
             else
             {
                 ComboCardCheckBox.Checked = true;
+            }
+        }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            if (!editCard) return;
+
+            if (ComboCardCheckBox.Checked)
+            {
+                if (_ccardBack != null)
+                {
+                    _ccard = _ccardBack;
+                }
+            }
+            else
+            {
+                if (_fcardBack != null)
+                {
+                    _fcard = _fcardBack;
+                }
             }
         }
     }

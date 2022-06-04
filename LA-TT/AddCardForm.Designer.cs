@@ -371,7 +371,7 @@
             this.ImagePictureBox.BackColor = System.Drawing.Color.Transparent;
             this.ImagePictureBox.Location = new System.Drawing.Point(36, 29);
             this.ImagePictureBox.Name = "ImagePictureBox";
-            this.ImagePictureBox.Size = new System.Drawing.Size(339, 448);
+            this.ImagePictureBox.Size = new System.Drawing.Size(334, 448);
             this.ImagePictureBox.TabIndex = 0;
             this.ImagePictureBox.TabStop = false;
             // 
@@ -384,7 +384,7 @@
             this.CardPictureBox.Image = global::LA_TT.Properties.Resources.CardB;
             this.CardPictureBox.Location = new System.Drawing.Point(18, 15);
             this.CardPictureBox.Name = "CardPictureBox";
-            this.CardPictureBox.Size = new System.Drawing.Size(372, 530);
+            this.CardPictureBox.Size = new System.Drawing.Size(374, 536);
             this.CardPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.CardPictureBox.TabIndex = 18;
             this.CardPictureBox.TabStop = false;
@@ -452,6 +452,7 @@
             this.CancelButton.TabIndex = 7;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // LeaveOpenCheckBox
             // 
@@ -560,7 +561,7 @@
             this.Controls.Add(this.CombosWithTextBox);
             this.Controls.Add(this.OkButton);
             this.Controls.Add(this.CardPanel);
-            this.MinimumSize = new System.Drawing.Size(700, 700);
+            this.MinimumSize = new System.Drawing.Size(819, 700);
             this.Name = "AddCardForm";
             this.ShowInTaskbar = false;
             this.Text = "Little Alchemist - Add Card";

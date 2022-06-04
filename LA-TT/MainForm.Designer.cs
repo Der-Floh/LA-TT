@@ -72,6 +72,7 @@
             this.RemoveOneToDeckButton = new System.Windows.Forms.Button();
             this.AddAllToDeckButton = new System.Windows.Forms.Button();
             this.AddOneToDeckButton = new System.Windows.Forms.Button();
+            this.EditCardButton = new System.Windows.Forms.Button();
             this.MenuStrip.SuspendLayout();
             this.DecksPanel.SuspendLayout();
             this.CardManagerMenuStrip.SuspendLayout();
@@ -224,6 +225,7 @@
             // 
             this.OwnedCardsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.OwnedCardsPanel.Controls.Add(this.EditCardButton);
             this.OwnedCardsPanel.Controls.Add(this.FilterButton);
             this.OwnedCardsPanel.Controls.Add(this.OperatorComboBox);
             this.OwnedCardsPanel.Controls.Add(this.OperatorLabel);
@@ -328,7 +330,7 @@
             // 
             // RefreshYourCardsButton
             // 
-            this.RefreshYourCardsButton.Location = new System.Drawing.Point(273, 356);
+            this.RefreshYourCardsButton.Location = new System.Drawing.Point(271, 386);
             this.RefreshYourCardsButton.Name = "RefreshYourCardsButton";
             this.RefreshYourCardsButton.Size = new System.Drawing.Size(101, 30);
             this.RefreshYourCardsButton.TabIndex = 4;
@@ -418,7 +420,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.CardPictureBox.BackColor = System.Drawing.Color.Transparent;
             this.CardPictureBox.Image = global::LA_TT.Properties.Resources.CardB;
-            this.CardPictureBox.Location = new System.Drawing.Point(3, 3);
+            this.CardPictureBox.Location = new System.Drawing.Point(0, 3);
             this.CardPictureBox.Name = "CardPictureBox";
             this.CardPictureBox.Size = new System.Drawing.Size(166, 227);
             this.CardPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -565,6 +567,16 @@
             this.AddOneToDeckButton.Text = "->";
             this.AddOneToDeckButton.UseVisualStyleBackColor = true;
             // 
+            // EditCardButton
+            // 
+            this.EditCardButton.Location = new System.Drawing.Point(271, 353);
+            this.EditCardButton.Name = "EditCardButton";
+            this.EditCardButton.Size = new System.Drawing.Size(101, 30);
+            this.EditCardButton.TabIndex = 16;
+            this.EditCardButton.Text = "Edit Card";
+            this.EditCardButton.UseVisualStyleBackColor = true;
+            this.EditCardButton.Click += new System.EventHandler(this.EditCardButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -646,5 +658,6 @@
         private Label OperatorLabel;
         private ComboBox OperatorComboBox;
         private Button FilterButton;
+        private Button EditCardButton;
     }
 }

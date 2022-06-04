@@ -181,7 +181,7 @@ namespace LA_TT
                 if (cCombos != null)
                     card.combos = cCombos;
                 
-                Cards.AddCCard(card);
+                Cards.AddCCard(card, false);
             }
             else
             {
@@ -197,7 +197,7 @@ namespace LA_TT
                 if (fCombos != null)
                     card.comboCards = fCombos;
                
-                Cards.AddFCard(card);
+                Cards.AddFCard(card, false);
             }
         }
 

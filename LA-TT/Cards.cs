@@ -62,6 +62,8 @@ namespace LA_TT
         private static bool yfcardsDChanged;
         private static bool yfcardsOChanged;
 
+        public static bool writing;
+
         private static System.Timers.Timer writeTimer;
 
         public static EventHandler OnFinishedInit = delegate { };
@@ -153,18 +155,18 @@ namespace LA_TT
 
             //Change _ccards to _yccards
             _yccards = new List<CCard>();
-            //_yccards.AddRange(_ccardsB);
-            //_yccards.AddRange(_ccardsS);
-            //_yccards.AddRange(_ccardsG);
-            //_yccards.AddRange(_ccardsD);
-            //_yccards.AddRange(_ccardsO);
+            _yccards.AddRange(_yccardsB);
+            _yccards.AddRange(_yccardsS);
+            _yccards.AddRange(_yccardsG);
+            _yccards.AddRange(_yccardsD);
+            _yccards.AddRange(_yccardsO);
 
             _yfcards = new List<FCard>();
-            //_yfcards.AddRange(_fcardsB);
-            //_yfcards.AddRange(_fcardsS);
-            //_yfcards.AddRange(_fcardsG);
-            //_yfcards.AddRange(_fcardsD);
-            //_yfcards.AddRange(_fcardsO);
+            _yfcards.AddRange(_yfcardsB);
+            _yfcards.AddRange(_yfcardsS);
+            _yfcards.AddRange(_yfcardsG);
+            _yfcards.AddRange(_yfcardsD);
+            _yfcards.AddRange(_yfcardsO);
 
             _ycards = new List<Card>();
             _ycards.AddRange(_yccards);
@@ -207,164 +209,234 @@ namespace LA_TT
             if (yfcardsOChanged) WriteFCards(true, 5);
         }
 
-        public static CCard GetCCard(string name, byte rarity)
+        public static CCard GetCCard(string name, byte rarity, bool your)
         {
-            switch (rarity)
+            if (!your)
             {
-                case 1: return _ccardsB.Find(c => c.name == name);
-                case 2: return _ccardsS.Find(c => c.name == name);
-                case 3: return _ccardsG.Find(c => c.name == name);
-                case 4: return _ccardsD.Find(c => c.name == name);
-                case 5: return _ccardsO.Find(c => c.name == name);
+                switch (rarity)
+                {
+                    case 1: return _ccardsB.Find(c => c.name == name);
+                    case 2: return _ccardsS.Find(c => c.name == name);
+                    case 3: return _ccardsG.Find(c => c.name == name);
+                    case 4: return _ccardsD.Find(c => c.name == name);
+                    case 5: return _ccardsO.Find(c => c.name == name);
+                }
+            }
+            else
+            {
+                switch (rarity)
+                {
+                    case 1: return _yccardsB.Find(c => c.name == name);
+                    case 2: return _yccardsS.Find(c => c.name == name);
+                    case 3: return _yccardsG.Find(c => c.name == name);
+                    case 4: return _yccardsD.Find(c => c.name == name);
+                    case 5: return _yccardsO.Find(c => c.name == name);
+                }
             }
             return null;
         }
-        public static CCard GetCCard(string name)
+        public static CCard GetCCard(string name, bool your)
         {
             CCard ccard = null;
-            ccard = _ccardsB.Find(c => c.name == name);
-            if (ccard != null) return ccard;
-            ccard = _ccardsS.Find(c => c.name == name);
-            if (ccard != null) return ccard;
-            ccard = _ccardsG.Find(c => c.name == name);
-            if (ccard != null) return ccard;
-            ccard = _ccardsD.Find(c => c.name == name);
-            if (ccard != null) return ccard;
-            ccard = _ccardsO.Find(c => c.name == name);
-            if (ccard != null) return ccard;
-            return null;
-        }
-        public static FCard GetFCard(string name, byte rarity)
-        {
-            switch (rarity)
+            if (!your)
             {
-                case 1: return _fcardsB.Find(c => c.name == name);
-                case 2: return _fcardsS.Find(c => c.name == name);
-                case 3: return _fcardsG.Find(c => c.name == name);
-                case 4: return _fcardsD.Find(c => c.name == name);
-                case 5: return _fcardsO.Find(c => c.name == name);
+                ccard = _ccardsB.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _ccardsS.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _ccardsG.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _ccardsD.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _ccardsO.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+            }
+            else
+            {
+                ccard = _yccardsB.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _yccardsS.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _yccardsG.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _yccardsD.Find(c => c.name == name);
+                if (ccard != null) return ccard;
+                ccard = _yccardsO.Find(c => c.name == name);
+                if (ccard != null) return ccard;
             }
             return null;
         }
-        public static FCard GetFCard(string name)
+        public static FCard GetFCard(string name, byte rarity, bool your)
+        {
+            if (!your)
+            {
+                switch (rarity)
+                {
+                    case 1: return _fcardsB.Find(c => c.name == name);
+                    case 2: return _fcardsS.Find(c => c.name == name);
+                    case 3: return _fcardsG.Find(c => c.name == name);
+                    case 4: return _fcardsD.Find(c => c.name == name);
+                    case 5: return _fcardsO.Find(c => c.name == name);
+                }
+            }
+            else
+            {
+                switch (rarity)
+                {
+                    case 1: return _yfcardsB.Find(c => c.name == name);
+                    case 2: return _yfcardsS.Find(c => c.name == name);
+                    case 3: return _yfcardsG.Find(c => c.name == name);
+                    case 4: return _yfcardsD.Find(c => c.name == name);
+                    case 5: return _yfcardsO.Find(c => c.name == name);
+                }
+            }
+            return null;
+        }
+        public static FCard GetFCard(string name, bool your)
         {
             FCard fcard = null;
-            fcard = _fcardsB.Find(c => c.name == name);
-            if (fcard != null) return fcard;
-            fcard = _fcardsS.Find(c => c.name == name);
-            if (fcard != null) return fcard;
-            fcard = _fcardsG.Find(c => c.name == name);
-            if (fcard != null) return fcard;
-            fcard = _fcardsD.Find(c => c.name == name);
-            if (fcard != null) return fcard;
-            fcard = _fcardsO.Find(c => c.name == name);
-            if (fcard != null) return fcard;
+            if (!your)
+            {
+                fcard = _fcardsB.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _fcardsS.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _fcardsG.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _fcardsD.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _fcardsO.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+            }
+            else
+            {
+                fcard = _yfcardsB.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _yfcardsS.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _yfcardsG.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _yfcardsD.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+                fcard = _yfcardsO.Find(c => c.name == name);
+                if (fcard != null) return fcard;
+            }
             return null;
         }
 
-        public static async void AddCCard(CCard ccard)
+        public static async void AddCCard(CCard ccard, bool your)
         {
-            switch (ccard.rarity)
+            if (!your)
             {
-                case 1:
-                    _ccardsB.Add(ccard);
-                    ccardsBChanged = true;
-                    break;
-                case 2:
-                    _ccardsS.Add(ccard);
-                    ccardsSChanged = true;
-                    break;
-                case 3:
-                    _ccardsG.Add(ccard);
-                    ccardsGChanged = true;
-                    break;
-                case 4:
-                    _ccardsD.Add(ccard);
-                    ccardsDChanged = true;
-                    break;
-                case 5:
-                    _ccardsO.Add(ccard);
-                    ccardsOChanged = true;
-                    break;
+                switch (ccard.rarity)
+                {
+                    case 1:
+                        _ccardsB.Add(ccard);
+                        ccardsBChanged = true;
+                        break;
+                    case 2:
+                        _ccardsS.Add(ccard);
+                        ccardsSChanged = true;
+                        break;
+                    case 3:
+                        _ccardsG.Add(ccard);
+                        ccardsGChanged = true;
+                        break;
+                    case 4:
+                        _ccardsD.Add(ccard);
+                        ccardsDChanged = true;
+                        break;
+                    case 5:
+                        _ccardsO.Add(ccard);
+                        ccardsOChanged = true;
+                        break;
+                }
             }
-        }
-        public static async void AddYourCCard(CCard ccard)
-        {
-            switch (ccard.rarity)
+            else
             {
-                case 1:
-                    _yccardsB.Add(ccard);
-                    yccardsBChanged = true;
-                    break;
-                case 2:
-                    _yccardsS.Add(ccard);
-                    yccardsSChanged = true;
-                    break;
-                case 3:
-                    _yccardsG.Add(ccard);
-                    yccardsGChanged = true;
-                    break;
-                case 4:
-                    _yccardsD.Add(ccard);
-                    yccardsDChanged = true;
-                    break;
-                case 5:
-                    _yccardsO.Add(ccard);
-                    yccardsOChanged = true;
-                    break;
+                switch (ccard.rarity)
+                {
+                    case 1:
+                        _yccardsB.Add(ccard);
+                        yccardsBChanged = true;
+                        break;
+                    case 2:
+                        _yccardsS.Add(ccard);
+                        yccardsSChanged = true;
+                        break;
+                    case 3:
+                        _yccardsG.Add(ccard);
+                        yccardsGChanged = true;
+                        break;
+                    case 4:
+                        _yccardsD.Add(ccard);
+                        yccardsDChanged = true;
+                        break;
+                    case 5:
+                        _yccardsO.Add(ccard);
+                        yccardsOChanged = true;
+                        break;
+                }
+                _yccards.Add(ccard);
+                _ycards.Add(ccard);
             }
         }
 
-        public static async void AddFCard(FCard fcard)
+        public static async void AddFCard(FCard fcard, bool your)
         {
-            switch (fcard.rarity)
+            if (!your)
             {
-                case 1:
-                    _fcardsB.Add(fcard);
-                    fcardsBChanged = true;
-                    break;
-                case 2:
-                    _fcardsS.Add(fcard);
-                    fcardsSChanged = true;
-                    break;
-                case 3:
-                    _fcardsG.Add(fcard);
-                    fcardsGChanged = true;
-                    break;
-                case 4:
-                    _fcardsD.Add(fcard);
-                    fcardsDChanged = true;
-                    break;
-                case 5:
-                    _fcardsO.Add(fcard);
-                    fcardsOChanged = true;
-                    break;
+                switch (fcard.rarity)
+                {
+                    case 1:
+                        _fcardsB.Add(fcard);
+                        fcardsBChanged = true;
+                        break;
+                    case 2:
+                        _fcardsS.Add(fcard);
+                        fcardsSChanged = true;
+                        break;
+                    case 3:
+                        _fcardsG.Add(fcard);
+                        fcardsGChanged = true;
+                        break;
+                    case 4:
+                        _fcardsD.Add(fcard);
+                        fcardsDChanged = true;
+                        break;
+                    case 5:
+                        _fcardsO.Add(fcard);
+                        fcardsOChanged = true;
+                        break;
+                }
             }
-        }
-        public static async void AddYourFCard(FCard fcard)
-        {
-            switch (fcard.rarity)
+            else
             {
-                case 1:
-                    _yfcardsB.Add(fcard);
-                    yfcardsBChanged = true;
-                    break;
-                case 2:
-                    _yfcardsS.Add(fcard);
-                    yfcardsSChanged = true;
-                    break;
-                case 3:
-                    _yfcardsG.Add(fcard);
-                    yfcardsGChanged = true;
-                    break;
-                case 4:
-                    _yfcardsD.Add(fcard);
-                    yfcardsDChanged = true;
-                    break;
-                case 5:
-                    _yfcardsO.Add(fcard);
-                    yfcardsOChanged = true;
-                    break;
+                switch (fcard.rarity)
+                {
+                    case 1:
+                        _yfcardsB.Add(fcard);
+                        yfcardsBChanged = true;
+                        break;
+                    case 2:
+                        _yfcardsS.Add(fcard);
+                        yfcardsSChanged = true;
+                        break;
+                    case 3:
+                        _yfcardsG.Add(fcard);
+                        yfcardsGChanged = true;
+                        break;
+                    case 4:
+                        _yfcardsD.Add(fcard);
+                        yfcardsDChanged = true;
+                        break;
+                    case 5:
+                        _yfcardsO.Add(fcard);
+                        yfcardsOChanged = true;
+                        break;
+                }
+                _yfcards.Add(fcard);
+                _ycards.Add(fcard);
             }
         }
 

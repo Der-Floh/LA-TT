@@ -8,6 +8,9 @@ namespace LA_TT
         private bool finishedLoadForm;
         private bool updateOnlyCCards;
         private bool updateOnlyFCards;
+        private bool currentCardC;
+        private CCard currentCCard;
+        private FCard currentFCard;
         public MainForm()
         {
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
@@ -28,58 +31,10 @@ namespace LA_TT
         {
             AddCardForm addCardForm = new AddCardForm();
             DialogResult result = addCardForm.ShowDialog();
-            /*
-            if (result == DialogResult.OK || (addCardForm.LeftWindowOpenCheckBox.Checked && result == DialogResult.None))//not using leave open box make new invisible one
+            if (result == DialogResult.OK)
             {
-                if (addCardForm.ComboCardCheckBox.Checked)
-                {
-                    //! CONTINUE
-                    CCard ccard = new CCard();
-                    ccard.name = addCardForm.NameTextBox.Text;
-                    ccard.level = (byte)addCardForm.LevelNumericBox.Value;
-                    ccard.attack = (byte)addCardForm.AttackNumericBox.Value;
-                    ccard.defense = (byte)addCardForm.DefenseNumericBox.Value;
-                    ccard.rarity = (byte)addCardForm.RarityNumericBox.Value;
-                    ccard.image = addCardForm.ImagePictureBox.Image;
-
-                    FCard fcard = Cards.GetFCard(addCardForm.CombosToCardTextBox.Text);
-
-                    if (fcard == null)
-                    {
-                        CCard cfcard = Cards.GetCCard(addCardForm.CombosToCardTextBox.Text);
-                        try
-                        {
-                            ccard.combos.Add(Cards.GetCCard(addCardForm.CombosWithTextBox.Text), cfcard);
-                        }
-                        catch (Exception) { }
-                    }
-                    else
-                    {
-                        ccard.combos.Add(Cards.GetCCard(addCardForm.CombosWithTextBox.Text), fcard);
-                    }
-
-                    Cards.AddCCard(ccard);
-                }
-                else
-                {
-                    FCard fcard = new FCard();
-                    fcard.name = addCardForm.NameTextBox.Text;
-                    fcard.level = (byte)addCardForm.LevelNumericBox.Value;
-                    fcard.attack = (byte)addCardForm.AttackNumericBox.Value;
-                    fcard.defense = (byte)addCardForm.DefenseNumericBox.Value;
-                    fcard.rarity = (byte)addCardForm.RarityNumericBox.Value;
-                    fcard.image = addCardForm.ImagePictureBox.Image;
-
-                    try
-                    {
-                        fcard.comboCards.Add(Cards.GetCCard(addCardForm.CombosWithTextBox.Text), Cards.GetCCard(addCardForm.CombosToCardTextBox.Text));
-                    }
-                    catch (Exception) { }
-                    
-                    Cards.AddFCard(fcard);
-                }
+                SortYourCards();
             }
-            */
         }
 
         private void saveAllCardsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -105,6 +60,7 @@ namespace LA_TT
             if (Cards._ycardsFiltered == null)
                 return;
 
+            int curIndex = OwnedCardsListBox.SelectedIndex;
             string cardType = "C";
             OwnedCardsListBox.Items.Clear();
             foreach (Card card in Cards._ycardsFiltered)
@@ -180,10 +136,9 @@ namespace LA_TT
         private void OnFinishedInitCards(object sender, EventArgs e)
         {
             finishedCardsInit = true;
-            //CalcComboRarity();
+            CalcComboRarity();
             Cards._ycards = Cards._ycards.OrderBy(c => c.name).ToList();
             UpdateYourCards();
-            //MessageBox.Show("Form Init Finished");
         }
 
         private void SortYourCards()
@@ -277,11 +232,11 @@ namespace LA_TT
                     FCard fcResult;
                     if (combo.card3Rarity != 0)
                     {
-                        fcResult = Cards.GetFCard(combo.card3Name);
+                        fcResult = Cards.GetFCard(combo.card3Name, true);
                     }
                     else
                     {
-                        fcResult = Cards.GetFCard(combo.card3Name, combo.card3Rarity);
+                        fcResult = Cards.GetFCard(combo.card3Name, combo.card3Rarity, true);
                     }
                     if (fcResult != null)
                     {
@@ -297,14 +252,14 @@ namespace LA_TT
             {
                 foreach (CCombo combo in ccard.combos)
                 {
-                    CCard ccCombo= Cards.GetCCard(combo.ccard2Name);
+                    CCard ccCombo= Cards.GetCCard(combo.ccard2Name, true);
                     if (ccCombo != null)
                     {
                         combo.ccard2Rarity = ccCombo.rarity;
                         Cards.UpdateCCard(ccCombo, false);
                     }
 
-                    FCard fcResult = Cards.GetFCard(combo.card3Name);
+                    FCard fcResult = Cards.GetFCard(combo.card3Name, true);
                     if (fcResult != null)
                     {
                         combo.card3Rarity = fcResult.rarity;
@@ -316,14 +271,14 @@ namespace LA_TT
             {
                 foreach (FCombo combo in fcard.comboCards)
                 {
-                    CCard ccCombo1 = Cards.GetCCard(combo.ccard1Name);
+                    CCard ccCombo1 = Cards.GetCCard(combo.ccard1Name, true);
                     if (ccCombo1 != null)
                     {
                         combo.ccard1Rarity = ccCombo1.rarity;
                         Cards.UpdateCCard(ccCombo1, false);
                     }
 
-                    CCard ccCombo2 = Cards.GetCCard(combo.ccard2Name);
+                    CCard ccCombo2 = Cards.GetCCard(combo.ccard2Name, true);
                     if (ccCombo2 != null)
                     {
                         combo.ccard2Rarity = ccCombo2.rarity;
@@ -360,19 +315,41 @@ namespace LA_TT
 
             if (cardtype == "C")
             {
-                CCard ccard = Cards.GetCCard(cardname, byte.Parse(cardrarity));
+                CCard ccard = Cards.GetCCard(cardname, byte.Parse(cardrarity), true);
                 CardLevelTextBox.Text = ccard.level.ToString();
                 CardAttackTextBox.Text = ccard.attack.ToString();
                 CardDefenseTextBox.Text = ccard.defense.ToString();
                 CardNameTextBox.Text = ccard.name;
+                CFPictureBox.Image = Properties.Resources.C;
+                switch (ccard.rarity)
+                {
+                    case 1: CardPictureBox.Image = Properties.Resources.CardB; break;
+                    case 2: CardPictureBox.Image = Properties.Resources.CardS; break;
+                    case 3: CardPictureBox.Image = Properties.Resources.CardG; break;
+                    case 4: CardPictureBox.Image = Properties.Resources.CardD; break;
+                }
+                currentCardC = true;
+                currentCCard = ccard;
+                currentFCard = new FCard();
             }
             else
             {
-                FCard fcard = Cards.GetFCard(cardname, byte.Parse(cardrarity));
+                FCard fcard = Cards.GetFCard(cardname, byte.Parse(cardrarity), true);
                 CardLevelTextBox.Text = fcard.level.ToString();
                 CardAttackTextBox.Text = fcard.attack.ToString();
                 CardDefenseTextBox.Text = fcard.defense.ToString();
                 CardNameTextBox.Text = fcard.name;
+                CFPictureBox.Image = Properties.Resources.F;
+                switch (fcard.rarity)
+                {
+                    case 1: CardPictureBox.Image = Properties.Resources.CardB; break;
+                    case 2: CardPictureBox.Image = Properties.Resources.CardS; break;
+                    case 3: CardPictureBox.Image = Properties.Resources.CardG; break;
+                    case 4: CardPictureBox.Image = Properties.Resources.CardD; break;
+                }
+                currentCardC = false;
+                currentFCard = fcard;
+                currentCCard = new CCard();
             }
         }
         private void OnProcessExit(object sender, EventArgs e)
@@ -401,7 +378,7 @@ namespace LA_TT
             Cards.WriteFCards(false, 4);
             Cards.WriteFCards(false, 5);
 
-            //Thread.Sleep(1000);
+            Thread.Sleep(2000);
         }
 
         private void FilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -531,6 +508,24 @@ namespace LA_TT
         private void OperatorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             SortYourCards();
+        }
+
+        private void EditCardButton_Click(object sender, EventArgs e)
+        {
+            AddCardForm addCardForm;
+            if (currentCardC)
+            {
+                addCardForm = new AddCardForm(currentCCard, true);
+            }
+            else
+            {
+                addCardForm = new AddCardForm(currentFCard, true);
+            }
+            DialogResult result = addCardForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                SortYourCards();
+            }
         }
     }
 }
