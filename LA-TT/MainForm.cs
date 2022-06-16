@@ -13,6 +13,7 @@ namespace LA_TT
         private FCard currentFCard;
         public MainForm()
         {
+            UserSettings.Init();
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             InitializeComponent();
             Cards.OnFinishedInit += OnFinishedInitCards;
@@ -119,8 +120,8 @@ namespace LA_TT
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Location = Settings.Default.MainWindowLocation;
-            Size = Settings.Default.MainWindowSize;
+            Location = UserSettings.mainWindowLocation;
+            Size = UserSettings.mainWindowSize;
 
             CardAttackTextBox.BackColor = Color.FromArgb(255, 102, 0);
             CardDefenseTextBox.BackColor = Color.FromArgb(0, 101, 204);
@@ -164,7 +165,7 @@ namespace LA_TT
                         //UpdateYourCards(); break;
                         updateOnlyCCards = false;
                         updateOnlyFCards = false; break;
-                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack * 2 + c.defense).ToList();
+                    case 3: Cards._ycards = Cards._ycards.OrderBy(c => c.attack * UserSettings.attackMultiplier + c.defense * UserSettings.defenseMultiplier).ToList();
                         //UpdateYourCards(); break;
                         updateOnlyCCards = false;
                         updateOnlyFCards = false; break;
@@ -201,7 +202,7 @@ namespace LA_TT
                         //UpdateYourCards(); break;
                         updateOnlyCCards = false;
                         updateOnlyFCards = false; break;
-                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack * 2 + c.defense).ToList();
+                    case 3: Cards._ycards = Cards._ycards.OrderByDescending(c => c.attack * UserSettings.attackMultiplier + c.defense * UserSettings.defenseMultiplier).ToList();
                         //UpdateYourCards(); break;
                         updateOnlyCCards = false;
                         updateOnlyFCards = false; break;
@@ -243,7 +244,7 @@ namespace LA_TT
                     }
                     if (fcResult != null)
                     {
-                        ccard.comboStatSum += fcResult.attack + fcResult.defense;
+                        ccard.comboStatSum += fcResult.attack * UserSettings.attackMultiplier + fcResult.defense * UserSettings.defenseMultiplier;
                         Cards.UpdateCCard(ccard, false);
                     }
                 }
@@ -357,35 +358,44 @@ namespace LA_TT
         }
         private void OnProcessExit(object sender, EventArgs e)
         {
-            Cards.WriteCCards(true, 1);
-            Cards.WriteCCards(true, 2);
-            Cards.WriteCCards(true, 3);
-            Cards.WriteCCards(true, 4);
-            Cards.WriteCCards(true, 5);
+            List<Task> writeTasks = new List<Task>();
 
-            Cards.WriteFCards(true, 1);
-            Cards.WriteFCards(true, 2);
-            Cards.WriteFCards(true, 3);
-            Cards.WriteFCards(true, 4);
-            Cards.WriteFCards(true, 5);
+            writeTasks.Add(Cards.WriteCCards(true, 1));
+            writeTasks.Add(Cards.WriteCCards(true, 2));
+            writeTasks.Add(Cards.WriteCCards(true, 3));
+            writeTasks.Add(Cards.WriteCCards(true, 4));
+            writeTasks.Add(Cards.WriteCCards(true, 5));
 
-            Cards.WriteCCards(false, 1);
-            Cards.WriteCCards(false, 2);
-            Cards.WriteCCards(false, 3);
-            Cards.WriteCCards(false, 4);
-            Cards.WriteCCards(false, 5);
+            writeTasks.Add(Cards.WriteFCards(true, 1));
+            writeTasks.Add(Cards.WriteFCards(true, 2));
+            writeTasks.Add(Cards.WriteFCards(true, 3));
+            writeTasks.Add(Cards.WriteFCards(true, 4));
+            writeTasks.Add(Cards.WriteFCards(true, 5));
 
-            Cards.WriteFCards(false, 1);
-            Cards.WriteFCards(false, 2);
-            Cards.WriteFCards(false, 3);
-            Cards.WriteFCards(false, 4);
-            Cards.WriteFCards(false, 5);
+            writeTasks.Add(Cards.WriteCCards(false, 1));
+            writeTasks.Add(Cards.WriteCCards(false, 2));
+            writeTasks.Add(Cards.WriteCCards(false, 3));
+            writeTasks.Add(Cards.WriteCCards(false, 4));
+            writeTasks.Add(Cards.WriteCCards(false, 5));
 
-            Settings.Default.MainWindowLocation = RestoreBounds.Location;
-            Settings.Default.MainWindowSize = RestoreBounds.Size;
-            Settings.Default.Save();
+            writeTasks.Add(Cards.WriteFCards(false, 1));
+            writeTasks.Add(Cards.WriteFCards(false, 2));
+            writeTasks.Add(Cards.WriteFCards(false, 3));
+            writeTasks.Add(Cards.WriteFCards(false, 4));
+            writeTasks.Add(Cards.WriteFCards(false, 5));
 
-            Thread.Sleep(2000);
+            while (writeTasks.Count != 0)
+            {
+                Thread.Sleep(100);
+                foreach (Task task in writeTasks)
+                {
+                    if (task.IsCompleted)
+                    {
+                        writeTasks.Remove(task);
+                        break;
+                    }
+                }
+            }
         }
 
         private void FilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -555,6 +565,19 @@ namespace LA_TT
         private void FilterTextBox_TextChanged(object sender, EventArgs e)
         {
             SortYourCards();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UserSettingsForm settingsForm = new UserSettingsForm();
+            settingsForm.Show();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            UserSettings.mainWindowLocation = Location;
+            UserSettings.mainWindowSize = Size;
+            UserSettings.Save();
         }
     }
 }

@@ -108,6 +108,9 @@ namespace LA_TT
 
         private void AddCardForm_Load(object sender, EventArgs e)
         {
+            Location = UserSettings.addCardWindowLocation;
+            Size = UserSettings.addCardWindowSize;
+
             AttackNumericBox.BackColor = Color.FromArgb(255, 102, 0);
             DefenseNumericBox.BackColor = Color.FromArgb(0, 101, 204);
             CalcedAttackTextBox.BackColor = Color.FromArgb(255, 102, 0);
@@ -735,6 +738,13 @@ namespace LA_TT
                     _fcard = _fcardBack;
                 }
             }
+        }
+
+        private void AddCardForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            UserSettings.addCardWindowLocation = Location;
+            UserSettings.addCardWindowSize = Size;
+            UserSettings.Save();
         }
     }
 }

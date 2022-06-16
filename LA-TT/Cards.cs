@@ -440,7 +440,7 @@ namespace LA_TT
             }
         }
 
-        public static async void WriteCCards(bool your, byte rarity)
+        public static async Task WriteCCards(bool your, byte rarity)
         {
             JsonHandler jsonHandler = new JsonHandler();
             if (!your)
@@ -526,7 +526,7 @@ namespace LA_TT
                 }
             }
         }
-        public static async void WriteFCards(bool your, byte rarity)
+        public static async Task WriteFCards(bool your, byte rarity)
         {
             JsonHandler jsonHandler = new JsonHandler();
             if (!your)

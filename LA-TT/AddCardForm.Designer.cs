@@ -565,6 +565,7 @@
             this.Name = "AddCardForm";
             this.ShowInTaskbar = false;
             this.Text = "Little Alchemist - Add Card";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddCardForm_FormClosing);
             this.Load += new System.EventHandler(this.AddCardForm_Load);
             this.CardPanel.ResumeLayout(false);
             this.CardPanel.PerformLayout();

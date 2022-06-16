@@ -36,6 +36,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshCardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addCardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DeckListBox = new System.Windows.Forms.ListBox();
             this.DecksComboBox = new System.Windows.Forms.ComboBox();
@@ -122,7 +123,8 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshCardsToolStripMenuItem,
-            this.addCardToolStripMenuItem});
+            this.addCardToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -139,6 +141,13 @@
             this.addCardToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.addCardToolStripMenuItem.Text = "Add Card";
             this.addCardToolStripMenuItem.Click += new System.EventHandler(this.addCardToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -582,6 +591,7 @@
             this.MinimumSize = new System.Drawing.Size(1015, 636);
             this.Name = "MainForm";
             this.Text = "Little Alchimist - The Tool";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.MenuStrip.ResumeLayout(false);
@@ -648,5 +658,6 @@
         private Label OperatorLabel;
         private ComboBox OperatorComboBox;
         private Button EditCardButton;
+        private ToolStripMenuItem settingsToolStripMenuItem;
     }
 }

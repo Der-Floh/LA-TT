@@ -113,5 +113,28 @@ namespace LA_TT
             }
             return null;
         }
+
+        public async Task WriteSettings(Settings settings)
+        {
+            string fileName = @"Resources/config.json";
+
+            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+            using FileStream createStream = File.Create(fileName);
+            await JsonSerializer.SerializeAsync(createStream, settings, jsonOptions);
+            await createStream.DisposeAsync();
+        }
+
+        public Settings GetSettings()
+        {
+            string fileName = @"Resources/config.json";
+            if (File.Exists(fileName))
+            {
+                using FileStream openStream = File.OpenRead(fileName);
+                Settings settings = JsonSerializer.Deserialize<Settings>(openStream);
+                openStream.Dispose();
+                return settings;
+            }
+            return null;
+        }
     }
 }

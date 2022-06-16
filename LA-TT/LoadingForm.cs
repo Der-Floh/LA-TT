@@ -47,6 +47,9 @@ namespace LA_TT
         {
             TopLoadingBar.Value = e.ProgressPercentage;
             TopLoadingBarLabel.Text = currTextTop;
+
+            TopLoadingBar.Refresh();
+            TopLoadingBarLabel.Refresh();
         }
 
         private void BackgroundWorkerTop_Completed(object sender, RunWorkerCompletedEventArgs e)
@@ -72,6 +75,9 @@ namespace LA_TT
         {
             BottomLoadingBar.Value = e.ProgressPercentage;
             BottomLoadingBarLabel.Text = currTextBottom;
+
+            BottomLoadingBar.Refresh();
+            BottomLoadingBarLabel.Refresh();
         }
 
         private void BackgroundWorkerBottom_Completed(object sender, RunWorkerCompletedEventArgs e)
@@ -91,6 +97,12 @@ namespace LA_TT
                 Thread.Sleep(100);
                 backgroundWorkerBottom.ReportProgress(currPercentageBottom);
             }
+        }
+
+        public void StartBackgroundWorkers()
+        {
+            backgroundWorkerTop.RunWorkerAsync();
+            backgroundWorkerBottom.RunWorkerAsync();
         }
     }
 }
