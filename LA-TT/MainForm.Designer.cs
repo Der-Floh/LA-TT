@@ -45,7 +45,7 @@
             this.yourCardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OwnedCardsPanel = new System.Windows.Forms.Panel();
-            this.FilterButton = new System.Windows.Forms.Button();
+            this.EditCardButton = new System.Windows.Forms.Button();
             this.OperatorComboBox = new System.Windows.Forms.ComboBox();
             this.OperatorLabel = new System.Windows.Forms.Label();
             this.FilterNumericBox = new System.Windows.Forms.NumericUpDown();
@@ -72,7 +72,6 @@
             this.RemoveOneToDeckButton = new System.Windows.Forms.Button();
             this.AddAllToDeckButton = new System.Windows.Forms.Button();
             this.AddOneToDeckButton = new System.Windows.Forms.Button();
-            this.EditCardButton = new System.Windows.Forms.Button();
             this.MenuStrip.SuspendLayout();
             this.DecksPanel.SuspendLayout();
             this.CardManagerMenuStrip.SuspendLayout();
@@ -226,7 +225,6 @@
             this.OwnedCardsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.OwnedCardsPanel.Controls.Add(this.EditCardButton);
-            this.OwnedCardsPanel.Controls.Add(this.FilterButton);
             this.OwnedCardsPanel.Controls.Add(this.OperatorComboBox);
             this.OwnedCardsPanel.Controls.Add(this.OperatorLabel);
             this.OwnedCardsPanel.Controls.Add(this.FilterNumericBox);
@@ -247,15 +245,15 @@
             this.OwnedCardsPanel.Size = new System.Drawing.Size(501, 424);
             this.OwnedCardsPanel.TabIndex = 6;
             // 
-            // FilterButton
+            // EditCardButton
             // 
-            this.FilterButton.Location = new System.Drawing.Point(447, 8);
-            this.FilterButton.Name = "FilterButton";
-            this.FilterButton.Size = new System.Drawing.Size(48, 23);
-            this.FilterButton.TabIndex = 15;
-            this.FilterButton.Text = "Ok";
-            this.FilterButton.UseVisualStyleBackColor = true;
-            this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);
+            this.EditCardButton.Location = new System.Drawing.Point(271, 353);
+            this.EditCardButton.Name = "EditCardButton";
+            this.EditCardButton.Size = new System.Drawing.Size(101, 30);
+            this.EditCardButton.TabIndex = 16;
+            this.EditCardButton.Text = "Edit Card";
+            this.EditCardButton.UseVisualStyleBackColor = true;
+            this.EditCardButton.Click += new System.EventHandler(this.EditCardButton_Click);
             // 
             // OperatorComboBox
             // 
@@ -294,6 +292,7 @@
             this.FilterNumericBox.Size = new System.Drawing.Size(148, 23);
             this.FilterNumericBox.TabIndex = 12;
             this.FilterNumericBox.Visible = false;
+            this.FilterNumericBox.ValueChanged += new System.EventHandler(this.FilterNumericBox_ValueChanged);
             // 
             // FilterTextBox
             // 
@@ -301,6 +300,7 @@
             this.FilterTextBox.Name = "FilterTextBox";
             this.FilterTextBox.Size = new System.Drawing.Size(148, 23);
             this.FilterTextBox.TabIndex = 11;
+            this.FilterTextBox.TextChanged += new System.EventHandler(this.FilterTextBox_TextChanged);
             // 
             // FilterLabel
             // 
@@ -567,16 +567,6 @@
             this.AddOneToDeckButton.Text = "->";
             this.AddOneToDeckButton.UseVisualStyleBackColor = true;
             // 
-            // EditCardButton
-            // 
-            this.EditCardButton.Location = new System.Drawing.Point(271, 353);
-            this.EditCardButton.Name = "EditCardButton";
-            this.EditCardButton.Size = new System.Drawing.Size(101, 30);
-            this.EditCardButton.TabIndex = 16;
-            this.EditCardButton.Text = "Edit Card";
-            this.EditCardButton.UseVisualStyleBackColor = true;
-            this.EditCardButton.Click += new System.EventHandler(this.EditCardButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -657,7 +647,6 @@
         public NumericUpDown FilterNumericBox;
         private Label OperatorLabel;
         private ComboBox OperatorComboBox;
-        private Button FilterButton;
         private Button EditCardButton;
     }
 }

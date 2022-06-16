@@ -33,15 +33,16 @@ namespace LA_TT
         private void DownloadWikiPageHTML()
         {
             loadingForm = new LoadingForm();
-            loadingForm.HeaderLabel.Text = "Syncing Cards with Wiki";
             loadingForm.Show();
+            loadingForm.HeaderLabel.Refresh();
 
             for (currentLetter = 'A'; currentLetter <= 'Z'; currentLetter++)
             {
                 using (WebClient client = new WebClient())
                 {
                     loadingForm.TopLoadingBarLabel.Text = "Loading Cards with Letter: " +currentLetter;
-                    loadingForm.Update();
+                    loadingForm.TopLoadingBarLabel.Refresh();
+                    loadingForm.TopLoadingBar.Refresh();
                     if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + ".html")))
                     {
                         client.DownloadFile(new Uri("https://lil-alchemist.fandom.com/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
@@ -60,14 +61,14 @@ namespace LA_TT
         private void DownloadWikiPageHTML(char letter)
         {
             loadingForm = new LoadingForm();
-            loadingForm.HeaderLabel.Text = "Syncing Cards with Wiki";
             loadingForm.Show();
             currentLetter = letter;
 
             using (WebClient client = new WebClient())
             {
                 loadingForm.TopLoadingBarLabel.Text = "Loading Cards with Letter: " + currentLetter;
-                loadingForm.Update();
+                loadingForm.TopLoadingBarLabel.Refresh();
+                loadingForm.TopLoadingBar.Refresh();
                 if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + ".html")))
                 {
                     client.DownloadFile(new Uri("https://lil-alchemist.fandom.com/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
@@ -123,7 +124,8 @@ namespace LA_TT
             foreach (string cardName in cardNames)
             {
                 loadingForm.BottomLoadingBarLabel.Text = "Loading Card: " +cardName;
-                loadingForm.Update();
+                loadingForm.BottomLoadingBarLabel.Refresh();
+                loadingForm.BottomLoadingBar.Refresh();
                 FindCard(cardName);
                 loadingCards += 1;
                 loadingForm.BottomLoadingBar.Value = (int)Math.Round(loadingCards*100 / cardNames.Count);

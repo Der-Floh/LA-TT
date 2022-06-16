@@ -73,9 +73,9 @@
             this.HeaderLabel.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.HeaderLabel.Location = new System.Drawing.Point(12, 9);
             this.HeaderLabel.Name = "HeaderLabel";
-            this.HeaderLabel.Size = new System.Drawing.Size(65, 28);
+            this.HeaderLabel.Size = new System.Drawing.Size(220, 28);
             this.HeaderLabel.TabIndex = 4;
-            this.HeaderLabel.Text = "label1";
+            this.HeaderLabel.Text = "Syncing Cards with Wiki";
             this.HeaderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // LoadingForm

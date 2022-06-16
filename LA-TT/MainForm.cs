@@ -119,6 +119,9 @@ namespace LA_TT
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Location = Settings.Default.MainWindowLocation;
+            Size = Settings.Default.MainWindowSize;
+
             CardAttackTextBox.BackColor = Color.FromArgb(255, 102, 0);
             CardDefenseTextBox.BackColor = Color.FromArgb(0, 101, 204);
             OwnedCardsSortComboBox.SelectedIndex = 0;
@@ -378,6 +381,10 @@ namespace LA_TT
             Cards.WriteFCards(false, 4);
             Cards.WriteFCards(false, 5);
 
+            Settings.Default.MainWindowLocation = RestoreBounds.Location;
+            Settings.Default.MainWindowSize = RestoreBounds.Size;
+            Settings.Default.Save();
+
             Thread.Sleep(2000);
         }
 
@@ -387,32 +394,44 @@ namespace LA_TT
             {
                 case 0:
                     FilterTextBox.Visible = false;
+                    OperatorLabel.Visible = false;
+                    OperatorComboBox.Visible = false;
                     FilterTextBox.Clear();
                     FilterNumericBox.Visible = false;
                     FilterNumericBox.Value = 0;
                     break;
                 case 1:
                     FilterTextBox.Visible = true;
+                    OperatorLabel.Visible = true;
+                    OperatorComboBox.Visible = true;
                     FilterNumericBox.Visible = false;
                     FilterNumericBox.Value = 0;
                     break;
                 case 2:
                     FilterNumericBox.Visible = true;
+                    OperatorLabel.Visible = true;
+                    OperatorComboBox.Visible = true;
                     FilterTextBox.Visible = false;
                     FilterTextBox.Clear();
                     break;
                 case 3:
                     FilterNumericBox.Visible = true;
+                    OperatorLabel.Visible = true;
+                    OperatorComboBox.Visible = true;
                     FilterTextBox.Visible = false;
                     FilterTextBox.Clear();
                     break;
                 case 4:
                     FilterNumericBox.Visible = true;
+                    OperatorLabel.Visible = true;
+                    OperatorComboBox.Visible = true;
                     FilterTextBox.Visible = false;
                     FilterTextBox.Clear();
                     break;
                 case 5:
                     FilterNumericBox.Visible = true;
+                    OperatorLabel.Visible = true;
+                    OperatorComboBox.Visible = true;
                     FilterTextBox.Visible = false;
                     FilterTextBox.Clear();
                     break;
@@ -526,6 +545,16 @@ namespace LA_TT
             {
                 SortYourCards();
             }
+        }
+
+        private void FilterNumericBox_ValueChanged(object sender, EventArgs e)
+        {
+            SortYourCards();
+        }
+
+        private void FilterTextBox_TextChanged(object sender, EventArgs e)
+        {
+            SortYourCards();
         }
     }
 }
