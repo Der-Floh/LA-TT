@@ -18,8 +18,15 @@ namespace LA_TT
         public static Size settingsWindowSize { get; set; }
 
         public static bool askForSync { get; set; }
+        public static bool sync { get; set; }
+        public static bool saveYourCards { get; set; }
+        public static bool comboSatsYour { get; set; }
+        public static bool skipDownload { get; set; }
+        public static bool preferAttack { get; set; }
+        public static bool preferDefense { get; set; }
         public static int attackMultiplier { get; set; }
         public static int defenseMultiplier { get; set; }
+        public static string wikiUrl { get; set; }
 
         public static void Init()
         {
@@ -28,17 +35,7 @@ namespace LA_TT
 
             if (settings == null)
             {
-                settings = new Settings();
-                settings.mainWindowLocation = new Point();
-                settings.mainWindowSize = new Size();
-                settings.addCardWindowLocation = new Point();
-                settings.addCardWindowSize = new Size();
-                settings.settingsWindowLocation = new Point();
-                settings.settingsWindowSize = new Size();
-
-                settings.askForSync = true;
-                settings.attackMultiplier = 2;
-                settings.defenseMultiplier = 1;
+                settings = GetDefaultSettings();
             }
             mainWindowLocation = settings.mainWindowLocation;
             mainWindowSize = settings.mainWindowSize;
@@ -48,8 +45,45 @@ namespace LA_TT
             settingsWindowSize = settings.settingsWindowSize;
 
             askForSync = settings.askForSync;
+            sync = settings.sync;
+            saveYourCards = settings.saveYourCards;
+            comboSatsYour = settings.comboStatsYour;
+            skipDownload = settings.skipDownload;
+            preferAttack = settings.preferAttack;
+            preferDefense = settings.preferDefense;
             attackMultiplier = settings.attackMultiplier;
             defenseMultiplier = settings.defenseMultiplier;
+            wikiUrl = settings.wikiUrl;
+        }
+
+        private static Settings GetDefaultSettings()
+        {
+            Settings defaultSettings = new Settings
+            {
+                mainWindowLocation = new Point(),
+                mainWindowSize = new Size(),
+                addCardWindowLocation = new Point(),
+                addCardWindowSize = new Size(),
+                settingsWindowLocation = new Point(),
+                settingsWindowSize = new Size(),
+
+                askForSync = true,
+                sync = false,
+                saveYourCards = false,
+                comboStatsYour = true,
+                skipDownload = true,
+                preferAttack = true,
+                preferDefense = false,
+                attackMultiplier = 2,
+                defenseMultiplier = 1,
+                wikiUrl = "https://lil-alchemist.fandom.com",
+            };
+            return defaultSettings;
+        }
+
+        public static void ResetToDefault()
+        {
+            settings = GetDefaultSettings();
         }
 
         public static void Save()
@@ -62,8 +96,14 @@ namespace LA_TT
             settings.settingsWindowSize = settingsWindowSize;
 
             settings.askForSync = askForSync;
+            settings.sync = sync;
+            settings.saveYourCards = saveYourCards;
+            settings.skipDownload = skipDownload;
+            settings.preferAttack = preferAttack;
+            settings.preferDefense = preferDefense;
             settings.attackMultiplier = attackMultiplier;
             settings.defenseMultiplier = defenseMultiplier;
+            settings.wikiUrl = wikiUrl;
 
             JsonHandler jsonHandler = new JsonHandler();
             jsonHandler.WriteSettings(settings);

@@ -16,7 +16,14 @@ namespace LA_TT
         public Size settingsWindowSize { get; set; }
 
         public bool askForSync { get; set; }
+        public bool sync { get; set; }
+        public bool saveYourCards { get; set; }
+        public bool comboStatsYour { get; set; }
+        public bool skipDownload { get; set; }
+        public bool preferAttack { get; set; }
+        public bool preferDefense { get; set; }
         public int attackMultiplier { get; set; }
         public int defenseMultiplier { get; set; }
+        public string wikiUrl { get; set; }
     }
 }

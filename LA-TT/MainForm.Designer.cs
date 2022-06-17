@@ -73,6 +73,7 @@
             this.RemoveOneToDeckButton = new System.Windows.Forms.Button();
             this.AddAllToDeckButton = new System.Windows.Forms.Button();
             this.AddOneToDeckButton = new System.Windows.Forms.Button();
+            this.syncWithWikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.DecksPanel.SuspendLayout();
             this.CardManagerMenuStrip.SuspendLayout();
@@ -123,6 +124,7 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshCardsToolStripMenuItem,
+            this.syncWithWikiToolStripMenuItem,
             this.addCardToolStripMenuItem,
             this.settingsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
@@ -132,20 +134,20 @@
             // refreshCardsToolStripMenuItem
             // 
             this.refreshCardsToolStripMenuItem.Name = "refreshCardsToolStripMenuItem";
-            this.refreshCardsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.refreshCardsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.refreshCardsToolStripMenuItem.Text = "Refresh Cards";
             // 
             // addCardToolStripMenuItem
             // 
             this.addCardToolStripMenuItem.Name = "addCardToolStripMenuItem";
-            this.addCardToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.addCardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addCardToolStripMenuItem.Text = "Add Card";
             this.addCardToolStripMenuItem.Click += new System.EventHandler(this.addCardToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -576,6 +578,13 @@
             this.AddOneToDeckButton.Text = "->";
             this.AddOneToDeckButton.UseVisualStyleBackColor = true;
             // 
+            // syncWithWikiToolStripMenuItem
+            // 
+            this.syncWithWikiToolStripMenuItem.Name = "syncWithWikiToolStripMenuItem";
+            this.syncWithWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.syncWithWikiToolStripMenuItem.Text = "Sync with Wiki";
+            this.syncWithWikiToolStripMenuItem.Click += new System.EventHandler(this.syncWithWikiToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -659,5 +668,6 @@
         private ComboBox OperatorComboBox;
         private Button EditCardButton;
         private ToolStripMenuItem settingsToolStripMenuItem;
+        private ToolStripMenuItem syncWithWikiToolStripMenuItem;
     }
 }

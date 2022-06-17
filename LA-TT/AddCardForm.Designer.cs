@@ -545,6 +545,7 @@
             this.AcceptButton = this.OkButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.CancelButton;
             this.ClientSize = new System.Drawing.Size(803, 661);
             this.Controls.Add(this.AddOwnCardCheckBox);
             this.Controls.Add(this.InstantSaveCheckBox);

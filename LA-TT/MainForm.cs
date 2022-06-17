@@ -11,6 +11,7 @@ namespace LA_TT
         private bool currentCardC;
         private CCard currentCCard;
         private FCard currentFCard;
+        //![Logo](https://scontent-dus1-1.xx.fbcdn.net/v/t1.18169-9/10406869_1503864016553017_8089075872970327605_n.png?_nc_cat=110&ccb=1-7&_nc_sid=e3f864&_nc_ohc=T_Vi3kds0gkAX9l9_G3&_nc_ht=scontent-dus1-1.xx&oh=00_AT_G90eIqEmXTL8TNFmWNRUlcHXGBeieTZUld64Q7RuH2w&oe=62D2A8FF)
         public MainForm()
         {
             UserSettings.Init();
@@ -19,10 +20,16 @@ namespace LA_TT
             Cards.OnFinishedInit += OnFinishedInitCards;
             Cards.Init();
 
-            if (MessageBox.Show("Do you want to sync all Cards with the Wiki?", "Sync Cards", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            DialogResult result = DialogResult.None;
+            if (UserSettings.askForSync)
+            {
+                AskForSyncForm askForSyncForm = new AskForSyncForm(true);
+                result = askForSyncForm.ShowDialog();
+            }
+            if (result == DialogResult.Yes || UserSettings.sync)
             {
                 HtmlHandler htmlHandler = new HtmlHandler();
-                htmlHandler.Sync(true);
+                htmlHandler.Sync(UserSettings.skipDownload);
             }
         }
 
@@ -40,20 +47,38 @@ namespace LA_TT
 
         private void saveAllCardsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Cards._ccardsB.Count != 0) Cards.WriteCCards(false, 1);
-            if (Cards._ccardsS.Count != 0) Cards.WriteCCards(false, 2);
-            if (Cards._ccardsG.Count != 0) Cards.WriteCCards(false, 3);
-            if (Cards._ccardsD.Count != 0) Cards.WriteCCards(false, 4);
-            if (Cards._ccardsO.Count != 0) Cards.WriteCCards(false, 5);
+            Cards.WriteCCards(true, 1);
+            Cards.WriteCCards(true, 2);
+            Cards.WriteCCards(true, 3);
+            Cards.WriteCCards(true, 4);
+            Cards.WriteCCards(true, 5);
+
+            if (!UserSettings.saveYourCards)
+            {
+                Cards.WriteCCards(false, 1);
+                Cards.WriteCCards(false, 2);
+                Cards.WriteCCards(false, 3);
+                Cards.WriteCCards(false, 4);
+                Cards.WriteCCards(false, 5);
+            }
         }
 
         private void saveAllFFCardsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Cards._fcardsB.Count != 0) Cards.WriteFCards(false, 1);
-            if (Cards._fcardsS.Count != 0) Cards.WriteFCards(false, 2);
-            if (Cards._fcardsG.Count != 0) Cards.WriteFCards(false, 3);
-            if (Cards._fcardsD.Count != 0) Cards.WriteFCards(false, 4);
-            if (Cards._fcardsO.Count != 0) Cards.WriteFCards(false, 5);
+            Cards.WriteFCards(true, 1);
+            Cards.WriteFCards(true, 2);
+            Cards.WriteFCards(true, 3);
+            Cards.WriteFCards(true, 4);
+            Cards.WriteFCards(true, 5);
+
+            if (!UserSettings.saveYourCards)
+            {
+                Cards.WriteFCards(false, 1);
+                Cards.WriteFCards(false, 2);
+                Cards.WriteFCards(false, 3);
+                Cards.WriteFCards(false, 4);
+                Cards.WriteFCards(false, 5);
+            }
         }
 
         private void UpdateYourCards()
@@ -179,7 +204,7 @@ namespace LA_TT
                         updateOnlyFCards = false; break;
                     case 7:
                         CalcComboRarity();
-                        CalcComboStatsSum();
+                        CalcComboStatsSum(UserSettings.comboSatsYour);
                         Cards._yccards = Cards._yccards.OrderBy(c => c.comboStatSum).ToList();
                         //UpdateYourCCards(); break;
                         updateOnlyCCards = true;
@@ -216,7 +241,7 @@ namespace LA_TT
                         updateOnlyFCards = false; break;
                     case 7:
                         CalcComboRarity();
-                        CalcComboStatsSum();
+                        CalcComboStatsSum(UserSettings.comboSatsYour);
                         Cards._yccards = Cards._yccards.OrderByDescending(c => c.comboStatSum).ToList();
                         //UpdateYourCCards(); break;
                         updateOnlyCCards = true;
@@ -227,7 +252,7 @@ namespace LA_TT
             SetFilters();
         }
 
-        private void CalcComboStatsSum()
+        private void CalcComboStatsSum(bool your)
         {
             foreach (CCard ccard in Cards._yccards)
             {
@@ -236,16 +261,16 @@ namespace LA_TT
                     FCard fcResult;
                     if (combo.card3Rarity != 0)
                     {
-                        fcResult = Cards.GetFCard(combo.card3Name, true);
+                        fcResult = Cards.GetFCard(combo.card3Name, your);
                     }
                     else
                     {
-                        fcResult = Cards.GetFCard(combo.card3Name, combo.card3Rarity, true);
+                        fcResult = Cards.GetFCard(combo.card3Name, combo.card3Rarity, your);
                     }
                     if (fcResult != null)
                     {
                         ccard.comboStatSum += fcResult.attack * UserSettings.attackMultiplier + fcResult.defense * UserSettings.defenseMultiplier;
-                        Cards.UpdateCCard(ccard, false);
+                        //Cards.UpdateCCard(ccard, false);
                     }
                 }
             }
@@ -267,7 +292,7 @@ namespace LA_TT
                     if (fcResult != null)
                     {
                         combo.card3Rarity = fcResult.rarity;
-                        Cards.UpdateFCard(fcResult, false);
+                        //Cards.UpdateFCard(fcResult, false);
                     }
                 }
             }
@@ -279,14 +304,14 @@ namespace LA_TT
                     if (ccCombo1 != null)
                     {
                         combo.ccard1Rarity = ccCombo1.rarity;
-                        Cards.UpdateCCard(ccCombo1, false);
+                        //Cards.UpdateCCard(ccCombo1, false);
                     }
 
                     CCard ccCombo2 = Cards.GetCCard(combo.ccard2Name, true);
                     if (ccCombo2 != null)
                     {
                         combo.ccard2Rarity = ccCombo2.rarity;
-                        Cards.UpdateCCard(ccCombo2, false);
+                        //Cards.UpdateCCard(ccCombo2, false);
                     }
                 }
             }
@@ -372,21 +397,23 @@ namespace LA_TT
             writeTasks.Add(Cards.WriteFCards(true, 4));
             writeTasks.Add(Cards.WriteFCards(true, 5));
 
-            writeTasks.Add(Cards.WriteCCards(false, 1));
-            writeTasks.Add(Cards.WriteCCards(false, 2));
-            writeTasks.Add(Cards.WriteCCards(false, 3));
-            writeTasks.Add(Cards.WriteCCards(false, 4));
-            writeTasks.Add(Cards.WriteCCards(false, 5));
+            if (!UserSettings.saveYourCards)
+            {
+                writeTasks.Add(Cards.WriteCCards(false, 1));
+                writeTasks.Add(Cards.WriteCCards(false, 2));
+                writeTasks.Add(Cards.WriteCCards(false, 3));
+                writeTasks.Add(Cards.WriteCCards(false, 4));
+                writeTasks.Add(Cards.WriteCCards(false, 5));
 
-            writeTasks.Add(Cards.WriteFCards(false, 1));
-            writeTasks.Add(Cards.WriteFCards(false, 2));
-            writeTasks.Add(Cards.WriteFCards(false, 3));
-            writeTasks.Add(Cards.WriteFCards(false, 4));
-            writeTasks.Add(Cards.WriteFCards(false, 5));
+                writeTasks.Add(Cards.WriteFCards(false, 1));
+                writeTasks.Add(Cards.WriteFCards(false, 2));
+                writeTasks.Add(Cards.WriteFCards(false, 3));
+                writeTasks.Add(Cards.WriteFCards(false, 4));
+                writeTasks.Add(Cards.WriteFCards(false, 5));
+            }
 
             while (writeTasks.Count != 0)
             {
-                Thread.Sleep(100);
                 foreach (Task task in writeTasks)
                 {
                     if (task.IsCompleted)
@@ -578,6 +605,27 @@ namespace LA_TT
             UserSettings.mainWindowLocation = Location;
             UserSettings.mainWindowSize = Size;
             UserSettings.Save();
+        }
+
+        private void syncWithWikiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!UserSettings.askForSync && UserSettings.sync)
+            {
+                HtmlHandler htmlHandler = new HtmlHandler();
+                htmlHandler.Sync(UserSettings.skipDownload);
+            }
+            else
+            {
+                AskForSyncForm askForSyncForm = new AskForSyncForm(false);
+                askForSyncForm.StartPosition = FormStartPosition.Manual;
+                askForSyncForm.Location = new Point((Location.X + Size.Width / 2) - askForSyncForm.Size.Width / 2, (Location.Y + Size.Height / 2) - askForSyncForm.Size.Height / 2);
+                DialogResult result = askForSyncForm.ShowDialog();
+                if (result == DialogResult.Yes)
+                {
+                    HtmlHandler htmlHandler = new HtmlHandler();
+                    htmlHandler.Sync(UserSettings.skipDownload);
+                }
+            }
         }
     }
 }

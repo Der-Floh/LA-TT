@@ -32,8 +32,10 @@ namespace LA_TT
         }
         private void DownloadWikiPageHTML()
         {
+            Form mainForm = Application.OpenForms[0];
             loadingForm = new LoadingForm();
             loadingForm.Show();
+            loadingForm.Location = new Point((mainForm.Location.X + mainForm.Size.Width / 2) - loadingForm.Size.Width / 2, (mainForm.Location.Y + mainForm.Size.Height / 2) - loadingForm.Size.Height / 2);
             loadingForm.HeaderLabel.Refresh();
 
             for (currentLetter = 'A'; currentLetter <= 'Z'; currentLetter++)
@@ -45,7 +47,7 @@ namespace LA_TT
                     loadingForm.TopLoadingBar.Refresh();
                     if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + ".html")))
                     {
-                        client.DownloadFile(new Uri("https://lil-alchemist.fandom.com/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
+                        client.DownloadFile(new Uri(UserSettings.wikiUrl+ "/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
                     }
                     _cardsHtml = new HtmlDocument();
                     _cardsHtml.Load("Resources/Html/Cards" +currentLetter+ ".html");
@@ -54,7 +56,15 @@ namespace LA_TT
                 loadingCardsAll += 1;
                 loadingForm.TopLoadingBar.Value = (int)Math.Round(loadingCardsAll*100 / 26);
             }
-            MessageBox.Show("Skipped Cards:\n" + skippedCards);
+            if (skippedCards == "" || skippedCards == " ")
+            {
+                MessageBox.Show("All Cards Synchronized");
+            }
+            else
+            {
+                MessageBox.Show("Skipped Cards:\n" + skippedCards);
+            }
+            SaveCards();
             loadingForm.Close();
         }
 
@@ -71,7 +81,7 @@ namespace LA_TT
                 loadingForm.TopLoadingBar.Refresh();
                 if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + ".html")))
                 {
-                    client.DownloadFile(new Uri("https://lil-alchemist.fandom.com/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
+                    client.DownloadFile(new Uri(UserSettings.wikiUrl+ "/wiki/Category:Card?from=" + currentLetter), "Resources/Html/Cards" + currentLetter + ".html");
                 }
                 _cardsHtml = new HtmlDocument();
                 _cardsHtml.Load("Resources/Html/Cards" + currentLetter + ".html");
@@ -80,8 +90,43 @@ namespace LA_TT
             loadingCardsAll += 1;
             loadingForm.TopLoadingBar.Value = (int)Math.Round(loadingCardsAll * 100 / 26);
 
-            MessageBox.Show("Skipped Cards:\n" + skippedCards);
+            if (skippedCards == "" || skippedCards == " ")
+            {
+                MessageBox.Show("All Cards Synchronized");
+            }
+            else
+            {
+                MessageBox.Show("Skipped Cards:\n" + skippedCards);
+            }
+            SaveCards();
             loadingForm.Close();
+        }
+
+        private void SaveCards()
+        {
+            Cards.WriteCCards(true, 1);
+            Cards.WriteCCards(true, 2);
+            Cards.WriteCCards(true, 3);
+            Cards.WriteCCards(true, 4);
+            Cards.WriteCCards(true, 5);
+
+            Cards.WriteCCards(false, 1);
+            Cards.WriteCCards(false, 2);
+            Cards.WriteCCards(false, 3);
+            Cards.WriteCCards(false, 4);
+            Cards.WriteCCards(false, 5);
+
+            Cards.WriteFCards(true, 1);
+            Cards.WriteFCards(true, 2);
+            Cards.WriteFCards(true, 3);
+            Cards.WriteFCards(true, 4);
+            Cards.WriteFCards(true, 5);
+
+            Cards.WriteFCards(false, 1);
+            Cards.WriteFCards(false, 2);
+            Cards.WriteFCards(false, 3);
+            Cards.WriteFCards(false, 4);
+            Cards.WriteFCards(false, 5);
         }
         private void DownloadCard(string cardUrl, string cardname)
         {
@@ -92,7 +137,7 @@ namespace LA_TT
                     if (!Directory.Exists("Resources/Html/Cards" + currentLetter)) Directory.CreateDirectory("Resources/Html/Cards" + currentLetter);
                     if (!(skipDownloadWhenExist && File.Exists("Resources/Html/Cards" + currentLetter + "/" + cardname + ".html")))
                     {
-                        client.DownloadFile(new Uri("https://lil-alchemist.fandom.com" + cardUrl), "Resources/Html/Cards" + currentLetter + "/" + cardname + ".html");
+                        client.DownloadFile(new Uri(UserSettings.wikiUrl + cardUrl), "Resources/Html/Cards" + currentLetter + "/" + cardname + ".html");
                     }
                 }
                 catch 
