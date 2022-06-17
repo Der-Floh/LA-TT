@@ -29,6 +29,8 @@ namespace LA_TT
             if (UserSettings.askForSync)
             {
                 AskForSyncForm askForSyncForm = new AskForSyncForm(true);
+                askForSyncForm.StartPosition = FormStartPosition.Manual;
+                askForSyncForm.Location = new Point((Screen.PrimaryScreen.WorkingArea.Width - askForSyncForm.Width) / 2, (Screen.PrimaryScreen.WorkingArea.Height - askForSyncForm.Height) / 2);
                 result = askForSyncForm.ShowDialog();
             }
             if (result == DialogResult.Yes || UserSettings.sync)
@@ -150,8 +152,11 @@ namespace LA_TT
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //Icon = Properties.Resources.icon;
-            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName;
+            path = path.Replace(@"\", "/");
+            path = path.Replace("//", "/") + ".exe";
+
+            Icon = Icon.ExtractAssociatedIcon(path);
             if (!UserSettings.mainWindowLocation.IsEmpty)
             {
                 Location = UserSettings.mainWindowLocation;

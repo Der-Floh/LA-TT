@@ -38,6 +38,11 @@ namespace LA_TT
             {
                 settings = GetDefaultSettings();
             }
+            SetThisToSettings();
+        }
+
+        private static void SetThisToSettings()
+        {
             mainWindowLocation = settings.mainWindowLocation;
             mainWindowSize = settings.mainWindowSize;
             addCardWindowLocation = settings.addCardWindowLocation;
@@ -87,6 +92,7 @@ namespace LA_TT
         public static void ResetToDefault()
         {
             settings = GetDefaultSettings();
+            SetThisToSettings();
         }
 
         public static void Save()

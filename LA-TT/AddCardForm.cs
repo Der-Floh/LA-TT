@@ -108,8 +108,10 @@ namespace LA_TT
 
         private void AddCardForm_Load(object sender, EventArgs e)
         {
-            //Icon = Properties.Resources.icon;
-            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName;
+            path = path.Replace(@"\", "/");
+            path = path.Replace("//", "/") + ".exe";
+            Icon = Icon.ExtractAssociatedIcon(path);
             if (!UserSettings.addCardWindowLocation.IsEmpty)
             {
                 Location = UserSettings.addCardWindowLocation;

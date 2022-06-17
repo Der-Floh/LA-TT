@@ -43,8 +43,10 @@ namespace LA_TT
 
         private void UserSettings_Load(object sender, EventArgs e)
         {
-            //Icon = Properties.Resources.icon;
-            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName;
+            path = path.Replace(@"\", "/");
+            path = path.Replace("//", "/") + ".exe";
+            Icon = Icon.ExtractAssociatedIcon(path);
             if (!UserSettings.settingsWindowLocation.IsEmpty)
             {
                 Location = UserSettings.settingsWindowLocation;
