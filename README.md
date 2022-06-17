@@ -2,10 +2,10 @@
 ![Logo](https://cdn.discordapp.com/attachments/737330100013629536/987335015799062528/LA-TT.png)
 
 ### Table of Contents:
-- [LA-TT](#Little)
-- [Features](#Features)
-- [Roadmap](#Roadmap)
-- [Installation](#Installation)
+- [LA-TT](#little-alchemist---the-tool--la-tt)
+- [Features](#features)
+- [Roadmap](#roadmap)
+- [Installation](#installation)
 
 # Little Alchemist - The Tool (LA-TT)
 ### Manage your Cards:
