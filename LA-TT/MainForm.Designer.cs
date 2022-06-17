@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.fIleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllCardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllFFCardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshCardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.syncWithWikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addCardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,7 +73,6 @@
             this.RemoveOneToDeckButton = new System.Windows.Forms.Button();
             this.AddAllToDeckButton = new System.Windows.Forms.Button();
             this.AddOneToDeckButton = new System.Windows.Forms.Button();
-            this.syncWithWikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.DecksPanel.SuspendLayout();
             this.CardManagerMenuStrip.SuspendLayout();
@@ -134,20 +133,27 @@
             // refreshCardsToolStripMenuItem
             // 
             this.refreshCardsToolStripMenuItem.Name = "refreshCardsToolStripMenuItem";
-            this.refreshCardsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.refreshCardsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.refreshCardsToolStripMenuItem.Text = "Refresh Cards";
+            // 
+            // syncWithWikiToolStripMenuItem
+            // 
+            this.syncWithWikiToolStripMenuItem.Name = "syncWithWikiToolStripMenuItem";
+            this.syncWithWikiToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.syncWithWikiToolStripMenuItem.Text = "Sync with Wiki";
+            this.syncWithWikiToolStripMenuItem.Click += new System.EventHandler(this.syncWithWikiToolStripMenuItem_Click);
             // 
             // addCardToolStripMenuItem
             // 
             this.addCardToolStripMenuItem.Name = "addCardToolStripMenuItem";
-            this.addCardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addCardToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.addCardToolStripMenuItem.Text = "Add Card";
             this.addCardToolStripMenuItem.Click += new System.EventHandler(this.addCardToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -578,13 +584,6 @@
             this.AddOneToDeckButton.Text = "->";
             this.AddOneToDeckButton.UseVisualStyleBackColor = true;
             // 
-            // syncWithWikiToolStripMenuItem
-            // 
-            this.syncWithWikiToolStripMenuItem.Name = "syncWithWikiToolStripMenuItem";
-            this.syncWithWikiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.syncWithWikiToolStripMenuItem.Text = "Sync with Wiki";
-            this.syncWithWikiToolStripMenuItem.Click += new System.EventHandler(this.syncWithWikiToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -595,7 +594,6 @@
             this.Controls.Add(this.DecksPanel);
             this.Controls.Add(this.MenuStrip);
             this.Controls.Add(this.CardManagerMenuStrip);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuStrip;
             this.MinimumSize = new System.Drawing.Size(1015, 636);
             this.Name = "MainForm";

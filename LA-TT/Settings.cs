@@ -20,6 +20,7 @@ namespace LA_TT
         public bool saveYourCards { get; set; }
         public bool comboStatsYour { get; set; }
         public bool skipDownload { get; set; }
+        public bool deleteAfterDownload { get; set; }
         public bool preferAttack { get; set; }
         public bool preferDefense { get; set; }
         public int attackMultiplier { get; set; }

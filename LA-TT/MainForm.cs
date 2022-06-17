@@ -14,6 +14,11 @@ namespace LA_TT
         //![Logo](https://scontent-dus1-1.xx.fbcdn.net/v/t1.18169-9/10406869_1503864016553017_8089075872970327605_n.png?_nc_cat=110&ccb=1-7&_nc_sid=e3f864&_nc_ohc=T_Vi3kds0gkAX9l9_G3&_nc_ht=scontent-dus1-1.xx&oh=00_AT_G90eIqEmXTL8TNFmWNRUlcHXGBeieTZUld64Q7RuH2w&oe=62D2A8FF)
         public MainForm()
         {
+            if (!Directory.Exists("Resources"))
+                Directory.CreateDirectory("Resources");
+            if (!Directory.Exists("Html"))
+                Directory.CreateDirectory("Resources/Html");
+
             UserSettings.Init();
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             InitializeComponent();
@@ -145,7 +150,16 @@ namespace LA_TT
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Location = UserSettings.mainWindowLocation;
+            //Icon = Properties.Resources.icon;
+            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            if (!UserSettings.mainWindowLocation.IsEmpty)
+            {
+                Location = UserSettings.mainWindowLocation;
+            }
+            else
+            {
+                Location = new Point((Screen.PrimaryScreen.WorkingArea.Width - Width) / 2, (Screen.PrimaryScreen.WorkingArea.Height - Height) / 2);
+            }
             Size = UserSettings.mainWindowSize;
 
             CardAttackTextBox.BackColor = Color.FromArgb(255, 102, 0);

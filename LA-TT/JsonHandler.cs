@@ -136,5 +136,20 @@ namespace LA_TT
             }
             return null;
         }
+
+        public async Task DeleteHtmlFiles()
+        {
+            DirectoryInfo directory = new DirectoryInfo("Resources/Html");
+            foreach (FileInfo file in directory.GetFiles())
+            {
+                if (file.Name == "create") continue;
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo dir in directory.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+        }
     }
 }

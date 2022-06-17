@@ -44,12 +44,14 @@
             this.WikiUrlLabel = new System.Windows.Forms.Label();
             this.EditWikiUrlButton = new System.Windows.Forms.Button();
             this.ResetToDefaultButton = new System.Windows.Forms.Button();
+            this.DeleteAfterDownloadCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.AttackMultiplicatorNumericBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DefenseMultiplicatorNumericBox)).BeginInit();
             this.SuspendLayout();
             // 
             // CancelButton
             // 
+            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CancelButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CancelButton.Location = new System.Drawing.Point(685, 398);
             this.CancelButton.Name = "CancelButton";
@@ -61,6 +63,7 @@
             // 
             // SaveButton
             // 
+            this.SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SaveButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SaveButton.Location = new System.Drawing.Point(576, 398);
             this.SaveButton.Name = "SaveButton";
@@ -72,10 +75,11 @@
             // 
             // PreferAttackCheckBox
             // 
+            this.PreferAttackCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.PreferAttackCheckBox.AutoSize = true;
             this.PreferAttackCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.PreferAttackCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.PreferAttackCheckBox.Location = new System.Drawing.Point(499, 86);
+            this.PreferAttackCheckBox.Location = new System.Drawing.Point(495, 148);
             this.PreferAttackCheckBox.Name = "PreferAttackCheckBox";
             this.PreferAttackCheckBox.Size = new System.Drawing.Size(213, 25);
             this.PreferAttackCheckBox.TabIndex = 2;
@@ -85,9 +89,10 @@
             // 
             // PreferDefenseCheckBox
             // 
+            this.PreferDefenseCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.PreferDefenseCheckBox.AutoSize = true;
             this.PreferDefenseCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PreferDefenseCheckBox.Location = new System.Drawing.Point(499, 183);
+            this.PreferDefenseCheckBox.Location = new System.Drawing.Point(495, 245);
             this.PreferDefenseCheckBox.Name = "PreferDefenseCheckBox";
             this.PreferDefenseCheckBox.Size = new System.Drawing.Size(213, 25);
             this.PreferDefenseCheckBox.TabIndex = 3;
@@ -97,17 +102,19 @@
             // 
             // AttackMultiplicatorNumericBox
             // 
+            this.AttackMultiplicatorNumericBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.AttackMultiplicatorNumericBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.AttackMultiplicatorNumericBox.Location = new System.Drawing.Point(654, 119);
+            this.AttackMultiplicatorNumericBox.Location = new System.Drawing.Point(650, 181);
             this.AttackMultiplicatorNumericBox.Name = "AttackMultiplicatorNumericBox";
             this.AttackMultiplicatorNumericBox.Size = new System.Drawing.Size(120, 29);
             this.AttackMultiplicatorNumericBox.TabIndex = 4;
             // 
             // AttackMultiplicatorLabel
             // 
+            this.AttackMultiplicatorLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.AttackMultiplicatorLabel.AutoSize = true;
             this.AttackMultiplicatorLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.AttackMultiplicatorLabel.Location = new System.Drawing.Point(568, 119);
+            this.AttackMultiplicatorLabel.Location = new System.Drawing.Point(564, 181);
             this.AttackMultiplicatorLabel.Name = "AttackMultiplicatorLabel";
             this.AttackMultiplicatorLabel.Size = new System.Drawing.Size(80, 21);
             this.AttackMultiplicatorLabel.TabIndex = 5;
@@ -115,9 +122,10 @@
             // 
             // DefenseMultiplicatorLabel
             // 
+            this.DefenseMultiplicatorLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DefenseMultiplicatorLabel.AutoSize = true;
             this.DefenseMultiplicatorLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.DefenseMultiplicatorLabel.Location = new System.Drawing.Point(568, 216);
+            this.DefenseMultiplicatorLabel.Location = new System.Drawing.Point(564, 278);
             this.DefenseMultiplicatorLabel.Name = "DefenseMultiplicatorLabel";
             this.DefenseMultiplicatorLabel.Size = new System.Drawing.Size(80, 21);
             this.DefenseMultiplicatorLabel.TabIndex = 6;
@@ -125,8 +133,9 @@
             // 
             // DefenseMultiplicatorNumericBox
             // 
+            this.DefenseMultiplicatorNumericBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DefenseMultiplicatorNumericBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.DefenseMultiplicatorNumericBox.Location = new System.Drawing.Point(654, 214);
+            this.DefenseMultiplicatorNumericBox.Location = new System.Drawing.Point(650, 276);
             this.DefenseMultiplicatorNumericBox.Name = "DefenseMultiplicatorNumericBox";
             this.DefenseMultiplicatorNumericBox.Size = new System.Drawing.Size(120, 29);
             this.DefenseMultiplicatorNumericBox.TabIndex = 7;
@@ -185,6 +194,8 @@
             // 
             // WikiUrlTextBox
             // 
+            this.WikiUrlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.WikiUrlTextBox.Location = new System.Drawing.Point(129, 322);
             this.WikiUrlTextBox.Name = "WikiUrlTextBox";
             this.WikiUrlTextBox.ReadOnly = true;
@@ -194,6 +205,7 @@
             // 
             // WikiUrlLabel
             // 
+            this.WikiUrlLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.WikiUrlLabel.AutoSize = true;
             this.WikiUrlLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.WikiUrlLabel.Location = new System.Drawing.Point(129, 304);
@@ -204,6 +216,7 @@
             // 
             // EditWikiUrlButton
             // 
+            this.EditWikiUrlButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.EditWikiUrlButton.Location = new System.Drawing.Point(48, 321);
             this.EditWikiUrlButton.Name = "EditWikiUrlButton";
             this.EditWikiUrlButton.Size = new System.Drawing.Size(75, 23);
@@ -214,6 +227,7 @@
             // 
             // ResetToDefaultButton
             // 
+            this.ResetToDefaultButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ResetToDefaultButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ResetToDefaultButton.Location = new System.Drawing.Point(12, 398);
             this.ResetToDefaultButton.Name = "ResetToDefaultButton";
@@ -223,13 +237,27 @@
             this.ResetToDefaultButton.UseVisualStyleBackColor = true;
             this.ResetToDefaultButton.Click += new System.EventHandler(this.ResetToDefaultButton_Click);
             // 
+            // DeleteAfterDownloadCheckBox
+            // 
+            this.DeleteAfterDownloadCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.DeleteAfterDownloadCheckBox.AutoSize = true;
+            this.DeleteAfterDownloadCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DeleteAfterDownloadCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.DeleteAfterDownloadCheckBox.Location = new System.Drawing.Point(495, 85);
+            this.DeleteAfterDownloadCheckBox.Name = "DeleteAfterDownloadCheckBox";
+            this.DeleteAfterDownloadCheckBox.Size = new System.Drawing.Size(271, 25);
+            this.DeleteAfterDownloadCheckBox.TabIndex = 16;
+            this.DeleteAfterDownloadCheckBox.Text = "Delete downloaded Files after Sync";
+            this.DeleteAfterDownloadCheckBox.UseVisualStyleBackColor = true;
+            this.DeleteAfterDownloadCheckBox.CheckedChanged += new System.EventHandler(this.DeleteAfterDownloadCheckBox_CheckedChanged);
+            // 
             // UserSettingsForm
             // 
             this.AcceptButton = this.SaveButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.CancelButton;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DeleteAfterDownloadCheckBox);
             this.Controls.Add(this.ResetToDefaultButton);
             this.Controls.Add(this.EditWikiUrlButton);
             this.Controls.Add(this.WikiUrlLabel);
@@ -246,6 +274,7 @@
             this.Controls.Add(this.PreferAttackCheckBox);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.CancelButton);
+            this.MinimumSize = new System.Drawing.Size(816, 489);
             this.Name = "UserSettingsForm";
             this.Text = "Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UserSettingsForm_FormClosing);
@@ -275,5 +304,6 @@
         private Label WikiUrlLabel;
         private Button EditWikiUrlButton;
         private Button ResetToDefaultButton;
+        private CheckBox DeleteAfterDownloadCheckBox;
     }
 }

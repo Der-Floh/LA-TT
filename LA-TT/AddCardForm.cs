@@ -94,13 +94,13 @@ namespace LA_TT
         {
             if (ComboCardCheckBox.Checked)
             {
-                CFPictureBox.Image = LA_TT.Properties.Resources.C;
+                CFPictureBox.Image = Properties.Resources.C;
                 CombosWithLabel.Text = "Combos with Card Name";
                 CombosToLabel.Text = "Combos to Card Name";
             }
             else
             {
-                CFPictureBox.Image = LA_TT.Properties.Resources.F;
+                CFPictureBox.Image = Properties.Resources.F;
                 CombosWithLabel.Text = "Combos with Card 1 Name";
                 CombosToLabel.Text = "Combos with Card 2 Name";
             }
@@ -108,7 +108,18 @@ namespace LA_TT
 
         private void AddCardForm_Load(object sender, EventArgs e)
         {
-            Location = UserSettings.addCardWindowLocation;
+            //Icon = Properties.Resources.icon;
+            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            if (!UserSettings.addCardWindowLocation.IsEmpty)
+            {
+                Location = UserSettings.addCardWindowLocation;
+            }
+            else
+            {
+                Form mainForm = Application.OpenForms[0];
+                StartPosition = FormStartPosition.Manual;
+                Location = new Point((mainForm.Location.X + mainForm.Size.Width / 2) - Size.Width / 2, (mainForm.Location.Y + mainForm.Size.Height / 2) - Size.Height / 2);
+            }
             Size = UserSettings.addCardWindowSize;
 
             AttackNumericBox.BackColor = Color.FromArgb(255, 102, 0);
@@ -488,10 +499,10 @@ namespace LA_TT
             }
             switch (RarityNumericBox.Value)
             {
-                case 1: CardPictureBox.Image = LA_TT.Properties.Resources.CardB; break;
-                case 2: CardPictureBox.Image = LA_TT.Properties.Resources.CardS; break;
-                case 3: CardPictureBox.Image = LA_TT.Properties.Resources.CardG; break;
-                case 4: CardPictureBox.Image = LA_TT.Properties.Resources.CardD; break;
+                case 1: CardPictureBox.Image = Properties.Resources.CardB; break;
+                case 2: CardPictureBox.Image = Properties.Resources.CardS; break;
+                case 3: CardPictureBox.Image = Properties.Resources.CardG; break;
+                case 4: CardPictureBox.Image = Properties.Resources.CardD; break;
             }
             UpdateValueDisplay();
         }

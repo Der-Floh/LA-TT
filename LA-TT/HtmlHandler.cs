@@ -15,6 +15,7 @@ namespace LA_TT
         HtmlDocument _currentCardHtml;
         char currentLetter;
         string skippedCards;
+        bool hasSkippedCards;
         float loadingCards;
         float loadingCardsAll;
         string currentCardUrl;
@@ -56,7 +57,7 @@ namespace LA_TT
                 loadingCardsAll += 1;
                 loadingForm.TopLoadingBar.Value = (int)Math.Round(loadingCardsAll*100 / 26);
             }
-            if (skippedCards == "" || skippedCards == " ")
+            if (!hasSkippedCards)
             {
                 MessageBox.Show("All Cards Synchronized");
             }
@@ -65,6 +66,13 @@ namespace LA_TT
                 MessageBox.Show("Skipped Cards:\n" + skippedCards);
             }
             SaveCards();
+
+            if (UserSettings.deleteAfterDownload)
+            {
+                JsonHandler jsonHandler = new JsonHandler();
+                jsonHandler.DeleteHtmlFiles();
+            }
+
             loadingForm.Close();
         }
 
@@ -90,7 +98,7 @@ namespace LA_TT
             loadingCardsAll += 1;
             loadingForm.TopLoadingBar.Value = (int)Math.Round(loadingCardsAll * 100 / 26);
 
-            if (skippedCards == "" || skippedCards == " ")
+            if (!hasSkippedCards)
             {
                 MessageBox.Show("All Cards Synchronized");
             }
@@ -99,6 +107,13 @@ namespace LA_TT
                 MessageBox.Show("Skipped Cards:\n" + skippedCards);
             }
             SaveCards();
+
+            if (UserSettings.deleteAfterDownload)
+            {
+                JsonHandler jsonHandler = new JsonHandler();
+                jsonHandler.DeleteHtmlFiles();
+            }
+
             loadingForm.Close();
         }
 
@@ -142,6 +157,7 @@ namespace LA_TT
                 }
                 catch 
                 {
+                    hasSkippedCards = true;
                     skippedCards += cardname + "\n";
                     return;
                 }

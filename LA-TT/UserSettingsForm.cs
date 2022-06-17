@@ -27,13 +27,11 @@ namespace LA_TT
 
         private void SetControlsToSettings()
         {
-            Location = UserSettings.settingsWindowLocation;
-            Size = UserSettings.settingsWindowSize;
-
             AskForSyncCheckBox.Checked = UserSettings.askForSync;
             SaveYourCardsCheckBox.Checked = UserSettings.saveYourCards;
             ComboStatYourCheckBox.Checked = UserSettings.comboSatsYour;
             SkipDownloadCheckBox.Checked = UserSettings.skipDownload;
+            DeleteAfterDownloadCheckBox.Checked = UserSettings.deleteAfterDownload;
             PreferAttackCheckBox.Checked = UserSettings.preferAttack;
             PreferDefenseCheckBox.Checked = UserSettings.preferDefense;
             AttackMultiplicatorNumericBox.Value = UserSettings.attackMultiplier;
@@ -45,6 +43,37 @@ namespace LA_TT
 
         private void UserSettings_Load(object sender, EventArgs e)
         {
+            //Icon = Properties.Resources.icon;
+            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            if (!UserSettings.settingsWindowLocation.IsEmpty)
+            {
+                Location = UserSettings.settingsWindowLocation;
+            }
+            else
+            {
+                Form mainForm = Application.OpenForms[0];
+                StartPosition = FormStartPosition.Manual;
+                Location = new Point((mainForm.Location.X + mainForm.Size.Width / 2) - Size.Width / 2, (mainForm.Location.Y + mainForm.Size.Height / 2) - Size.Height / 2);
+            }
+            Size = UserSettings.settingsWindowSize;
+
+            ToolTip toolTip = new ToolTip();
+            toolTip.AutoPopDelay = 10000;
+            toolTip.InitialDelay = 1000;
+            toolTip.ReshowDelay = 500;
+            toolTip.ShowAlways = true;
+            
+            toolTip.SetToolTip(AskForSyncCheckBox, "Specifies wether the app asks, on startup,\nif you want to sync Cards with the Wiki");
+            toolTip.SetToolTip(SaveYourCardsCheckBox, "Specifies wether the save Cards Action saves\nonly your Cards or also Cards synced with the wiki");
+            toolTip.SetToolTip(ComboStatYourCheckBox, "Specifies wether the Calculation of the Combo-Sum\nis based only on your Cards or also on Cards synced with the Wiki");
+            toolTip.SetToolTip(SkipDownloadCheckBox, "Specifes wether the Download of Cards from the Wiki\nis skipped if it's still accessable by the program");
+            toolTip.SetToolTip(DeleteAfterDownloadCheckBox, "Specifies wether the, for the download needed,\nhtml files get deleted when not needed anymore");
+            toolTip.SetToolTip(PreferAttackCheckBox, "Specifies if you prefer the Attack stat");
+            toolTip.SetToolTip(AttackMultiplicatorNumericBox, "Specifies the weight of the Attack stat");
+            toolTip.SetToolTip(PreferDefenseCheckBox, "Specifies if you prefer the Defense stat");
+            toolTip.SetToolTip(DefenseMultiplicatorNumericBox, "Specifies the weight of the Defense stat");
+            toolTip.SetToolTip(WikiUrlTextBox, "Speciefies the Wiki Url which is use to sync existing Cards with");
+
             SetControlsToSettings();
         }
 
@@ -74,6 +103,7 @@ namespace LA_TT
             }
             else
             {
+                AttackMultiplicatorNumericBox.Value = 1;
                 AttackMultiplicatorLabel.Visible = false;
                 AttackMultiplicatorNumericBox.Visible = false;
             }
@@ -93,6 +123,7 @@ namespace LA_TT
             }
             else
             {
+                DefenseMultiplicatorNumericBox.Value = 1;
                 DefenseMultiplicatorLabel.Visible = false;
                 DefenseMultiplicatorNumericBox.Visible = false;
             }
@@ -105,6 +136,7 @@ namespace LA_TT
             UserSettings.saveYourCards = SaveYourCardsCheckBox.Checked;
             UserSettings.comboSatsYour = ComboStatYourCheckBox.Checked;
             UserSettings.skipDownload = SkipDownloadCheckBox.Checked;
+            UserSettings.deleteAfterDownload = DeleteAfterDownloadCheckBox.Checked;
             UserSettings.preferAttack = PreferAttackCheckBox.Checked;
             UserSettings.preferDefense = PreferDefenseCheckBox.Checked;
             UserSettings.attackMultiplier = (int)AttackMultiplicatorNumericBox.Value;
@@ -133,6 +165,8 @@ namespace LA_TT
 
         private void SkipDownloadCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            if (SkipDownloadCheckBox.Checked)
+                DeleteAfterDownloadCheckBox.Checked = false;
             changed = true;
         }
 
@@ -155,6 +189,13 @@ namespace LA_TT
                 UserSettings.Save();
                 SetControlsToSettings();
             }
+        }
+
+        private void DeleteAfterDownloadCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DeleteAfterDownloadCheckBox.Checked)
+                SkipDownloadCheckBox.Checked = false;
+            changed = true;
         }
     }
 }

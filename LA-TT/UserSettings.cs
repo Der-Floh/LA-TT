@@ -22,6 +22,7 @@ namespace LA_TT
         public static bool saveYourCards { get; set; }
         public static bool comboSatsYour { get; set; }
         public static bool skipDownload { get; set; }
+        public static bool deleteAfterDownload { get; set; }
         public static bool preferAttack { get; set; }
         public static bool preferDefense { get; set; }
         public static int attackMultiplier { get; set; }
@@ -49,6 +50,7 @@ namespace LA_TT
             saveYourCards = settings.saveYourCards;
             comboSatsYour = settings.comboStatsYour;
             skipDownload = settings.skipDownload;
+            deleteAfterDownload = settings.deleteAfterDownload;
             preferAttack = settings.preferAttack;
             preferDefense = settings.preferDefense;
             attackMultiplier = settings.attackMultiplier;
@@ -72,6 +74,7 @@ namespace LA_TT
                 saveYourCards = false,
                 comboStatsYour = true,
                 skipDownload = true,
+                deleteAfterDownload = false,
                 preferAttack = true,
                 preferDefense = false,
                 attackMultiplier = 2,
@@ -99,6 +102,7 @@ namespace LA_TT
             settings.sync = sync;
             settings.saveYourCards = saveYourCards;
             settings.skipDownload = skipDownload;
+            settings.deleteAfterDownload = deleteAfterDownload;
             settings.preferAttack = preferAttack;
             settings.preferDefense = preferDefense;
             settings.attackMultiplier = attackMultiplier;
