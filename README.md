@@ -1,6 +1,12 @@
 
 ![Logo](https://cdn.discordapp.com/attachments/737330100013629536/987335015799062528/LA-TT.png)
 
+### Table of Contents:
+- [LA-TT](#Little)
+- [Features](#Features)
+- [Roadmap](#Roadmap)
+- [Installation](#Installation)
+
 # Little Alchemist - The Tool (LA-TT)
 ### Manage your Cards:
 With this Tool you can **manage** your Gamecards while having a great overview over them. This is accomplished by being able to Filter and Sort your cards how you want.
